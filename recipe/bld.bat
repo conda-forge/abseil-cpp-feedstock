@@ -3,8 +3,9 @@ cd build
 cmake -G "NMake Makefiles" ^
       -DCMAKE_INSTALL_PREFIX=%LIBRARY_PREFIX% ^
 	  -DCMAKE_PREFIX_PATH=%LIBRARY_PREFIX% ^
+	  -DCMAKE_BUILD_TYPE=Release ^
 	  ..
 
-cmake --build . --config Release
+cmake --build .
 
-cmake --build . --config Release --target install
+cmake --build . --target install
