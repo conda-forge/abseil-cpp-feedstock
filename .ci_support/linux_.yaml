@@ -1,7 +1,7 @@
 c_compiler:
 - gcc
 c_compiler_version:
-- '5.4'
+- '7'
 channel_sources:
 - conda-forge,defaults
 channel_targets:
@@ -9,6 +9,6 @@ channel_targets:
 cxx_compiler:
 - gxx
 cxx_compiler_version:
-- '5.4'
+- '7'
 docker_image:
 - condaforge/linux-anvil-comp7

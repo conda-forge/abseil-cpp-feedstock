@@ -1,8 +1,0 @@
-# same as
-# https://github.com/conda-forge/tensorflow-feedstock/blob/master/recipe/conda_build_config.yaml
-c_compiler_version:    # [unix]
-  - 5.4                # [linux]
-  - 8.0                # [osx]
-cxx_compiler_version:  # [unix]
-  - 5.4                # [linux]
-  - 8.0                # [osx]
