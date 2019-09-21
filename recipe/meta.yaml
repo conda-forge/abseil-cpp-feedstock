@@ -8,6 +8,8 @@ package:
 source:
   url: https://github.com/abseil/{{ name }}/archive/{{ version }}.tar.gz
   sha256: 8100085dada279bf3ee00cd064d43b5f55e5d913be0dfe2906f06f8f28d5b37e
+  patches:
+    - clang4_osx_fix.diff # [osx]
 
 build:
   number: 3
