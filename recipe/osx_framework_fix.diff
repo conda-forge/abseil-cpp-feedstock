@@ -1,0 +1,13 @@
+diff --git a/absl/time/CMakeLists.txt b/absl/time/CMakeLists.txt
+index 5909832..9fa49f7 100644
+--- a/absl/time/CMakeLists.txt
++++ b/absl/time/CMakeLists.txt
+@@ -83,7 +83,7 @@ absl_cc_library(
+   COPTS
+     ${ABSL_DEFAULT_COPTS}
+   DEPS
+-    $<$<PLATFORM_ID:Darwin>:${CoreFoundation}>
++    $<$<PLATFORM_ID:Darwin>:"-framework CoreFoundation">
+ )
+ 
+ absl_cc_library(
