@@ -10,9 +10,10 @@ source:
   sha256: 8100085dada279bf3ee00cd064d43b5f55e5d913be0dfe2906f06f8f28d5b37e
   patches:
     - clang4_osx_fix.diff  # [osx]
+    - osx_framework_fix.diff  # [osx]
 
 build:
-  number: 3
+  number: 4
   skip: True  # [win and vc<14]
 
 requirements:
