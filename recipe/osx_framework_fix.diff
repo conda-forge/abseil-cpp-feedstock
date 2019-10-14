@@ -1,13 +1,19 @@
 diff --git a/absl/time/CMakeLists.txt b/absl/time/CMakeLists.txt
-index 5909832..9fa49f7 100644
+index 5909832..087bb6a 100644
 --- a/absl/time/CMakeLists.txt
 +++ b/absl/time/CMakeLists.txt
-@@ -83,7 +83,7 @@ absl_cc_library(
+@@ -82,10 +82,12 @@ absl_cc_library(
+     "internal/cctz/src/zone_info_source.cc"
    COPTS
      ${ABSL_DEFAULT_COPTS}
-   DEPS
+-  DEPS
 -    $<$<PLATFORM_ID:Darwin>:${CoreFoundation}>
-+    $<$<PLATFORM_ID:Darwin>:"-framework CoreFoundation">
  )
  
++if(APPLE)
++  target_compile_options(absl_time_zone PUBLIC "-framework CoreFoundation")
++endif()
++
  absl_cc_library(
+   NAME
+     test_util
