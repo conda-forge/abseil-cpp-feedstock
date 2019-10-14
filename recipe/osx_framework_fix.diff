@@ -11,7 +11,7 @@ index 5909832..087bb6a 100644
  )
  
 +if(APPLE)
-+  target_compile_options(time_zone PUBLIC "-framework CoreFoundation")
++  target_compile_options(time_zone PUBLIC -framework CoreFoundation)
 +endif()
 +
  absl_cc_library(
