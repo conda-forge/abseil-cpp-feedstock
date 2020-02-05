@@ -9,6 +9,8 @@ source:
   url: https://github.com/abseil/{{ name }}/archive/{{ version }}.tar.gz
   sha256: 8100085dada279bf3ee00cd064d43b5f55e5d913be0dfe2906f06f8f28d5b37e
   patches:
+    - 0001-Use-aarch64-AES-optimizations.patch  # [aarch64]
+    - 0001-Disable-HW-AES-optimizations-on-ppc64le.patch  # [ppc64le]
     - clang4_osx_fix.diff  # [osx]
     - osx_framework_fix.diff  # [osx]
 
