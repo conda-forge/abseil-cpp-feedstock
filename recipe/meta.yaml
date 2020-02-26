@@ -1,5 +1,5 @@
 {% set name = "abseil-cpp" %}
-{% set version = "20190808" %}
+{% set version = "20200225" %}
 
 package:
   name: {{ name|lower }}
@@ -7,7 +7,7 @@ package:
 
 source:
   url: https://github.com/abseil/{{ name }}/archive/{{ version }}.tar.gz
-  sha256: 8100085dada279bf3ee00cd064d43b5f55e5d913be0dfe2906f06f8f28d5b37e
+  sha256: 728a813291bdec2aa46eab8356ace9f75ac2ed9dfe2df5ab603c4e6c09f1c353
   patches:
     - 0001-Use-aarch64-AES-optimizations.patch  # [aarch64]
     - 0001-Disable-HW-AES-optimizations-on-ppc64le.patch  # [ppc64le]
@@ -15,8 +15,8 @@ source:
     - osx_framework_fix.diff  # [osx]
 
 build:
-  number: 5
-  skip: True  # [win and vc<14]
+  number: 0
+  skip: true  # [win and vc<14]
 
 requirements:
   build:
@@ -35,10 +35,10 @@ about:
   license: Apache-2.0
   license_family: Apache
   license_file: LICENSE
-  summary: 'Abseil Common Libraries (C++)'
+  summary: Abseil Common Libraries (C++)
   description: |
-      Abseil is an open-source collection of C++ code (compliant to C++11)
-      designed to augment the C++ standard library.
+    Abseil is an open-source collection of C++ code (compliant to C++11)
+    designed to augment the C++ standard library.
   doc_url: https://github.com/abseil/abseil-cpp
   dev_url: https://github.com/abseil/abseil-cpp
 
