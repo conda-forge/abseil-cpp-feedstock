@@ -1,5 +1,5 @@
 {% set name = "abseil-cpp" %}
-{% set version = "20200225" %}
+{% set version = "20200225.1" %}
 
 package:
   name: {{ name|lower }}
@@ -7,21 +7,23 @@ package:
 
 source:
   url: https://github.com/abseil/{{ name }}/archive/{{ version }}.tar.gz
-  sha256: 728a813291bdec2aa46eab8356ace9f75ac2ed9dfe2df5ab603c4e6c09f1c353
+  sha256: 0db0d26f43ba6806a8a3338da3e646bb581f0ca5359b3a201d8fb8e4752fd5f8
   patches:
     - clang4_osx_fix.diff  # [osx]
     - osx_framework_fix.diff  # [osx]
 
 build:
-  number: 0
+  number: 1
   skip: true  # [win and vc<14]
+  run_exports:
+    - {{ pin_subpackage("abseil-cpp", max_pin="x.x") }}
 
 requirements:
   build:
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
     - cmake
-    - make  # [not win]
+    - ninja
 
 test:
   commands:
