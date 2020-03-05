@@ -13,7 +13,7 @@ source:
     - osx_framework_fix.diff  # [osx]
 
 build:
-  number: 0
+  number: 1
   skip: true  # [win and vc<14]
   run_exports:
     - {{ pin_subpackage("abseil-cpp", max_pin="x.x") }}
@@ -23,7 +23,7 @@ requirements:
     - {{ compiler('c') }}
     - {{ compiler('cxx') }}
     - cmake
-    - make  # [not win]
+    - ninja
 
 test:
   commands:
