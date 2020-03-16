@@ -9,11 +9,12 @@ source:
   url: https://github.com/abseil/{{ name }}/archive/{{ version }}.tar.gz
   sha256: 0db0d26f43ba6806a8a3338da3e646bb581f0ca5359b3a201d8fb8e4752fd5f8
   patches:
+    - linux-librt.patch  # [linux]
     - clang4_osx_fix.diff  # [osx]
     - osx_framework_fix.diff  # [osx]
 
 build:
-  number: 1
+  number: 2
   skip: true  # [win and vc<14]
   run_exports:
     - {{ pin_subpackage("abseil-cpp", max_pin="x.x") }}
