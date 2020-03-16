@@ -1,0 +1,22 @@
+From b16540046d80fb76c435de466214a2294273adc4 Mon Sep 17 00:00:00 2001
+From: "Uwe L. Korn" <xhochy@users.noreply.github.com>
+Date: Mon, 16 Mar 2020 12:42:53 +0100
+Subject: [PATCH] Update CMakeLists.txt
+
+---
+ absl/base/CMakeLists.txt | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/absl/base/CMakeLists.txt b/absl/base/CMakeLists.txt
+index 14c52eab..7a5fed84 100644
+--- a/absl/base/CMakeLists.txt
++++ b/absl/base/CMakeLists.txt
+@@ -191,7 +191,7 @@ absl_cc_library(
+     ${ABSL_DEFAULT_COPTS}
+   LINKOPTS
+     ${ABSL_DEFAULT_LINKOPTS}
+-    $<$<BOOL:${LIBRT}>:${LIBRT}>
++    $<$<BOOL:${LIBRT}>:"rt">
+     $<$<BOOL:${MINGW}>:"advapi32">
+   DEPS
+     absl::atomic_hook
