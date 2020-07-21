@@ -14,8 +14,7 @@ source:
     - osx_framework_fix.diff  # [osx]
 
 build:
-  number: 0
-  skip: true  # [win and vc<14]
+  number: 1
   run_exports:
     - {{ pin_subpackage("abseil-cpp", max_pin="x.x") }}
 
@@ -28,7 +27,7 @@ requirements:
 
 test:
   commands:
-    - test -f $PREFIX/lib/libabsl_base.a  # [not win]
+    - test -f $PREFIX/lib/libabsl_base${SHLIB_EXT}  # [not win]
     - if not exist %LIBRARY_LIB%\\absl_base.lib exit 1  # [win]
 
 about:
