@@ -12,9 +12,10 @@ source:
     - linux-librt.patch  # [linux]
     - clang4_osx_fix.diff  # [osx]
     - osx_framework_fix.diff  # [osx]
+    - remove-4221.patch  # [win]
 
 build:
-  number: 1
+  number: 2
   run_exports:
     - {{ pin_subpackage("abseil-cpp", max_pin="x.x") }}
 
