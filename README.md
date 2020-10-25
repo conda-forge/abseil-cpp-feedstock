@@ -5,9 +5,13 @@ Home: https://github.com/abseil/abseil-cpp
 
 Package license: Apache-2.0
 
-Feedstock license: BSD-3-Clause
+Feedstock license: [BSD-3-Clause](https://github.com/conda-forge/abseil-cpp-feedstock/blob/master/LICENSE.txt)
 
 Summary: Abseil Common Libraries (C++)
+
+Development: https://github.com/abseil/abseil-cpp
+
+Documentation: https://github.com/abseil/abseil-cpp
 
 Abseil is an open-source collection of C++ code (compliant to C++11)
 designed to augment the C++ standard library.
