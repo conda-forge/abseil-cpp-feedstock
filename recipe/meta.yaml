@@ -1,5 +1,5 @@
 {% set name = "abseil-cpp" %}
-{% set version = "20210324.2" %}
+{% set version = "20211102.0" %}
 
 package:
   name: {{ name|lower }}
@@ -7,7 +7,7 @@ package:
 
 source:
   url: https://github.com/abseil/{{ name }}/archive/{{ version }}.tar.gz
-  sha256: 59b862f50e710277f8ede96f083a5bb8d7c9595376146838b9580be90374ee1f
+  sha256: dcf71b9cba8dc0ca9940c4b316a0c796be8fab42b070bb6b7cab62b48f0e66c4
   patches:
     #- linux-librt.patch  # [linux]
     - clang4_osx_fix.diff  # [osx]
