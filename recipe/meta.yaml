@@ -38,15 +38,14 @@ requirements:
 ] %}
 test:
   commands:
-    # windows
-    - if not exist %LIBRARY_LIB%\\abseil_dll.lib exit 1  # [win]
+    # windows (DLL + import library)
     - if not exist %LIBRARY_BIN%\\abseil_dll.dll exit 1  # [win]
+    - if not exist %LIBRARY_LIB%\\abseil_dll.lib exit 1  # [win]
 
     # absl_libs
     {% for each_lib in absl_libs %}
     # presence of shared libs
     - test -f $PREFIX/lib/libabsl_{{ each_lib }}${SHLIB_EXT}      # [unix]
-    - if not exist %LIBRARY_LIB%\\absl_{{ each_lib }}.lib exit 1  # [win]
     # absence of static libs
     - test ! -f $PREFIX/lib/libabsl_{{ each_lib }}.a              # [unix]
     # TODO: do we want to get rid of the static windows libs?
