@@ -15,7 +15,7 @@ source:
     - remove-4221.patch  # [win]
 
 build:
-  number: 0
+  number: 1
   run_exports:
     - {{ pin_subpackage("abseil-cpp", max_pin="x.x") }}
 
