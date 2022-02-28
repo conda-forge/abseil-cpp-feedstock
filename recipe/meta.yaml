@@ -15,7 +15,7 @@ source:
     - remove-4221.patch  # [win]
 
 build:
-  number: 0
+  number: 1
   run_exports:
     - {{ pin_subpackage("abseil-cpp", max_pin="x.x") }}
 
@@ -26,10 +26,31 @@ requirements:
     - cmake
     - ninja
 
+{% set absl_libs = [
+    "base", "civil_time", "cord", "cordz_functions", "cordz_handle", "cordz_info",
+    "cordz_sample_token", "examine_stack", "exponential_biased", "failure_signal_handler",
+    "flags", "flags_commandlineflag", "flags_config", "flags_marshalling", "flags_parse",
+    "flags_private_handle_accessor", "flags_program_name", "flags_reflection", "flags_usage",
+    "hash", "hashtablez_sampler", "int128", "log_severity", "low_level_hash", "periodic_sampler",
+    "random_distributions", "random_seed_gen_exception", "random_seed_sequences", "raw_hash_set",
+    "scoped_set_env", "spinlock_wait", "stacktrace", "status", "statusor", "strerror", "strings",
+    "symbolize", "synchronization", "time", "time_zone"
+] %}
 test:
   commands:
-    - test -f $PREFIX/lib/libabsl_base${SHLIB_EXT}  # [not win]
-    - if not exist %LIBRARY_LIB%\\absl_base.lib exit 1  # [win]
+    # windows (DLL + import library)
+    - if not exist %LIBRARY_BIN%\\abseil_dll.dll exit 1  # [win]
+    - if not exist %LIBRARY_LIB%\\abseil_dll.lib exit 1  # [win]
+
+    # absl_libs
+    {% for each_lib in absl_libs %}
+    # presence of shared libs
+    - test -f $PREFIX/lib/libabsl_{{ each_lib }}${SHLIB_EXT}      # [unix]
+    # absence of static libs
+    - test ! -f $PREFIX/lib/libabsl_{{ each_lib }}.a              # [unix]
+    # TODO: do we want to get rid of the static windows libs?
+    # - if exist %LIBRARY_LIB%\\absl_{{ each_lib }}.lib exit 1      # [win]
+    {% endfor %}
 
 about:
   home: https://github.com/abseil/abseil-cpp
