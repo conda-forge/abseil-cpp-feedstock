@@ -9,13 +9,15 @@ source:
   url: https://github.com/abseil/{{ name }}/archive/{{ version }}.tar.gz
   sha256: dcf71b9cba8dc0ca9940c4b316a0c796be8fab42b070bb6b7cab62b48f0e66c4
   patches:
-    #- linux-librt.patch  # [linux]
-    - clang4_osx_fix.diff  # [osx]
-    - osx_framework_fix.diff  # [osx]
-    - remove-4221.patch  # [win]
+    - patches/0001-patch-out-the-build-issue-on-clang4-osx.patch
+    - patches/0002-fix-for-linking-to-the-CoreFoundation-framework-on-O.patch
+    - patches/0003-remove-ignore-4221-from-ABSL_MSVC_LINKOPTS.patch
+    # experimental
+    - patches/0004-alphabetize-ABSL_INTERNAL_DLL_TARGETS.patch
+    - patches/0005-add-some-missing-internal-dll-targets.patch
 
 build:
-  number: 1
+  number: 2
   run_exports:
     - {{ pin_subpackage("abseil-cpp", max_pin="x.x") }}
 
