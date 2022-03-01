@@ -179,6 +179,7 @@ Feedstock Maintainers
 =====================
 
 * [@bluescarni](https://github.com/bluescarni/)
+* [@h-vetinari](https://github.com/h-vetinari/)
 * [@njzjz](https://github.com/njzjz/)
 * [@xhochy](https://github.com/xhochy/)
 
