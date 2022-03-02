@@ -1,0 +1,48 @@
+From cfe4ecf10c1da4cf7a0f5814718e891eaf839e8b Mon Sep 17 00:00:00 2001
+From: "H. Vetinari" <h.vetinari@gmx.com>
+Date: Wed, 2 Mar 2022 19:01:20 +1100
+Subject: [PATCH 8/8] add some more internal DLL targets
+
+---
+ CMake/AbseilDll.cmake | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/CMake/AbseilDll.cmake b/CMake/AbseilDll.cmake
+index 5cbf5d0..673594b 100644
+--- a/CMake/AbseilDll.cmake
++++ b/CMake/AbseilDll.cmake
+@@ -347,6 +347,7 @@ set(ABSL_INTERNAL_DLL_TARGETS
+   "algorithm"
+   "algorithm_container"
+   "any"
++  "ascii_internal"
+   "atomic_hook"
+   "bad_any_cast"
+   "bad_any_cast_impl"
+@@ -364,6 +365,7 @@ set(ABSL_INTERNAL_DLL_TARGETS
+   "config"
+   "container"
+   "container_common"
++  "container_internal"
+   "container_memory"
+   "cord"
+   "cord_internal"
+@@ -400,6 +402,7 @@ set(ABSL_INTERNAL_DLL_TARGETS
+   "graphcycles_internal"
+   "hash"
+   "hash_function_defaults"
++  "hash_internal"
+   "hash_policy_traits"
+   "hashtable_debug"
+   "hashtable_debug_hooks"
+@@ -420,6 +423,7 @@ set(ABSL_INTERNAL_DLL_TARGETS
+   "node_hash_map"
+   "node_hash_policy"
+   "node_hash_set"
++  "number_internal"
+   "numeric"
+   "optional"
+   "periodic_sampler"
+-- 
+2.35.1.windows.2
+
