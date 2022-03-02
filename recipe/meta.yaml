@@ -50,8 +50,7 @@ test:
     - test -f $PREFIX/lib/libabsl_{{ each_lib }}${SHLIB_EXT}      # [unix]
     # absence of static libs
     - test ! -f $PREFIX/lib/libabsl_{{ each_lib }}.a              # [unix]
-    # TODO: do we want to get rid of the static windows libs?
-    # - if exist %LIBRARY_LIB%\\absl_{{ each_lib }}.lib exit 1      # [win]
+    - if exist %LIBRARY_LIB%\\absl_{{ each_lib }}.lib exit 1      # [win]
     {% endfor %}
 
 about:
