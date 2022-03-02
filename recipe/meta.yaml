@@ -14,10 +14,12 @@ source:
     - patches/0003-remove-ignore-4221-from-ABSL_MSVC_LINKOPTS.patch
     # experimental
     - patches/0004-alphabetize-ABSL_INTERNAL_DLL_TARGETS.patch
-    - patches/0005-add-some-missing-internal-dll-targets.patch
+    - patches/0005-expand-ABSL_INTERNAL_DLL_TARGETS.patch
+    - patches/0006-propagate-requirement-of-C-17-to-consumers.patch
+    - patches/0007-also-set-target_compile_features-for-abseil_dll.patch
 
 build:
-  number: 2
+  number: 3
   run_exports:
     - {{ pin_subpackage("abseil-cpp", max_pin="x.x") }}
 
@@ -50,8 +52,7 @@ test:
     - test -f $PREFIX/lib/libabsl_{{ each_lib }}${SHLIB_EXT}      # [unix]
     # absence of static libs
     - test ! -f $PREFIX/lib/libabsl_{{ each_lib }}.a              # [unix]
-    # TODO: do we want to get rid of the static windows libs?
-    # - if exist %LIBRARY_LIB%\\absl_{{ each_lib }}.lib exit 1      # [win]
+    - if exist %LIBRARY_LIB%\\absl_{{ each_lib }}.lib exit 1      # [win]
     {% endfor %}
 
 about:
