@@ -15,9 +15,11 @@ source:
     # experimental
     - patches/0004-alphabetize-ABSL_INTERNAL_DLL_TARGETS.patch
     - patches/0005-expand-ABSL_INTERNAL_DLL_TARGETS.patch
+    - patches/0006-propagate-requirement-of-C-17-to-consumers.patch
+    - patches/0007-also-set-target_compile_features-for-abseil_dll.patch
 
 build:
-  number: 2
+  number: 3
   run_exports:
     - {{ pin_subpackage("abseil-cpp", max_pin="x.x") }}
 
