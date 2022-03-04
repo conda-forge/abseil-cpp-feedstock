@@ -14,13 +14,14 @@ source:
     - patches/0003-remove-ignore-4221-from-ABSL_MSVC_LINKOPTS.patch
     # experimental
     - patches/0004-alphabetize-ABSL_INTERNAL_DLL_TARGETS.patch
-    - patches/0005-expand-ABSL_INTERNAL_DLL_TARGETS.patch
-    - patches/0006-propagate-requirement-of-C-17-to-consumers.patch
+    - patches/0005-expand-ABSL_INTERNAL_DLL_TARGETS-to-avoid-static-lib.patch
+    - patches/0006-propagate-C-standard-used-to-compile-as-requirement.patch
     - patches/0007-also-set-target_compile_features-for-abseil_dll.patch
-    - patches/0008-add-some-more-internal-DLL-targets.patch
+    - patches/0008-add-DLL-export-to-MixingHashState-kSeed.patch
+    - patches/0009-move-definition-of-container_internal-kEmptyGroup-to.patch
 
 build:
-  number: 4
+  number: 5
   run_exports:
     - {{ pin_subpackage("abseil-cpp", max_pin="x.x") }}
 
