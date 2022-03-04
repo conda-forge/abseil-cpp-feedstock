@@ -1,0 +1,65 @@
+From da9902b959979af34352a28013db31eee76bb94b Mon Sep 17 00:00:00 2001
+From: "H. Vetinari" <h.vetinari@gmx.com>
+Date: Fri, 4 Mar 2022 12:36:24 +1100
+Subject: [PATCH 9/9] move definition of container_internal::kEmptyGroup to
+ header
+
+and make it constexpr
+---
+ absl/container/internal/raw_hash_set.cc | 6 ------
+ absl/container/internal/raw_hash_set.h  | 7 ++++++-
+ absl/copts/AbseilConfigureCopts.cmake   | 3 +++
+ 3 files changed, 9 insertions(+), 7 deletions(-)
+
+diff --git a/absl/container/internal/raw_hash_set.cc b/absl/container/internal/raw_hash_set.cc
+index 687bcb8..58b8e42 100644
+--- a/absl/container/internal/raw_hash_set.cc
++++ b/absl/container/internal/raw_hash_set.cc
+@@ -23,12 +23,6 @@ namespace absl {
+ ABSL_NAMESPACE_BEGIN
+ namespace container_internal {
+ 
+-alignas(16) ABSL_CONST_INIT ABSL_DLL const ctrl_t kEmptyGroup[16] = {
+-    ctrl_t::kSentinel, ctrl_t::kEmpty, ctrl_t::kEmpty, ctrl_t::kEmpty,
+-    ctrl_t::kEmpty,    ctrl_t::kEmpty, ctrl_t::kEmpty, ctrl_t::kEmpty,
+-    ctrl_t::kEmpty,    ctrl_t::kEmpty, ctrl_t::kEmpty, ctrl_t::kEmpty,
+-    ctrl_t::kEmpty,    ctrl_t::kEmpty, ctrl_t::kEmpty, ctrl_t::kEmpty};
+-
+ constexpr size_t Group::kWidth;
+ 
+ // Returns "random" seed.
+diff --git a/absl/container/internal/raw_hash_set.h b/absl/container/internal/raw_hash_set.h
+index 12682b3..aec2888 100644
+--- a/absl/container/internal/raw_hash_set.h
++++ b/absl/container/internal/raw_hash_set.h
+@@ -301,7 +301,12 @@ static_assert(ctrl_t::kDeleted == static_cast<ctrl_t>(-2),
+ 
+ // A single block of empty control bytes for tables without any slots allocated.
+ // This enables removing a branch in the hot path of find().
+-ABSL_DLL extern const ctrl_t kEmptyGroup[16];
++alignas(16) ABSL_CONST_INIT ABSL_DLL constexpr ctrl_t kEmptyGroup[16] = {
++    ctrl_t::kSentinel, ctrl_t::kEmpty, ctrl_t::kEmpty, ctrl_t::kEmpty,
++    ctrl_t::kEmpty,    ctrl_t::kEmpty, ctrl_t::kEmpty, ctrl_t::kEmpty,
++    ctrl_t::kEmpty,    ctrl_t::kEmpty, ctrl_t::kEmpty, ctrl_t::kEmpty,
++    ctrl_t::kEmpty,    ctrl_t::kEmpty, ctrl_t::kEmpty, ctrl_t::kEmpty};
++
+ inline ctrl_t* EmptyGroup() {
+   return const_cast<ctrl_t*>(kEmptyGroup);
+ }
+diff --git a/absl/copts/AbseilConfigureCopts.cmake b/absl/copts/AbseilConfigureCopts.cmake
+index 942ce90..838227d 100644
+--- a/absl/copts/AbseilConfigureCopts.cmake
++++ b/absl/copts/AbseilConfigureCopts.cmake
+@@ -56,6 +56,9 @@ elseif(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+   set(ABSL_DEFAULT_COPTS "${ABSL_MSVC_FLAGS}")
+   set(ABSL_TEST_COPTS "${ABSL_MSVC_FLAGS};${ABSL_MSVC_TEST_FLAGS}")
+   set(ABSL_DEFAULT_LINKOPTS "${ABSL_MSVC_LINKOPTS}")
++  # make extern constexpr work correctly on MSVC, see
++  # https://docs.microsoft.com/en-us/cpp/cpp/extern-cpp#extern-constexpr-linkage
++  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /Zc:externConstexpr")
+ else()
+   message(WARNING "Unknown compiler: ${CMAKE_CXX_COMPILER}.  Building with no default flags")
+   set(ABSL_DEFAULT_COPTS "")
+-- 
+2.35.1.windows.2
+
