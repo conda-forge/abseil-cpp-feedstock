@@ -1,0 +1,39 @@
+From 544c385820e039c8d8f5d97bfc71e776a8567149 Mon Sep 17 00:00:00 2001
+From: "H. Vetinari" <h.vetinari@gmx.com>
+Date: Fri, 4 Mar 2022 12:35:49 +1100
+Subject: [PATCH 8/9] mark MixingHashState::kSeed as extern
+
+---
+ absl/hash/internal/hash.cc | 2 +-
+ absl/hash/internal/hash.h  | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/absl/hash/internal/hash.cc b/absl/hash/internal/hash.cc
+index 11451e5..d71d41c 100644
+--- a/absl/hash/internal/hash.cc
++++ b/absl/hash/internal/hash.cc
+@@ -44,7 +44,7 @@ uint64_t MixingHashState::CombineLargeContiguousImpl64(
+                                std::integral_constant<int, 8>{});
+ }
+ 
+-ABSL_CONST_INIT const void* const MixingHashState::kSeed = &kSeed;
++ABSL_DLL ABSL_CONST_INIT const void* const MixingHashState::kSeed = &kSeed;
+ 
+ // The salt array used by LowLevelHash. This array is NOT the mechanism used to
+ // make absl::Hash non-deterministic between program invocations.  See `Seed()`
+diff --git a/absl/hash/internal/hash.h b/absl/hash/internal/hash.h
+index b1e33ca..e2b8826 100644
+--- a/absl/hash/internal/hash.h
++++ b/absl/hash/internal/hash.h
+@@ -955,7 +955,7 @@ class ABSL_DLL MixingHashState : public HashStateBase<MixingHashState> {
+     return static_cast<uint64_t>(reinterpret_cast<uintptr_t>(kSeed));
+ #endif
+   }
+-  static const void* const kSeed;
++  ABSL_DLL extern const void* const kSeed;
+ 
+   uint64_t state_;
+ };
+-- 
+2.35.1.windows.2
+

@@ -1,0 +1,54 @@
+From 572f44704a4c0c2d07ceaa4659af0dd159170f09 Mon Sep 17 00:00:00 2001
+From: "H. Vetinari" <h.vetinari@gmx.com>
+Date: Fri, 4 Mar 2022 12:36:24 +1100
+Subject: [PATCH 9/9] use constexpr for container_internal::kEmptyGroup
+
+---
+ absl/container/internal/raw_hash_set.cc | 2 +-
+ absl/container/internal/raw_hash_set.h  | 2 +-
+ absl/copts/AbseilConfigureCopts.cmake   | 3 +++
+ 3 files changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/absl/container/internal/raw_hash_set.cc b/absl/container/internal/raw_hash_set.cc
+index 687bcb8..5a991a4 100644
+--- a/absl/container/internal/raw_hash_set.cc
++++ b/absl/container/internal/raw_hash_set.cc
+@@ -23,7 +23,7 @@ namespace absl {
+ ABSL_NAMESPACE_BEGIN
+ namespace container_internal {
+ 
+-alignas(16) ABSL_CONST_INIT ABSL_DLL const ctrl_t kEmptyGroup[16] = {
++alignas(16) ABSL_CONST_INIT ABSL_DLL constexpr ctrl_t kEmptyGroup[16] = {
+     ctrl_t::kSentinel, ctrl_t::kEmpty, ctrl_t::kEmpty, ctrl_t::kEmpty,
+     ctrl_t::kEmpty,    ctrl_t::kEmpty, ctrl_t::kEmpty, ctrl_t::kEmpty,
+     ctrl_t::kEmpty,    ctrl_t::kEmpty, ctrl_t::kEmpty, ctrl_t::kEmpty,
+diff --git a/absl/container/internal/raw_hash_set.h b/absl/container/internal/raw_hash_set.h
+index 12682b3..dc6c12f 100644
+--- a/absl/container/internal/raw_hash_set.h
++++ b/absl/container/internal/raw_hash_set.h
+@@ -301,7 +301,7 @@ static_assert(ctrl_t::kDeleted == static_cast<ctrl_t>(-2),
+ 
+ // A single block of empty control bytes for tables without any slots allocated.
+ // This enables removing a branch in the hot path of find().
+-ABSL_DLL extern const ctrl_t kEmptyGroup[16];
++ABSL_DLL extern constexpr ctrl_t kEmptyGroup[16];
+ inline ctrl_t* EmptyGroup() {
+   return const_cast<ctrl_t*>(kEmptyGroup);
+ }
+diff --git a/absl/copts/AbseilConfigureCopts.cmake b/absl/copts/AbseilConfigureCopts.cmake
+index 942ce90..838227d 100644
+--- a/absl/copts/AbseilConfigureCopts.cmake
++++ b/absl/copts/AbseilConfigureCopts.cmake
+@@ -56,6 +56,9 @@ elseif(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+   set(ABSL_DEFAULT_COPTS "${ABSL_MSVC_FLAGS}")
+   set(ABSL_TEST_COPTS "${ABSL_MSVC_FLAGS};${ABSL_MSVC_TEST_FLAGS}")
+   set(ABSL_DEFAULT_LINKOPTS "${ABSL_MSVC_LINKOPTS}")
++  # make extern constexpr work correctly on MSVC, see
++  # https://docs.microsoft.com/en-us/cpp/cpp/extern-cpp#extern-constexpr-linkage
++  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /Zc:externConstexpr")
+ else()
+   message(WARNING "Unknown compiler: ${CMAKE_CXX_COMPILER}.  Building with no default flags")
+   set(ABSL_DEFAULT_COPTS "")
+-- 
+2.35.1.windows.2
+
