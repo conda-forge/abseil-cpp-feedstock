@@ -1,12 +1,11 @@
-From e80e6e731a46bcae8bc611869bc79cca1c4a5a2c Mon Sep 17 00:00:00 2001
+From 9fe99781120e9e5e64b54e6ee1252f4e721bf75e Mon Sep 17 00:00:00 2001
 From: "H. Vetinari" <h.vetinari@gmx.com>
 Date: Fri, 4 Mar 2022 12:35:49 +1100
 Subject: [PATCH 8/9] add DLL export to MixingHashState::kSeed
 
 ---
  absl/hash/internal/hash.cc | 2 +-
- absl/hash/internal/hash.h  | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/absl/hash/internal/hash.cc b/absl/hash/internal/hash.cc
 index 11451e5..d71d41c 100644
@@ -21,19 +20,6 @@ index 11451e5..d71d41c 100644
  
  // The salt array used by LowLevelHash. This array is NOT the mechanism used to
  // make absl::Hash non-deterministic between program invocations.  See `Seed()`
-diff --git a/absl/hash/internal/hash.h b/absl/hash/internal/hash.h
-index b1e33ca..2971376 100644
---- a/absl/hash/internal/hash.h
-+++ b/absl/hash/internal/hash.h
-@@ -955,7 +955,7 @@ class ABSL_DLL MixingHashState : public HashStateBase<MixingHashState> {
-     return static_cast<uint64_t>(reinterpret_cast<uintptr_t>(kSeed));
- #endif
-   }
--  static const void* const kSeed;
-+  ABSL_DLL static const void* const kSeed;
- 
-   uint64_t state_;
- };
 -- 
 2.35.1.windows.2
 

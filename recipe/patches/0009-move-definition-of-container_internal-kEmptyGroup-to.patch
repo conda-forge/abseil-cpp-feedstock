@@ -1,4 +1,4 @@
-From ce180ab8d8eeba5f269b3ed73c140747af4179c5 Mon Sep 17 00:00:00 2001
+From 9e7cc4de93102eccc5234e51a0a907750c2647ac Mon Sep 17 00:00:00 2001
 From: "H. Vetinari" <h.vetinari@gmx.com>
 Date: Fri, 4 Mar 2022 12:36:24 +1100
 Subject: [PATCH 9/9] move definition of container_internal::kEmptyGroup to
