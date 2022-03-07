@@ -1,0 +1,53 @@
+From e7583f113c39c22e80623463b83ff3968163a369 Mon Sep 17 00:00:00 2001
+From: "H. Vetinari" <h.vetinari@gmx.com>
+Date: Tue, 8 Mar 2022 10:58:24 +1100
+Subject: [PATCH 11/11] add some missing headers
+
+---
+ absl/container/internal/raw_hash_set.h | 3 +++
+ absl/hash/internal/hash.h              | 1 +
+ absl/time/format.cc                    | 1 +
+ 3 files changed, 5 insertions(+)
+
+diff --git a/absl/container/internal/raw_hash_set.h b/absl/container/internal/raw_hash_set.h
+index aec2888..629075f 100644
+--- a/absl/container/internal/raw_hash_set.h
++++ b/absl/container/internal/raw_hash_set.h
+@@ -113,7 +113,10 @@
+ #include <type_traits>
+ #include <utility>
+ 
++#include "absl/base/attributes.h"
++#include "absl/base/config.h"
+ #include "absl/base/internal/endian.h"
++#include "absl/base/macros.h"
+ #include "absl/base/optimization.h"
+ #include "absl/base/port.h"
+ #include "absl/container/internal/common.h"
+diff --git a/absl/hash/internal/hash.h b/absl/hash/internal/hash.h
+index b1e33ca..ab55bf9 100644
+--- a/absl/hash/internal/hash.h
++++ b/absl/hash/internal/hash.h
+@@ -39,6 +39,7 @@
+ #include <utility>
+ #include <vector>
+ 
++#include "absl/base/attributes.h"
+ #include "absl/base/config.h"
+ #include "absl/base/internal/unaligned_access.h"
+ #include "absl/base/port.h"
+diff --git a/absl/time/format.cc b/absl/time/format.cc
+index 4005fb7..8994664 100644
+--- a/absl/time/format.cc
++++ b/absl/time/format.cc
+@@ -17,6 +17,7 @@
+ #include <cctype>
+ #include <cstdint>
+ 
++#include "absl/base/config.h"
+ #include "absl/strings/match.h"
+ #include "absl/strings/string_view.h"
+ #include "absl/time/internal/cctz/include/cctz/time_zone.h"
+-- 
+2.35.1.windows.2
+

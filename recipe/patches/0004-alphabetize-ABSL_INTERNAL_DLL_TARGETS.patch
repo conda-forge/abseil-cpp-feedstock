@@ -1,7 +1,7 @@
 From 48bfdfc5de1b6be894a72a09e7c30e9afd173fbc Mon Sep 17 00:00:00 2001
 From: "H. Vetinari" <h.vetinari@gmx.com>
 Date: Wed, 2 Mar 2022 08:07:20 +1100
-Subject: [PATCH 4/9] alphabetize ABSL_INTERNAL_DLL_TARGETS
+Subject: [PATCH 04/11] alphabetize ABSL_INTERNAL_DLL_TARGETS
 
 ---
  CMake/AbseilDll.cmake | 174 +++++++++++++++++++++---------------------
