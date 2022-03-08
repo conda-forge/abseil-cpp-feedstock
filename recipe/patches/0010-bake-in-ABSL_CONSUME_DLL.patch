@@ -1,0 +1,40 @@
+From 3756d8ffb00a4d1802f1d6ff7f242afad6215792 Mon Sep 17 00:00:00 2001
+From: "H. Vetinari" <h.vetinari@gmx.com>
+Date: Tue, 8 Mar 2022 15:24:12 +1100
+Subject: [PATCH 10/11] bake in ABSL_CONSUME_DLL
+
+---
+ absl/base/config.h                   | 2 +-
+ absl/base/internal/thread_identity.h | 3 +--
+ 2 files changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/absl/base/config.h b/absl/base/config.h
+index 585485c..f16af62 100644
+--- a/absl/base/config.h
++++ b/absl/base/config.h
+@@ -717,7 +717,7 @@ static_assert(ABSL_INTERNAL_INLINE_NAMESPACE_STR[0] != 'h' ||
+ #if defined(_MSC_VER)
+ #if defined(ABSL_BUILD_DLL)
+ #define ABSL_DLL __declspec(dllexport)
+-#elif defined(ABSL_CONSUME_DLL)
++#elif 1
+ #define ABSL_DLL __declspec(dllimport)
+ #else
+ #define ABSL_DLL
+diff --git a/absl/base/internal/thread_identity.h b/absl/base/internal/thread_identity.h
+index 659694b..d86e023 100644
+--- a/absl/base/internal/thread_identity.h
++++ b/absl/base/internal/thread_identity.h
+@@ -242,8 +242,7 @@ ABSL_CONST_INIT extern thread_local ThreadIdentity* thread_identity_ptr;
+ // inlined. In the other cases we opt to have the function not be inlined. Note
+ // that `CurrentThreadIdentityIfPresent` is declared above so we can exclude
+ // this entire inline definition.
+-#if !defined(__APPLE__) && !defined(ABSL_BUILD_DLL) && \
+-    !defined(ABSL_CONSUME_DLL)
++#if !defined(__APPLE__) && !defined(_MSC_VER)
+ #define ABSL_INTERNAL_INLINE_CURRENT_THREAD_IDENTITY_IF_PRESENT 1
+ #endif
+ 
+-- 
+2.35.1.windows.2
+
