@@ -24,6 +24,7 @@ source:
 
 build:
   number: 7
+  string: "h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}_cxx{{ cxx_standard }}"
   run_exports:
     - {{ pin_subpackage("abseil-cpp", max_pin="x.x") }}
 
