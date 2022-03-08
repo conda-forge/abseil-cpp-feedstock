@@ -1,7 +1,7 @@
 From 341b5875ad617a45600d19ac03d78e68ef8a39b0 Mon Sep 17 00:00:00 2001
 From: Francesco Biscani <bluescarni@gmail.com>
 Date: Sat, 21 Sep 2019 21:39:26 +0200
-Subject: [PATCH 02/10] fix for linking to the CoreFoundation framework on OSX
+Subject: [PATCH 02/12] fix for linking to the CoreFoundation framework on OSX
 
 ---
  absl/time/CMakeLists.txt | 6 ++++--
