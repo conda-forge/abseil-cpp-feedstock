@@ -1,5 +1,18 @@
 @echo on
 
+:: take care of activation scripts;
+:: from https://conda-forge.org/docs/maintainer/adding_pkgs.html#activate-scripts
+setlocal EnableDelayedExpansion
+
+:: Copy the [de]activate scripts to %PREFIX%\etc\conda\[de]activate.d.
+:: This will allow them to be run on environment activation.
+for %%F in (activate deactivate) DO (
+    if not exist %PREFIX%\etc\conda\%%F.d mkdir %PREFIX%\etc\conda\%%F.d
+    copy %RECIPE_DIR%\%%F.bat %PREFIX%\etc\conda\%%F.d\%PKG_NAME%_%%F.bat
+    :: Copy unix shell activation scripts, needed by Windows Bash users
+    copy %RECIPE_DIR%\%%F.sh %PREFIX%\etc\conda\%%F.d\%PKG_NAME%_%%F.sh
+)
+
 mkdir build
 cd build
 
@@ -11,7 +24,7 @@ cmake -GNinja ^
     -DABSL_PROPAGATE_CXX_STD=ON ^
     -DBUILD_SHARED_LIBS=ON ^
     -DCMAKE_BUILD_TYPE=Release ^
-    -DCMAKE_CXX_STANDARD=11 ^
+    -DCMAKE_CXX_STANDARD=%cxx_standard% ^
     -DCMAKE_INSTALL_PREFIX=%LIBRARY_PREFIX% ^
     -DCMAKE_PREFIX_PATH=%LIBRARY_PREFIX% ^
     ..

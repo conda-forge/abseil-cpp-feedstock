@@ -17,11 +17,13 @@ source:
     - patches/0005-expand-ABSL_INTERNAL_DLL_TARGETS-to-avoid-static-lib.patch
     - patches/0006-propagate-C-standard-used-to-compile-as-requirement.patch
     - patches/0007-also-set-target_compile_features-for-abseil_dll.patch
-    # - patches/0008-add-DLL-export-to-MixingHashState-kSeed.patch
-    # - patches/0009-move-definition-of-container_internal-kEmptyGroup-to.patch
+    - patches/0008-add-DLL-export-to-MixingHashState-kSeed.patch
+    - patches/0009-move-definition-of-container_internal-kEmptyGroup-to.patch
+    - patches/0010-add-some-missing-headers.patch
 
 build:
-  number: 6
+  number: 7
+  string: "h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}_cxx{{ cxx_standard }}"
   run_exports:
     - {{ pin_subpackage("abseil-cpp", max_pin="x.x") }}
 

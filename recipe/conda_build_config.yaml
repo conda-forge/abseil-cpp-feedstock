@@ -1,2 +1,7 @@
+# do not set in build script; this is used for build string!
+cxx_standard:
+  - 17  # [unix]
+  - 11  # [win]
+
 channel_targets:
   - conda-forge abseil_dev
