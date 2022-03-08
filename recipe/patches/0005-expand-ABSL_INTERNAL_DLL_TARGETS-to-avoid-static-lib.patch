@@ -1,7 +1,7 @@
 From dbd13e623a1be471f98bc8318628e6f8416bd3ef Mon Sep 17 00:00:00 2001
 From: "H. Vetinari" <h.vetinari@gmx.com>
 Date: Wed, 2 Mar 2022 13:43:37 +1100
-Subject: [PATCH 05/11] expand ABSL_INTERNAL_DLL_TARGETS to avoid static libs
+Subject: [PATCH 05/10] expand ABSL_INTERNAL_DLL_TARGETS to avoid static libs
 
 This is due to how the logic of absl_internal_dll_contains checks
 whether additional static libraries should be built, compare

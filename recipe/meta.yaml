@@ -19,8 +19,7 @@ source:
     - patches/0007-also-set-target_compile_features-for-abseil_dll.patch
     - patches/0008-add-DLL-export-to-MixingHashState-kSeed.patch
     - patches/0009-move-definition-of-container_internal-kEmptyGroup-to.patch
-    - patches/0010-move-definition-of-ascii_internal-kPropertyBits-to-h.patch
-    - patches/0011-add-some-missing-headers.patch
+    - patches/0010-add-some-missing-headers.patch
 
 build:
   number: 7

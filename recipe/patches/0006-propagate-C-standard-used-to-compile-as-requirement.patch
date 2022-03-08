@@ -1,7 +1,7 @@
 From c9d3b94c5dc261eba5257f5113f01b581eab20ed Mon Sep 17 00:00:00 2001
 From: "H. Vetinari" <h.vetinari@gmx.com>
 Date: Wed, 2 Mar 2022 12:34:33 +1100
-Subject: [PATCH 06/11] propagate C++ standard used to compile as requirement
+Subject: [PATCH 06/10] propagate C++ standard used to compile as requirement
 
 ---
  CMake/AbseilHelpers.cmake | 4 ++--
