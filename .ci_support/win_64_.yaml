@@ -1,10 +1,12 @@
 c_compiler:
-- vs2017
+- vs2019
 channel_sources:
 - conda-forge
 channel_targets:
 - conda-forge abseil_dev
 cxx_compiler:
-- vs2017
+- vs2019
+cxx_standard:
+- '11'
 target_platform:
 - win-64
