@@ -1,4 +1,4 @@
-From 7172c70f828fd5edfb3925b40262c3b31de17698 Mon Sep 17 00:00:00 2001
+From b0219bd60d3e23ea2d3d12617a0f0d83341b5b69 Mon Sep 17 00:00:00 2001
 From: "H. Vetinari" <h.vetinari@gmx.com>
 Date: Thu, 10 Mar 2022 22:13:04 +1100
 Subject: [PATCH 11/11] move initialization of kSeed to header
@@ -22,7 +22,7 @@ index 11451e5..3f851b4 100644
  // make absl::Hash non-deterministic between program invocations.  See `Seed()`
  // for that mechanism.
 diff --git a/absl/hash/internal/hash.h b/absl/hash/internal/hash.h
-index ab55bf9..7cb59b2 100644
+index ab55bf9..4e8231c 100644
 --- a/absl/hash/internal/hash.h
 +++ b/absl/hash/internal/hash.h
 @@ -956,7 +956,9 @@ class ABSL_DLL MixingHashState : public HashStateBase<MixingHashState> {
@@ -31,7 +31,7 @@ index ab55bf9..7cb59b2 100644
    }
 -  static const void* const kSeed;
 +
-+  static const void* const dummy;
++  inline static const void* const dummy;
 +  static constexpr const void* const kSeed = &dummy;
  
    uint64_t state_;
