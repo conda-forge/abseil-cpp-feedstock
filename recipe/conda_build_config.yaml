@@ -1,3 +1,8 @@
+c_compiler:    # [win]
+  - vs2019     # [win]
+cxx_compiler:  # [win]
+  - vs2019     # [win]
+
 # do not set in build script; this is used for build string!
 cxx_standard:
   - 17  # [unix]
