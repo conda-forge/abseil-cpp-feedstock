@@ -106,7 +106,6 @@ outputs:
       commands:
         # tested in other outputs
         - echo "hello"
-  {% endif %}
 
 about:
   home: https://github.com/abseil/abseil-cpp
