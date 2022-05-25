@@ -77,13 +77,11 @@ outputs:
 
   {% endif %}  # shared_libs == "ON" / "OFF"
 
-  # choose sensible default per platform;
-  # windows doesn't support fully dynamic builds, see
-  # https://github.com/abseil/abseil-cpp/pull/1115
-  {% if (unix and ((shared_libs == "ON") and (cxx_standard == "17")))
-        or (win and ((shared_libs == "OFF") and (cxx_standard == "11"))) %}
+  # choose sensible default per platform
   - name: libabseil
     build:
+      skip: True  # [unix and not ((shared_libs == "ON") and (cxx_standard == "17"))]
+      skip: True  # [win and not ((shared_libs == "OFF") and (cxx_standard == "11"))]
       run_exports:
         - {{ pin_subpackage("libabseil", max_pin="x.x") }}
     requirements:
@@ -97,13 +95,13 @@ outputs:
 
   # for compatibility
   - name: abseil-cpp
+    # needs to match skips of libabseil
+    build:
+      skip: True  # [unix and not ((shared_libs == "ON") and (cxx_standard == "17"))]
+      skip: True  # [win and not ((shared_libs == "OFF") and (cxx_standard == "11"))]
     requirements:
       host:
-        # somehow errors
-        # - {{ pin_subpackage('libabseil', exact=True) }}
-        # copied from libabseil
-        - libabseil_dynamic ={{ version }}=*_cxx17  # [unix]
-        - libabseil_static ={{ version }}=*_cxx11   # [win]
+        - {{ pin_subpackage('libabseil', exact=True) }}
     test:
       commands:
         # tested in other outputs
