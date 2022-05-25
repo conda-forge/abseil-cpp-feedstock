@@ -1,0 +1,14 @@
+cxx_standard:
+  - 11
+  - 14
+  - 17
+  - 17  # [unix]
+shared_libs:
+  - OFF
+  - OFF
+  - OFF
+  - ON  # [unix]
+zip_keys:
+  -
+    - cxx_standard
+    - shared_libs
