@@ -32,9 +32,9 @@ outputs:
   - name: libabseil_dynamic
     script: build-abseil.sh   # [unix]
     build:
-      string: h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}_cxx{{ cxx_standard }}
+      string: cxx{{ cxx_standard }}_h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}
       run_exports:
-        - libabseil_dynamic ={{ version }}=*_cxx{{ cxx_standard }}
+        - libabseil_dynamic ={{ version }}=cxx{{ cxx_standard }}*
     requirements:
       build:
         - {{ compiler('c') }}
@@ -56,7 +56,7 @@ outputs:
     script: build-abseil.sh   # [unix]
     script: build-abseil.bat  # [win]
     build:
-      string: h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}_cxx{{ cxx_standard }}
+      string: cxx{{ cxx_standard }}_h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}
       # no run_export necessary for static lib
 
     requirements:
