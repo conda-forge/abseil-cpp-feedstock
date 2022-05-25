@@ -99,7 +99,11 @@ outputs:
   - name: abseil-cpp
     requirements:
       host:
-        - {{ pin_subpackage('libabseil', exact=True) }}
+        # somehow errors
+        # - {{ pin_subpackage('libabseil', exact=True) }}
+        # copied from libabseil
+        - libabseil_dynamic ={{ version }}=*_cxx17  # [unix]
+        - libabseil_static ={{ version }}=*_cxx11   # [win]
     test:
       commands:
         # tested in other outputs
