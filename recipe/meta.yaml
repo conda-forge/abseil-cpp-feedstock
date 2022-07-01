@@ -1,21 +1,20 @@
-{% set name = "abseil-cpp" %}
-{% set version = "20211102.0" %}
+{% set version = "20220623.0" %}
 
 package:
-  name: {{ name|lower }}
+  name: abseil-cpp
   version: {{ version }}
 
 source:
-  url: https://github.com/abseil/{{ name }}/archive/{{ version }}.tar.gz
-  sha256: dcf71b9cba8dc0ca9940c4b316a0c796be8fab42b070bb6b7cab62b48f0e66c4
+  url: https://github.com/abseil/abseil-cpp/archive/{{ version }}.tar.gz
+  sha256: 4208129b49006089ba1d6710845a45e31c59b0ab6bff9e5788a87f55c5abd602
   patches:
-    #- linux-librt.patch  # [linux]
-    - clang4_osx_fix.diff  # [osx]
-    - osx_framework_fix.diff  # [osx]
-    - remove-4221.patch  # [win]
+    - patches/0001-patch-out-the-build-issue-on-clang4-osx.patch
+    - patches/0002-fix-for-linking-to-the-CoreFoundation-framework-on-O.patch
+    - patches/0003-remove-ignore-4221-from-ABSL_MSVC_LINKOPTS.patch
+    - patches/0004-add-missing-osx-workaround.patch
 
 build:
-  number: 1
+  number: 0
   run_exports:
     - {{ pin_subpackage("abseil-cpp", max_pin="x.x") }}
 
