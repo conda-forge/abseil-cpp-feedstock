@@ -12,6 +12,7 @@ source:
     - patches/0001-patch-out-the-build-issue-on-clang4-osx.patch
     - patches/0002-fix-for-linking-to-the-CoreFoundation-framework-on-O.patch
     - patches/0003-remove-ignore-4221-from-ABSL_MSVC_LINKOPTS.patch
+    - patches/0004-add-missing-osx-workaround.patch
 
 build:
   number: 0
