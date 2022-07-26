@@ -12,7 +12,7 @@
 ] %}
 
 package:
-  name: abseil-cpp
+  name: abseil-split
   version: {{ version }}
 
 source:
