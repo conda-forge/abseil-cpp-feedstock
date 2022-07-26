@@ -8,11 +8,29 @@ jobs:
     vmImage: macOS-10.15
   strategy:
     matrix:
-      osx_64_:
-        CONFIG: osx_64_
+      osx_64_cxx_standard11shared_libsOFF:
+        CONFIG: osx_64_cxx_standard11shared_libsOFF
         UPLOAD_PACKAGES: 'True'
-      osx_arm64_:
-        CONFIG: osx_arm64_
+      osx_64_cxx_standard14shared_libsOFF:
+        CONFIG: osx_64_cxx_standard14shared_libsOFF
+        UPLOAD_PACKAGES: 'True'
+      osx_64_cxx_standard17shared_libsOFF:
+        CONFIG: osx_64_cxx_standard17shared_libsOFF
+        UPLOAD_PACKAGES: 'True'
+      osx_64_cxx_standard17shared_libsON:
+        CONFIG: osx_64_cxx_standard17shared_libsON
+        UPLOAD_PACKAGES: 'True'
+      osx_arm64_cxx_standard11shared_libsOFF:
+        CONFIG: osx_arm64_cxx_standard11shared_libsOFF
+        UPLOAD_PACKAGES: 'True'
+      osx_arm64_cxx_standard14shared_libsOFF:
+        CONFIG: osx_arm64_cxx_standard14shared_libsOFF
+        UPLOAD_PACKAGES: 'True'
+      osx_arm64_cxx_standard17shared_libsOFF:
+        CONFIG: osx_arm64_cxx_standard17shared_libsOFF
+        UPLOAD_PACKAGES: 'True'
+      osx_arm64_cxx_standard17shared_libsON:
+        CONFIG: osx_arm64_cxx_standard17shared_libsON
         UPLOAD_PACKAGES: 'True'
   timeoutInMinutes: 360
 

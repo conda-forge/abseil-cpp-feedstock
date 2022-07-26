@@ -8,8 +8,14 @@ jobs:
     vmImage: windows-2019
   strategy:
     matrix:
-      win_64_:
-        CONFIG: win_64_
+      win_64_cxx_standard11:
+        CONFIG: win_64_cxx_standard11
+        UPLOAD_PACKAGES: 'True'
+      win_64_cxx_standard14:
+        CONFIG: win_64_cxx_standard14
+        UPLOAD_PACKAGES: 'True'
+      win_64_cxx_standard17:
+        CONFIG: win_64_cxx_standard17
         UPLOAD_PACKAGES: 'True'
   timeoutInMinutes: 360
   variables:

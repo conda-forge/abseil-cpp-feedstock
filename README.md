@@ -1,5 +1,5 @@
-About abseil-cpp
-================
+About abseil-split
+==================
 
 Home: https://github.com/abseil/abseil-cpp
 
@@ -35,45 +35,164 @@ Current build status
         <table>
           <thead><tr><th>Variant</th><th>Status</th></tr></thead>
           <tbody><tr>
-              <td>linux_64</td>
+              <td>linux_64_cxx_standard11shared_libsOFF</td>
               <td>
                 <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=7433&branchName=main">
-                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/abseil-cpp-feedstock?branchName=main&jobName=linux&configuration=linux_64_" alt="variant">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/abseil-cpp-feedstock?branchName=main&jobName=linux&configuration=linux_64_cxx_standard11shared_libsOFF" alt="variant">
                 </a>
               </td>
             </tr><tr>
-              <td>linux_aarch64</td>
+              <td>linux_64_cxx_standard14shared_libsOFF</td>
               <td>
                 <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=7433&branchName=main">
-                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/abseil-cpp-feedstock?branchName=main&jobName=linux&configuration=linux_aarch64_" alt="variant">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/abseil-cpp-feedstock?branchName=main&jobName=linux&configuration=linux_64_cxx_standard14shared_libsOFF" alt="variant">
                 </a>
               </td>
             </tr><tr>
-              <td>linux_ppc64le</td>
+              <td>linux_64_cxx_standard17shared_libsOFF</td>
               <td>
                 <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=7433&branchName=main">
-                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/abseil-cpp-feedstock?branchName=main&jobName=linux&configuration=linux_ppc64le_" alt="variant">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/abseil-cpp-feedstock?branchName=main&jobName=linux&configuration=linux_64_cxx_standard17shared_libsOFF" alt="variant">
                 </a>
               </td>
             </tr><tr>
-              <td>osx_64</td>
+              <td>linux_64_cxx_standard17shared_libsON</td>
               <td>
                 <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=7433&branchName=main">
-                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/abseil-cpp-feedstock?branchName=main&jobName=osx&configuration=osx_64_" alt="variant">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/abseil-cpp-feedstock?branchName=main&jobName=linux&configuration=linux_64_cxx_standard17shared_libsON" alt="variant">
                 </a>
               </td>
             </tr><tr>
-              <td>osx_arm64</td>
+              <td>linux_aarch64_cxx_standard11shared_libsOFF</td>
               <td>
                 <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=7433&branchName=main">
-                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/abseil-cpp-feedstock?branchName=main&jobName=osx&configuration=osx_arm64_" alt="variant">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/abseil-cpp-feedstock?branchName=main&jobName=linux&configuration=linux_aarch64_cxx_standard11shared_libsOFF" alt="variant">
                 </a>
               </td>
             </tr><tr>
-              <td>win_64</td>
+              <td>linux_aarch64_cxx_standard14shared_libsOFF</td>
               <td>
                 <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=7433&branchName=main">
-                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/abseil-cpp-feedstock?branchName=main&jobName=win&configuration=win_64_" alt="variant">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/abseil-cpp-feedstock?branchName=main&jobName=linux&configuration=linux_aarch64_cxx_standard14shared_libsOFF" alt="variant">
+                </a>
+              </td>
+            </tr><tr>
+              <td>linux_aarch64_cxx_standard17shared_libsOFF</td>
+              <td>
+                <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=7433&branchName=main">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/abseil-cpp-feedstock?branchName=main&jobName=linux&configuration=linux_aarch64_cxx_standard17shared_libsOFF" alt="variant">
+                </a>
+              </td>
+            </tr><tr>
+              <td>linux_aarch64_cxx_standard17shared_libsON</td>
+              <td>
+                <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=7433&branchName=main">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/abseil-cpp-feedstock?branchName=main&jobName=linux&configuration=linux_aarch64_cxx_standard17shared_libsON" alt="variant">
+                </a>
+              </td>
+            </tr><tr>
+              <td>linux_ppc64le_cxx_standard11shared_libsOFF</td>
+              <td>
+                <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=7433&branchName=main">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/abseil-cpp-feedstock?branchName=main&jobName=linux&configuration=linux_ppc64le_cxx_standard11shared_libsOFF" alt="variant">
+                </a>
+              </td>
+            </tr><tr>
+              <td>linux_ppc64le_cxx_standard14shared_libsOFF</td>
+              <td>
+                <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=7433&branchName=main">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/abseil-cpp-feedstock?branchName=main&jobName=linux&configuration=linux_ppc64le_cxx_standard14shared_libsOFF" alt="variant">
+                </a>
+              </td>
+            </tr><tr>
+              <td>linux_ppc64le_cxx_standard17shared_libsOFF</td>
+              <td>
+                <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=7433&branchName=main">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/abseil-cpp-feedstock?branchName=main&jobName=linux&configuration=linux_ppc64le_cxx_standard17shared_libsOFF" alt="variant">
+                </a>
+              </td>
+            </tr><tr>
+              <td>linux_ppc64le_cxx_standard17shared_libsON</td>
+              <td>
+                <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=7433&branchName=main">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/abseil-cpp-feedstock?branchName=main&jobName=linux&configuration=linux_ppc64le_cxx_standard17shared_libsON" alt="variant">
+                </a>
+              </td>
+            </tr><tr>
+              <td>osx_64_cxx_standard11shared_libsOFF</td>
+              <td>
+                <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=7433&branchName=main">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/abseil-cpp-feedstock?branchName=main&jobName=osx&configuration=osx_64_cxx_standard11shared_libsOFF" alt="variant">
+                </a>
+              </td>
+            </tr><tr>
+              <td>osx_64_cxx_standard14shared_libsOFF</td>
+              <td>
+                <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=7433&branchName=main">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/abseil-cpp-feedstock?branchName=main&jobName=osx&configuration=osx_64_cxx_standard14shared_libsOFF" alt="variant">
+                </a>
+              </td>
+            </tr><tr>
+              <td>osx_64_cxx_standard17shared_libsOFF</td>
+              <td>
+                <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=7433&branchName=main">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/abseil-cpp-feedstock?branchName=main&jobName=osx&configuration=osx_64_cxx_standard17shared_libsOFF" alt="variant">
+                </a>
+              </td>
+            </tr><tr>
+              <td>osx_64_cxx_standard17shared_libsON</td>
+              <td>
+                <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=7433&branchName=main">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/abseil-cpp-feedstock?branchName=main&jobName=osx&configuration=osx_64_cxx_standard17shared_libsON" alt="variant">
+                </a>
+              </td>
+            </tr><tr>
+              <td>osx_arm64_cxx_standard11shared_libsOFF</td>
+              <td>
+                <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=7433&branchName=main">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/abseil-cpp-feedstock?branchName=main&jobName=osx&configuration=osx_arm64_cxx_standard11shared_libsOFF" alt="variant">
+                </a>
+              </td>
+            </tr><tr>
+              <td>osx_arm64_cxx_standard14shared_libsOFF</td>
+              <td>
+                <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=7433&branchName=main">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/abseil-cpp-feedstock?branchName=main&jobName=osx&configuration=osx_arm64_cxx_standard14shared_libsOFF" alt="variant">
+                </a>
+              </td>
+            </tr><tr>
+              <td>osx_arm64_cxx_standard17shared_libsOFF</td>
+              <td>
+                <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=7433&branchName=main">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/abseil-cpp-feedstock?branchName=main&jobName=osx&configuration=osx_arm64_cxx_standard17shared_libsOFF" alt="variant">
+                </a>
+              </td>
+            </tr><tr>
+              <td>osx_arm64_cxx_standard17shared_libsON</td>
+              <td>
+                <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=7433&branchName=main">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/abseil-cpp-feedstock?branchName=main&jobName=osx&configuration=osx_arm64_cxx_standard17shared_libsON" alt="variant">
+                </a>
+              </td>
+            </tr><tr>
+              <td>win_64_cxx_standard11</td>
+              <td>
+                <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=7433&branchName=main">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/abseil-cpp-feedstock?branchName=main&jobName=win&configuration=win_64_cxx_standard11" alt="variant">
+                </a>
+              </td>
+            </tr><tr>
+              <td>win_64_cxx_standard14</td>
+              <td>
+                <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=7433&branchName=main">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/abseil-cpp-feedstock?branchName=main&jobName=win&configuration=win_64_cxx_standard14" alt="variant">
+                </a>
+              </td>
+            </tr><tr>
+              <td>win_64_cxx_standard17</td>
+              <td>
+                <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=7433&branchName=main">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/abseil-cpp-feedstock?branchName=main&jobName=win&configuration=win_64_cxx_standard17" alt="variant">
                 </a>
               </td>
             </tr>
@@ -90,27 +209,30 @@ Current release info
 | Name | Downloads | Version | Platforms |
 | --- | --- | --- | --- |
 | [![Conda Recipe](https://img.shields.io/badge/recipe-abseil--cpp-green.svg)](https://anaconda.org/conda-forge/abseil-cpp) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/abseil-cpp.svg)](https://anaconda.org/conda-forge/abseil-cpp) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/abseil-cpp.svg)](https://anaconda.org/conda-forge/abseil-cpp) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/abseil-cpp.svg)](https://anaconda.org/conda-forge/abseil-cpp) |
+| [![Conda Recipe](https://img.shields.io/badge/recipe-libabseil-green.svg)](https://anaconda.org/conda-forge/libabseil) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/libabseil.svg)](https://anaconda.org/conda-forge/libabseil) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/libabseil.svg)](https://anaconda.org/conda-forge/libabseil) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/libabseil.svg)](https://anaconda.org/conda-forge/libabseil) |
+| [![Conda Recipe](https://img.shields.io/badge/recipe-libabseil_dynamic-green.svg)](https://anaconda.org/conda-forge/libabseil_dynamic) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/libabseil_dynamic.svg)](https://anaconda.org/conda-forge/libabseil_dynamic) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/libabseil_dynamic.svg)](https://anaconda.org/conda-forge/libabseil_dynamic) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/libabseil_dynamic.svg)](https://anaconda.org/conda-forge/libabseil_dynamic) |
+| [![Conda Recipe](https://img.shields.io/badge/recipe-libabseil_static-green.svg)](https://anaconda.org/conda-forge/libabseil_static) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/libabseil_static.svg)](https://anaconda.org/conda-forge/libabseil_static) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/libabseil_static.svg)](https://anaconda.org/conda-forge/libabseil_static) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/libabseil_static.svg)](https://anaconda.org/conda-forge/libabseil_static) |
 
-Installing abseil-cpp
-=====================
+Installing abseil-split
+=======================
 
-Installing `abseil-cpp` from the `conda-forge` channel can be achieved by adding `conda-forge` to your channels with:
+Installing `abseil-split` from the `conda-forge` channel can be achieved by adding `conda-forge` to your channels with:
 
 ```
 conda config --add channels conda-forge
 conda config --set channel_priority strict
 ```
 
-Once the `conda-forge` channel has been enabled, `abseil-cpp` can be installed with `conda`:
+Once the `conda-forge` channel has been enabled, `abseil-cpp, libabseil, libabseil_dynamic, libabseil_static` can be installed with `conda`:
 
 ```
-conda install abseil-cpp
+conda install abseil-cpp libabseil libabseil_dynamic libabseil_static
 ```
 
 or with `mamba`:
 
 ```
-mamba install abseil-cpp
+mamba install abseil-cpp libabseil libabseil_dynamic libabseil_static
 ```
 
 It is possible to list all of the versions of `abseil-cpp` available on your platform with `conda`:
@@ -180,17 +302,17 @@ Terminology
                   produce the finished article (built conda distributions)
 
 
-Updating abseil-cpp-feedstock
-=============================
+Updating abseil-split-feedstock
+===============================
 
-If you would like to improve the abseil-cpp recipe or build a new
+If you would like to improve the abseil-split recipe or build a new
 package version, please fork this repository and submit a PR. Upon submission,
 your changes will be run on the appropriate platforms to give the reviewer an
 opportunity to confirm that the changes result in a successful build. Once
 merged, the recipe will be re-built and uploaded automatically to the
 `conda-forge` channel, whereupon the built conda packages will be available for
 everybody to install and use from the `conda-forge` channel.
-Note that all branches in the conda-forge/abseil-cpp-feedstock are
+Note that all branches in the conda-forge/abseil-split-feedstock are
 immediately built and any created packages are uploaded, so PRs should be based
 on branches in forks and branches in the main repository should only be used to
 build distinct package versions.
