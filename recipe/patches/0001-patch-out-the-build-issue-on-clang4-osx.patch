@@ -1,14 +1,14 @@
-From 50b8f574cfc8a6868f9fc74741c384f50e3ef540 Mon Sep 17 00:00:00 2001
+From 336f3e70a058f6b07aa25725ea2a23a739f190ef Mon Sep 17 00:00:00 2001
 From: Francesco Biscani <bluescarni@gmail.com>
 Date: Sat, 21 Sep 2019 15:05:46 +0200
-Subject: [PATCH 01/10] patch out the build issue on clang4 osx
+Subject: [PATCH 1/4] patch out the build issue on clang4 osx
 
 ---
  absl/time/internal/cctz/include/cctz/civil_time_detail.h | 4 ++++
  1 file changed, 4 insertions(+)
 
 diff --git a/absl/time/internal/cctz/include/cctz/civil_time_detail.h b/absl/time/internal/cctz/include/cctz/civil_time_detail.h
-index 8aadde5..2dac15c 100644
+index a5b084e6..0a9a4389 100644
 --- a/absl/time/internal/cctz/include/cctz/civil_time_detail.h
 +++ b/absl/time/internal/cctz/include/cctz/civil_time_detail.h
 @@ -15,6 +15,10 @@
@@ -23,5 +23,5 @@ index 8aadde5..2dac15c 100644
  #include <limits>
  #include <ostream>
 -- 
-2.35.1.windows.2
+2.35.3.windows.1
 
