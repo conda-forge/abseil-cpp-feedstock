@@ -3,15 +3,10 @@ c_compiler:
 channel_sources:
 - conda-forge
 channel_targets:
-- conda-forge main
+- conda-forge abseil_dev
 cxx_compiler:
 - vs2017
 cxx_standard:
 - '11'
-shared_libs:
-- 'OFF'
 target_platform:
 - win-64
-zip_keys:
-- - cxx_standard
-  - shared_libs

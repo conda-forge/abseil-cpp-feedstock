@@ -209,6 +209,7 @@ Current release info
 | Name | Downloads | Version | Platforms |
 | --- | --- | --- | --- |
 | [![Conda Recipe](https://img.shields.io/badge/recipe-abseil--cpp-green.svg)](https://anaconda.org/conda-forge/abseil-cpp) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/abseil-cpp.svg)](https://anaconda.org/conda-forge/abseil-cpp) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/abseil-cpp.svg)](https://anaconda.org/conda-forge/abseil-cpp) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/abseil-cpp.svg)](https://anaconda.org/conda-forge/abseil-cpp) |
+| [![Conda Recipe](https://img.shields.io/badge/recipe-libabseil-green.svg)](https://anaconda.org/conda-forge/libabseil) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/libabseil.svg)](https://anaconda.org/conda-forge/libabseil) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/libabseil.svg)](https://anaconda.org/conda-forge/libabseil) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/libabseil.svg)](https://anaconda.org/conda-forge/libabseil) |
 | [![Conda Recipe](https://img.shields.io/badge/recipe-libabseil_dynamic-green.svg)](https://anaconda.org/conda-forge/libabseil_dynamic) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/libabseil_dynamic.svg)](https://anaconda.org/conda-forge/libabseil_dynamic) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/libabseil_dynamic.svg)](https://anaconda.org/conda-forge/libabseil_dynamic) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/libabseil_dynamic.svg)](https://anaconda.org/conda-forge/libabseil_dynamic) |
 | [![Conda Recipe](https://img.shields.io/badge/recipe-libabseil_static-green.svg)](https://anaconda.org/conda-forge/libabseil_static) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/libabseil_static.svg)](https://anaconda.org/conda-forge/libabseil_static) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/libabseil_static.svg)](https://anaconda.org/conda-forge/libabseil_static) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/libabseil_static.svg)](https://anaconda.org/conda-forge/libabseil_static) |
 
@@ -222,16 +223,16 @@ conda config --add channels conda-forge
 conda config --set channel_priority strict
 ```
 
-Once the `conda-forge` channel has been enabled, `abseil-cpp, libabseil_dynamic, libabseil_static` can be installed with `conda`:
+Once the `conda-forge` channel has been enabled, `abseil-cpp, libabseil, libabseil_dynamic, libabseil_static` can be installed with `conda`:
 
 ```
-conda install abseil-cpp libabseil_dynamic libabseil_static
+conda install abseil-cpp libabseil libabseil_dynamic libabseil_static
 ```
 
 or with `mamba`:
 
 ```
-mamba install abseil-cpp libabseil_dynamic libabseil_static
+mamba install abseil-cpp libabseil libabseil_dynamic libabseil_static
 ```
 
 It is possible to list all of the versions of `abseil-cpp` available on your platform with `conda`:
