@@ -25,7 +25,7 @@ source:
     - patches/0004-add-missing-osx-workaround.patch
 
 build:
-  number: 2
+  number: 3
 
 outputs:
   {% if shared_libs == "ON" %}
@@ -83,14 +83,17 @@ outputs:
   {% if (unix and ((shared_libs == "ON") and (cxx_standard == "17")))
         or (win and ((shared_libs == "OFF") and (cxx_standard == "11"))) %}
   - name: libabseil
+    build:
+      run_exports:                                                 # [unix]
+        - libabseil_dynamic ={{ version }}=cxx{{ cxx_standard }}*  # [unix]
     requirements:
       host:
         # cxx-versions enforced through jinja-if-condition above
-        - {{ pin_subpackage('libabseil_dynamic', exact=True) }}  # [unix]
-        - {{ pin_subpackage('libabseil_static', exact=True) }}   # [win]
+        - {{ pin_subpackage('libabseil_dynamic', exact=True) }}    # [unix]
+        - {{ pin_subpackage('libabseil_static', exact=True) }}     # [win]
       run:
-        - {{ pin_subpackage('libabseil_dynamic', exact=True) }}  # [unix]
-        - {{ pin_subpackage('libabseil_static', exact=True) }}   # [win]
+        - {{ pin_subpackage('libabseil_dynamic', exact=True) }}    # [unix]
+        - {{ pin_subpackage('libabseil_static', exact=True) }}     # [win]
     test:
       commands:
         # tested in other outputs
@@ -98,6 +101,9 @@ outputs:
 
   # for compatibility
   - name: abseil-cpp
+    build:
+      run_exports:                                                 # [unix]
+        - libabseil_dynamic ={{ version }}=cxx{{ cxx_standard }}*  # [unix]
     requirements:
       host:
         - {{ pin_subpackage('libabseil', exact=True) }}
