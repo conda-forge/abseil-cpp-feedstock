@@ -12,3 +12,6 @@ zip_keys:
   -
     - cxx_standard
     - shared_libs
+
+channel_targets:
+  - conda-forge abseil_dev
