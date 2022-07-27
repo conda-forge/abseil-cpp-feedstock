@@ -25,7 +25,7 @@ source:
     - patches/0004-add-missing-osx-workaround.patch
 
 build:
-  number: 1
+  number: 2
 
 outputs:
   {% if shared_libs == "ON" %}
@@ -88,6 +88,9 @@ outputs:
         # cxx-versions enforced through jinja-if-condition above
         - {{ pin_subpackage('libabseil_dynamic', exact=True) }}  # [unix]
         - {{ pin_subpackage('libabseil_static', exact=True) }}   # [win]
+      run:
+        - {{ pin_subpackage('libabseil_dynamic', exact=True) }}  # [unix]
+        - {{ pin_subpackage('libabseil_static', exact=True) }}   # [win]
     test:
       commands:
         # tested in other outputs
@@ -97,6 +100,8 @@ outputs:
   - name: abseil-cpp
     requirements:
       host:
+        - {{ pin_subpackage('libabseil', exact=True) }}
+      run:
         - {{ pin_subpackage('libabseil', exact=True) }}
     test:
       commands:
