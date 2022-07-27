@@ -1,38 +1,4 @@
-{% set name = "abseil-cpp" %}
-{% set version = "20211102.0" %}
-
-package:
-  name: {{ name|lower }}
-  version: {{ version }}
-
-source:
-  url: https://github.com/abseil/{{ name }}/archive/{{ version }}.tar.gz
-  sha256: dcf71b9cba8dc0ca9940c4b316a0c796be8fab42b070bb6b7cab62b48f0e66c4
-  patches:
-    - patches/0001-patch-out-the-build-issue-on-clang4-osx.patch
-    - patches/0002-fix-for-linking-to-the-CoreFoundation-framework-on-O.patch
-    - patches/0003-remove-ignore-4221-from-ABSL_MSVC_LINKOPTS.patch
-    # experimental
-    - patches/0004-alphabetize-ABSL_INTERNAL_DLL_TARGETS.patch
-    - patches/0005-expand-ABSL_INTERNAL_DLL_TARGETS-to-avoid-static-lib.patch
-    - patches/0006-propagate-C-standard-used-to-compile-as-requirement.patch
-    - patches/0007-also-set-target_compile_features-for-abseil_dll.patch
-    - patches/0008-add-DLL-export-to-MixingHashState-kSeed.patch
-    - patches/0009-move-definition-of-container_internal-kEmptyGroup-to.patch
-    - patches/0010-add-some-missing-headers.patch
-
-build:
-  number: 7
-  string: "h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}_cxx{{ cxx_standard }}"
-  run_exports:
-    - {{ pin_subpackage("abseil-cpp", max_pin="x.x") }}
-
-requirements:
-  build:
-    - {{ compiler('c') }}
-    - {{ compiler('cxx') }}
-    - cmake
-    - ninja
+{% set version = "20220623.0" %}
 
 {% set absl_libs = [
     "base", "civil_time", "cord", "cordz_functions", "cordz_handle", "cordz_info",
@@ -44,20 +10,99 @@ requirements:
     "scoped_set_env", "spinlock_wait", "stacktrace", "status", "statusor", "strerror", "strings",
     "symbolize", "synchronization", "time", "time_zone"
 ] %}
-test:
-  commands:
-    # windows (DLL + import library)
-    - if not exist %LIBRARY_BIN%\\abseil_dll.dll exit 1  # [win]
-    - if not exist %LIBRARY_LIB%\\abseil_dll.lib exit 1  # [win]
 
-    # absl_libs
-    {% for each_lib in absl_libs %}
-    # presence of shared libs
-    - test -f $PREFIX/lib/libabsl_{{ each_lib }}${SHLIB_EXT}      # [unix]
-    # absence of static libs
-    - test ! -f $PREFIX/lib/libabsl_{{ each_lib }}.a              # [unix]
-    - if exist %LIBRARY_LIB%\\absl_{{ each_lib }}.lib exit 1      # [win]
-    {% endfor %}
+package:
+  name: abseil-split
+  version: {{ version }}
+
+source:
+  url: https://github.com/abseil/abseil-cpp/archive/{{ version }}.tar.gz
+  sha256: 4208129b49006089ba1d6710845a45e31c59b0ab6bff9e5788a87f55c5abd602
+  patches:
+    - patches/0001-patch-out-the-build-issue-on-clang4-osx.patch
+    - patches/0002-fix-for-linking-to-the-CoreFoundation-framework-on-O.patch
+    - patches/0003-remove-ignore-4221-from-ABSL_MSVC_LINKOPTS.patch
+    - patches/0004-add-missing-osx-workaround.patch
+
+build:
+  number: 1
+
+outputs:
+  {% if shared_libs == "ON" %}
+  - name: libabseil_dynamic
+    script: build-abseil.sh   # [unix]
+    build:
+      string: cxx{{ cxx_standard }}_h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}
+      run_exports:
+        - libabseil_dynamic ={{ version }}=cxx{{ cxx_standard }}*
+    requirements:
+      build:
+        - {{ compiler('c') }}
+        - {{ compiler('cxx') }}
+        - cmake
+        - ninja
+    test:
+      commands:
+        {% for each_lib in absl_libs %}
+          # presence of shared libs
+          - test -f $PREFIX/lib/libabsl_{{ each_lib }}${SHLIB_EXT}
+          # absence of static libs
+          - test ! -f $PREFIX/lib/libabsl_{{ each_lib }}.a
+        {% endfor %}
+
+  {% else %}  # shared_libs == "OFF"
+
+  - name: libabseil_static
+    script: build-abseil.sh   # [unix]
+    script: build-abseil.bat  # [win]
+    build:
+      string: cxx{{ cxx_standard }}_h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}
+      # no run_export necessary for static lib
+
+    requirements:
+      build:
+        - {{ compiler('c') }}
+        - {{ compiler('cxx') }}
+        - cmake
+        - ninja
+    test:
+      commands:
+        {% for each_lib in absl_libs %}
+          # presence of static libs
+          - test -f $PREFIX/lib/libabsl_{{ each_lib }}.a                # [unix]
+          - if not exist %LIBRARY_LIB%\\absl_{{ each_lib }}.lib exit 1  # [win]
+          # absence of shared libs
+          - test ! -f $PREFIX/lib/libabsl_{{ each_lib }}${SHLIB_EXT}    # [unix]
+        {% endfor %}
+
+  {% endif %}  # shared_libs == "ON" / "OFF"
+
+  # choose sensible default per platform;
+  # windows doesn't support fully dynamic builds, see
+  # https://github.com/abseil/abseil-cpp/pull/1115
+  {% if (unix and ((shared_libs == "ON") and (cxx_standard == "17")))
+        or (win and ((shared_libs == "OFF") and (cxx_standard == "11"))) %}
+  - name: libabseil
+    requirements:
+      host:
+        # cxx-versions enforced through jinja-if-condition above
+        - {{ pin_subpackage('libabseil_dynamic', exact=True) }}  # [unix]
+        - {{ pin_subpackage('libabseil_static', exact=True) }}   # [win]
+    test:
+      commands:
+        # tested in other outputs
+        - echo "hello"
+
+  # for compatibility
+  - name: abseil-cpp
+    requirements:
+      host:
+        - {{ pin_subpackage('libabseil', exact=True) }}
+    test:
+      commands:
+        # tested in other outputs
+        - echo "hello"
+    {% endif %}
 
 about:
   home: https://github.com/abseil/abseil-cpp
@@ -77,3 +122,4 @@ extra:
     - bluescarni
     - xhochy
     - h-vetinari
+  feedstock-name: abseil-cpp

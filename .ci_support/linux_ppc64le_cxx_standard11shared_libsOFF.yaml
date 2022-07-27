@@ -7,15 +7,21 @@ cdt_name:
 channel_sources:
 - conda-forge
 channel_targets:
-- conda-forge abseil_dev
+- conda-forge main
 cxx_compiler:
 - gxx
 cxx_compiler_version:
 - '10'
+cxx_standard:
+- '11'
 docker_image:
 - quay.io/condaforge/linux-anvil-cos7-x86_64
+shared_libs:
+- 'OFF'
 target_platform:
 - linux-ppc64le
 zip_keys:
 - - c_compiler_version
   - cxx_compiler_version
+- - cxx_standard
+  - shared_libs
