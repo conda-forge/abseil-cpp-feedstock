@@ -23,6 +23,9 @@ source:
     - patches/0002-fix-for-linking-to-the-CoreFoundation-framework-on-O.patch
     - patches/0003-remove-ignore-4221-from-ABSL_MSVC_LINKOPTS.patch
     - patches/0004-add-missing-osx-workaround.patch
+    # backport of https://github.com/abseil/abseil-cpp/pull/1115 (two commits)
+    - patches/0005-alphabetize-ABSL_INTERNAL_DLL_TARGETS.patch
+    - patches/0006-avoid-building-static-libs-on-windows-when-BUILD_SHA.patch
 
 build:
   number: 0
