@@ -33,7 +33,7 @@ source:
     - patches/0006-avoid-building-static-libs-on-windows-when-BUILD_SHA.patch
 
 build:
-  number: 0
+  number: 1
 
 outputs:
   {% if shared_libs == "ON" %}
