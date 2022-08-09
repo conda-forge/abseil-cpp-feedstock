@@ -8,8 +8,17 @@ jobs:
     vmImage: windows-2019
   strategy:
     matrix:
-      win_64_:
-        CONFIG: win_64_
+      win_64_cxx_standard11shared_libsOFF:
+        CONFIG: win_64_cxx_standard11shared_libsOFF
+        UPLOAD_PACKAGES: 'True'
+      win_64_cxx_standard14shared_libsOFF:
+        CONFIG: win_64_cxx_standard14shared_libsOFF
+        UPLOAD_PACKAGES: 'True'
+      win_64_cxx_standard17shared_libsOFF:
+        CONFIG: win_64_cxx_standard17shared_libsOFF
+        UPLOAD_PACKAGES: 'True'
+      win_64_cxx_standard17shared_libsON:
+        CONFIG: win_64_cxx_standard17shared_libsON
         UPLOAD_PACKAGES: 'True'
   timeoutInMinutes: 360
   variables:
