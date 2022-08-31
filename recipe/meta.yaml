@@ -32,7 +32,7 @@ source:
     - patches/0005-avoid-building-static-libs-on-windows-when-BUILD_SHA.patch
 
 build:
-  number: 2
+  number: 3
 
 outputs:
   {% if shared_libs == "ON" %}
@@ -53,6 +53,7 @@ outputs:
         - cmake
         - ninja
       run_constrained:
+        - libabseil-static ={{ version }}=cxx{{ cxx_standard }}*
         # make sure we don't co-install with old version of old package name
         - abseil-cpp ={{ version }}
 
@@ -93,6 +94,7 @@ outputs:
         - cmake
         - ninja
       run_constrained:
+        - libabseil ={{ version }}=cxx{{ cxx_standard }}*
         # make sure we don't co-install with old version of old package name
         - abseil-cpp ={{ version }}
     test:
