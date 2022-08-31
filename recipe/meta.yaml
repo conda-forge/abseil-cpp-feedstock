@@ -1,4 +1,4 @@
-{% set version = "20220623.0" %}
+{% set version = "20220623.1" %}
 
 # shared builds for flags_* libraries are not supported on windows, see
 # https://github.com/abseil/abseil-cpp/pull/1115
@@ -22,7 +22,7 @@ package:
 
 source:
   url: https://github.com/abseil/abseil-cpp/archive/{{ version }}.tar.gz
-  sha256: 4208129b49006089ba1d6710845a45e31c59b0ab6bff9e5788a87f55c5abd602
+  sha256: 91ac87d30cc6d79f9ab974c51874a704de9c2647c40f6932597329a282217ba8
   patches:
     - patches/0001-patch-out-the-build-issue-on-clang4-osx.patch
     - patches/0002-fix-for-linking-to-the-CoreFoundation-framework-on-O.patch
@@ -33,14 +33,14 @@ source:
     - patches/0006-avoid-building-static-libs-on-windows-when-BUILD_SHA.patch
 
 build:
-  number: 2
+  number: 0
 
 outputs:
   {% if shared_libs == "ON" %}
   # default behaviour is shared; however note that upstream does not support
   # fully shared builds on windows, and some static libs will remain, see above
   - name: libabseil
-    script: build-abseil.sh   # [unix]
+    script: build-abseil.sh  # [unix]
     script: build-abseil.bat  # [win]
     build:
       string: cxx{{ cxx_standard }}_h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}
@@ -82,7 +82,7 @@ outputs:
   {% else %}  # shared_libs == "OFF"
 
   - name: libabseil-static
-    script: build-abseil.sh   # [unix]
+    script: build-abseil.sh  # [unix]
     script: build-abseil.bat  # [win]
     build:
       string: cxx{{ cxx_standard }}_h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}
