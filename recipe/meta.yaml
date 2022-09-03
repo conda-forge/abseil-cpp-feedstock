@@ -31,9 +31,11 @@ source:
     # backport of https://github.com/abseil/abseil-cpp/pull/1115 (two commits)
     - patches/0005-alphabetize-ABSL_INTERNAL_DLL_TARGETS.patch
     - patches/0006-avoid-building-static-libs-on-windows-when-BUILD_SHA.patch
+    # backport https://github.com/abseil/abseil-cpp/pull/1269
+    - patches/0007-Compile-all-dependencies-of-the-DLL-with-ABSL_CONSUM.patch
 
 build:
-  number: 2
+  number: 3
 
 outputs:
   {% if shared_libs == "ON" %}
