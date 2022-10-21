@@ -68,7 +68,12 @@ outputs:
 
     test:
       requires:
+        - {{ compiler('cxx') }}
+        - cmake
+        - ninja
         - pkg-config
+      files:
+        - cmake_test/
       commands:
         # windows-only (almost-)all-in-one DLL + import library
         - if not exist %LIBRARY_BIN%\\abseil_dll.dll exit 1           # [win]
@@ -95,6 +100,16 @@ outputs:
         # pkg-config (abseil_dll)
         - pkg-config --print-errors --exact-version "{{ v_major }}" abseil_dll  # [win]
 
+        # CMake integration
+        - cd cmake_test
+        - export CMAKE_ARGS="$CMAKE_ARGS -GNinja -DCMAKE_BUILD_TYPE=Release"  # [unix]
+        - set "CMAKE_ARGS=%CMAKE_ARGS% -GNinja -DCMAKE_BUILD_TYPE=Release"    # [win]
+        - cmake $CMAKE_ARGS  -DCMAKE_CXX_STANDARD={{ cxx_standard }} .        # [unix]
+        - cmake %CMAKE_ARGS% -DCMAKE_CXX_STANDARD={{ cxx_standard }} .        # [win]
+        - cmake --build .
+        - ./flags_example    # [unix]
+        - flags_example.exe  # [win]
+
   {% else %}  # shared_libs == "OFF"
 
   - name: libabseil-static
@@ -116,7 +131,12 @@ outputs:
         - abseil-cpp ={{ version }}
     test:
       requires:
+        - {{ compiler('cxx') }}
+        - cmake
+        - ninja
         - pkg-config
+      files:
+        - cmake_test/
       commands:
         # absence of DLL on windows
         - if exist %LIBRARY_BIN%\\abseil_dll.dll exit 1               # [win]
@@ -132,6 +152,16 @@ outputs:
         # pkg-config
         - pkg-config --print-errors --exact-version "{{ v_major }}" absl_{{ each_lib }}
       {% endfor %}
+
+        # CMake integration
+        - cd cmake_test
+        - export CMAKE_ARGS="$CMAKE_ARGS -GNinja -DCMAKE_BUILD_TYPE=Release"  # [unix]
+        - set "CMAKE_ARGS=%CMAKE_ARGS% -GNinja -DCMAKE_BUILD_TYPE=Release"    # [win]
+        - cmake $CMAKE_ARGS  -DCMAKE_CXX_STANDARD={{ cxx_standard }} .        # [unix]
+        - cmake %CMAKE_ARGS% -DCMAKE_CXX_STANDARD={{ cxx_standard }} .        # [win]
+        - cmake --build .
+        - ./flags_example    # [unix]
+        - flags_example.exe  # [win]
 
   {% endif %}  # shared_libs == "ON" / "OFF"
 
