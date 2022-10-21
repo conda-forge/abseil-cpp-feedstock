@@ -66,6 +66,8 @@ outputs:
         - abseil-cpp ={{ version }}
 
     test:
+      requires:
+        - pkg-config
       commands:
         # windows-only (almost-)all-in-one DLL + import library
         - if not exist %LIBRARY_BIN%\\abseil_dll.dll exit 1           # [win]
@@ -84,7 +86,13 @@ outputs:
         {% else %}
         - if exist %LIBRARY_LIB%\\absl_{{ each_lib }}.lib exit 1      # [win]
         {% endif %}
+
+        # pkg-config (should point to abseil_dll on shared windows builds)
+        - pkg-config --print-errors --exact-version "{{ version }}" absl_{{ each_lib }}
       {% endfor %}
+
+        # pkg-config (abseil_dll)
+        - pkg-config --print-errors --exact-version "{{ version }}" abseil_dll  # [win]
 
   {% else %}  # shared_libs == "OFF"
 
@@ -106,6 +114,8 @@ outputs:
         # make sure we don't co-install with old version of old package name
         - abseil-cpp ={{ version }}
     test:
+      requires:
+        - pkg-config
       commands:
         # absence of DLL on windows
         - if exist %LIBRARY_BIN%\\abseil_dll.dll exit 1               # [win]
@@ -117,6 +127,9 @@ outputs:
         - if not exist %LIBRARY_LIB%\\absl_{{ each_lib }}.lib exit 1  # [win]
         # absence of shared libs
         - test ! -f $PREFIX/lib/libabsl_{{ each_lib }}${SHLIB_EXT}    # [unix]
+
+        # pkg-config
+        - pkg-config --print-errors --exact-version "{{ version }}" absl_{{ each_lib }}
       {% endfor %}
 
   {% endif %}  # shared_libs == "ON" / "OFF"
