@@ -36,6 +36,8 @@ source:
     # Helps downstream packages import the dll without an extra define
     # https://github.com/conda-forge/abseil-cpp-feedstock/issues/43#issuecomment-1242969515
     - patches/0008-default-dll-import-for-windows.patch  # [win and shared_libs == "ON"]
+    # add pkgconfig metadata for shared builds on windows
+    - patches/0009-add-pkgconfig-metadata-for-shared-windows-builds.patch
 
 build:
   number: 4

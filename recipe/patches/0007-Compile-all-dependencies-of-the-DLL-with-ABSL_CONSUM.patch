@@ -1,7 +1,7 @@
 From d4b55614c1f10515c7a8a98ec24fe5a1df5750d2 Mon Sep 17 00:00:00 2001
 From: Isuru Fernando <isuruf@gmail.com>
 Date: Fri, 2 Sep 2022 04:04:37 -0500
-Subject: [PATCH 7/8] Compile all dependencies of the DLL with ABSL_CONSUME_DLL
+Subject: [PATCH 7/9] Compile all dependencies of the DLL with ABSL_CONSUME_DLL
 
 ---
  CMake/AbseilDll.cmake | 1 +

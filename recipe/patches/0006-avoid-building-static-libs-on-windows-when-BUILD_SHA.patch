@@ -1,7 +1,7 @@
 From 5b0225562085b17749a04a57cd6e89e8926c7053 Mon Sep 17 00:00:00 2001
 From: "H. Vetinari" <h.vetinari@gmx.com>
 Date: Wed, 2 Mar 2022 13:43:37 +1100
-Subject: [PATCH 6/8] avoid building static libs on windows when
+Subject: [PATCH 6/9] avoid building static libs on windows when
  BUILD_SHARED_LIBS=ON
 
 except all flags_* libraries, for which DLL builds on windows
