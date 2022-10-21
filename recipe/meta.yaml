@@ -1,4 +1,5 @@
 {% set version = "20220623.0" %}
+{% set v_major = version.split(".")[0] %}
 
 # shared builds for flags_* libraries are not supported on windows, see
 # https://github.com/abseil/abseil-cpp/pull/1115
@@ -88,11 +89,11 @@ outputs:
         {% endif %}
 
         # pkg-config (should point to abseil_dll on shared windows builds)
-        - pkg-config --print-errors --exact-version "{{ version }}" absl_{{ each_lib }}
+        - pkg-config --print-errors --exact-version "{{ v_major }}" absl_{{ each_lib }}
       {% endfor %}
 
         # pkg-config (abseil_dll)
-        - pkg-config --print-errors --exact-version "{{ version }}" abseil_dll  # [win]
+        - pkg-config --print-errors --exact-version "{{ v_major }}" abseil_dll  # [win]
 
   {% else %}  # shared_libs == "OFF"
 
@@ -129,7 +130,7 @@ outputs:
         - test ! -f $PREFIX/lib/libabsl_{{ each_lib }}${SHLIB_EXT}    # [unix]
 
         # pkg-config
-        - pkg-config --print-errors --exact-version "{{ version }}" absl_{{ each_lib }}
+        - pkg-config --print-errors --exact-version "{{ v_major }}" absl_{{ each_lib }}
       {% endfor %}
 
   {% endif %}  # shared_libs == "ON" / "OFF"
