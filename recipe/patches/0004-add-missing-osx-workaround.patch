@@ -1,7 +1,7 @@
 From 3b5f3943a593d5c7544b594d0bd6eec569d26067 Mon Sep 17 00:00:00 2001
 From: "H. Vetinari" <h.vetinari@gmx.com>
 Date: Fri, 1 Jul 2022 13:37:17 +0200
-Subject: [PATCH 4/7] add missing osx workaround
+Subject: [PATCH 4/9] add missing osx workaround
 
 ---
  absl/debugging/internal/examine_stack.cc | 4 ++++
@@ -23,5 +23,5 @@ index 5bdd341e..e86f384f 100644
  #include <sys/ucontext.h>
  #endif
 -- 
-2.37.3.windows.1
+2.38.1.windows.1
 

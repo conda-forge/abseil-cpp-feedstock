@@ -1,7 +1,7 @@
 From d4b55614c1f10515c7a8a98ec24fe5a1df5750d2 Mon Sep 17 00:00:00 2001
 From: Isuru Fernando <isuruf@gmail.com>
 Date: Fri, 2 Sep 2022 04:04:37 -0500
-Subject: [PATCH 7/7] Compile all dependencies of the DLL with ABSL_CONSUME_DLL
+Subject: [PATCH 7/9] Compile all dependencies of the DLL with ABSL_CONSUME_DLL
 
 ---
  CMake/AbseilDll.cmake | 1 +
@@ -20,5 +20,5 @@ index b9a3664b..5e1316f0 100644
    install(TARGETS abseil_dll EXPORT ${PROJECT_NAME}Targets
          RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 -- 
-2.37.3.windows.1
+2.38.1.windows.1
 
