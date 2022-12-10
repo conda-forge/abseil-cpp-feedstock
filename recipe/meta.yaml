@@ -41,7 +41,7 @@ source:
     - patches/0009-add-pkgconfig-metadata-for-shared-windows-builds.patch
 
 build:
-  number: 5
+  number: 6
 
 outputs:
   {% if shared_libs == "ON" %}

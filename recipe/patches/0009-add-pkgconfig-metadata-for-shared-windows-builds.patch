@@ -1,12 +1,12 @@
-From 4d2135dde67ee6e00983bcaa1b0cf799b0b1d232 Mon Sep 17 00:00:00 2001
+From 0dc45d5683e6dd1813bbb287b32c1bb8284bf5e9 Mon Sep 17 00:00:00 2001
 From: "H. Vetinari" <h.vetinari@gmx.com>
 Date: Fri, 21 Oct 2022 21:06:25 +1100
 Subject: [PATCH 9/9] add pkgconfig metadata for shared windows builds
 
 ---
  CMake/AbseilDll.cmake     | 27 +++++++++++++++++++++++++++
- CMake/AbseilHelpers.cmake | 26 ++++++++++++++++++++------
- 2 files changed, 47 insertions(+), 6 deletions(-)
+ CMake/AbseilHelpers.cmake | 30 +++++++++++++++++++++++-------
+ 2 files changed, 50 insertions(+), 7 deletions(-)
 
 diff --git a/CMake/AbseilDll.cmake b/CMake/AbseilDll.cmake
 index 5e1316f0..8ac4cb40 100644
@@ -47,7 +47,7 @@ index 5e1316f0..8ac4cb40 100644
      abseil_dll
      PRIVATE
 diff --git a/CMake/AbseilHelpers.cmake b/CMake/AbseilHelpers.cmake
-index dbb09fe2..83430145 100644
+index dbb09fe2..905cb2f4 100644
 --- a/CMake/AbseilHelpers.cmake
 +++ b/CMake/AbseilHelpers.cmake
 @@ -143,8 +143,7 @@ function(absl_cc_library)
@@ -60,7 +60,7 @@ index dbb09fe2..83430145 100644
      if(NOT ABSL_CC_LIB_TESTONLY)
        if(absl_VERSION)
          set(PC_VERSION "${absl_VERSION}")
-@@ -153,11 +152,26 @@ function(absl_cc_library)
+@@ -153,11 +152,28 @@ function(absl_cc_library)
        endif()
        foreach(dep ${ABSL_CC_LIB_DEPS})
          if(${dep} MATCHES "^absl::(.*)")
@@ -79,6 +79,7 @@ index dbb09fe2..83430145 100644
 +              endif()
 +              # don't duplicate dll-dep if it exists already
 +              set(PC_DEPS "${PC_DEPS} abseil_dll = ${PC_VERSION}")
++              set(LNK_LIB "${LNK_LIB} -labseil_dll")
 +            endif()
 +          else()
 +            # Join deps with commas.
@@ -86,11 +87,21 @@ index dbb09fe2..83430145 100644
 +              set(PC_DEPS "${PC_DEPS},")
 +            endif()
 +            set(PC_DEPS "${PC_DEPS} absl_${CMAKE_MATCH_1} = ${PC_VERSION}")
++            set(LNK_LIB "${LNK_LIB} -labsl_${_NAME}")
            endif()
 -          set(PC_DEPS "${PC_DEPS} absl_${CMAKE_MATCH_1} = ${PC_VERSION}")
          endif()
        endforeach()
        foreach(cflag ${ABSL_CC_LIB_COPTS})
+@@ -182,7 +198,7 @@ Description: Abseil ${_NAME} library\n\
+ URL: https://abseil.io/\n\
+ Version: ${PC_VERSION}\n\
+ Requires:${PC_DEPS}\n\
+-Libs: -L\${libdir} ${PC_LINKOPTS} $<$<NOT:$<BOOL:${ABSL_CC_LIB_IS_INTERFACE}>>:-labsl_${_NAME}>\n\
++Libs: -L\${libdir} ${PC_LINKOPTS} $<$<NOT:$<BOOL:${ABSL_CC_LIB_IS_INTERFACE}>>:${LNK_LIB}>\n\
+ Cflags: -I\${includedir}${PC_CFLAGS}\n")
+       INSTALL(FILES "${CMAKE_BINARY_DIR}/lib/pkgconfig/absl_${_NAME}.pc"
+               DESTINATION "${CMAKE_INSTALL_LIBDIR}/pkgconfig")
 -- 
 2.38.1.windows.1
 
