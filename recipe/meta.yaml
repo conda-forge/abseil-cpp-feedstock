@@ -29,16 +29,9 @@ source:
     - patches/0002-fix-for-linking-to-the-CoreFoundation-framework-on-O.patch
     - patches/0003-remove-ignore-4221-from-ABSL_MSVC_LINKOPTS.patch
     - patches/0004-add-missing-osx-workaround.patch
-    # backport of https://github.com/abseil/abseil-cpp/pull/1115 (two commits)
-    - patches/0005-alphabetize-ABSL_INTERNAL_DLL_TARGETS.patch
-    - patches/0006-avoid-building-static-libs-on-windows-when-BUILD_SHA.patch
-    # backport https://github.com/abseil/abseil-cpp/pull/1269
-    - patches/0007-Compile-all-dependencies-of-the-DLL-with-ABSL_CONSUM.patch
     # Helps downstream packages import the dll without an extra define
     # https://github.com/conda-forge/abseil-cpp-feedstock/issues/43#issuecomment-1242969515
-    - patches/0008-default-dll-import-for-windows.patch  # [win and shared_libs == "ON"]
-    # add pkgconfig metadata for shared builds on windows
-    - patches/0009-add-pkgconfig-metadata-for-shared-windows-builds.patch
+    - patches/0005-default-dll-import-for-windows.patch  # [win and shared_libs == "ON"]
 
 build:
   number: 0

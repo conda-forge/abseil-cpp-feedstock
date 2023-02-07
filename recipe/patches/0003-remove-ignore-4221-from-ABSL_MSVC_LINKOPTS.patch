@@ -1,7 +1,7 @@
-From 1a77917fe7c5c3feece1a608d5537f848f4e930f Mon Sep 17 00:00:00 2001
+From dfbac02988c119967037c53a0f78f03bdf01e1c8 Mon Sep 17 00:00:00 2001
 From: "Uwe L. Korn" <uwe.korn@quantco.com>
 Date: Thu, 30 Jul 2020 13:01:32 +0200
-Subject: [PATCH 3/9] remove "-ignore:4221" from ABSL_MSVC_LINKOPTS
+Subject: [PATCH 3/5] remove "-ignore:4221" from ABSL_MSVC_LINKOPTS
 
 see also https://github.com/microsoft/vcpkg/issues/13945
 ---
@@ -10,11 +10,11 @@ see also https://github.com/microsoft/vcpkg/issues/13945
  2 files changed, 1 insertion(+), 8 deletions(-)
 
 diff --git a/absl/copts/GENERATED_AbseilCopts.cmake b/absl/copts/GENERATED_AbseilCopts.cmake
-index a4ab1aa2..f2cdfa0c 100644
+index 430916f7..358354e1 100644
 --- a/absl/copts/GENERATED_AbseilCopts.cmake
 +++ b/absl/copts/GENERATED_AbseilCopts.cmake
-@@ -135,10 +135,6 @@ list(APPEND ABSL_MSVC_FLAGS
-     "/wd4800"
+@@ -186,10 +186,6 @@ list(APPEND ABSL_MSVC_FLAGS
+     "/D_ENABLE_EXTENDED_ALIGNED_STORAGE"
  )
  
 -list(APPEND ABSL_MSVC_LINKOPTS
@@ -22,16 +22,16 @@ index a4ab1aa2..f2cdfa0c 100644
 -)
 -
  list(APPEND ABSL_MSVC_TEST_FLAGS
-     "/wd4018"
-     "/wd4101"
+     "/W3"
+     "/bigobj"
 diff --git a/absl/copts/copts.py b/absl/copts/copts.py
-index 0d6c1ec3..8df92751 100644
+index e6e11949..09ac7618 100644
 --- a/absl/copts/copts.py
 +++ b/absl/copts/copts.py
-@@ -148,10 +148,7 @@ COPT_VARS = {
-         "/wd4996",  # use of deprecated symbol
-         "/DNOMINMAX",  # disable the min() and max() macros from <windows.h>
-     ],
+@@ -173,10 +173,7 @@ COPT_VARS = {
+             "/wd4996",  # use of deprecated symbol
+             "/DNOMINMAX",  # disable the min() and max() macros from <windows.h>
+         ],
 -    "ABSL_MSVC_LINKOPTS": [
 -        # Object file doesn't export any previously undefined symbols
 -        "-ignore:4221",
