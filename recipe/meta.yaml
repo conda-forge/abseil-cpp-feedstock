@@ -160,27 +160,6 @@ outputs:
 
   {% endif %}  # shared_libs == "ON" / "OFF"
 
-  # for compatibility with previous behavior of "abseil-cpp"
-  {% if (unix and ((shared_libs == "ON") and (cxx_standard == "17")))
-        or (win and ((shared_libs == "OFF") and (cxx_standard == "11"))) %}
-  - name: abseil-cpp
-    build:
-      run_exports:                                                # [unix]
-        - libabseil ={{ version }}=cxx{{ cxx_standard }}*         # [unix]
-    requirements:
-      host:
-        # cxx-versions enforced through jinja-if-condition above
-        - {{ pin_subpackage('libabseil', exact=True) }}           # [unix]
-        - {{ pin_subpackage('libabseil-static', exact=True) }}    # [win]
-      run:
-        - {{ pin_subpackage('libabseil', exact=True) }}           # [unix]
-        - {{ pin_subpackage('libabseil-static', exact=True) }}    # [win]
-    test:
-      commands:
-        # tested in other outputs
-        - echo "hello"
-  {% endif %}
-
 about:
   home: https://github.com/abseil/abseil-cpp
   license: Apache-2.0
