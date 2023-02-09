@@ -1,5 +1,8 @@
 {% set version = "20230125.0" %}
 {% set v_major = version.split(".")[0] %}
+# needs to match across all dependent packages; using C++20
+# is potentially problematic in some cases, see #45
+{% set cxx_standard = 17 %}
 
 # shared builds for flags_* libraries are not supported on windows, see
 # https://github.com/abseil/abseil-cpp/pull/1115
@@ -33,13 +36,12 @@ source:
     - patches/0005-fix-some-missing-ABSL_INTERNAL_DLL_TARGETS-for-share.patch
     # Helps downstream packages import the dll without an extra define
     # https://github.com/conda-forge/abseil-cpp-feedstock/issues/43#issuecomment-1242969515
-    - patches/0006-default-dll-import-for-windows.patch  # [win and shared_libs == "ON"]
+    - patches/0006-default-dll-import-for-windows.patch  # [win]
 
 build:
   number: 0
 
 outputs:
-  {% if shared_libs == "ON" %}
   # default behaviour is shared; however note that upstream does not support
   # fully shared builds on windows, and some static libs will remain, see above
   - name: libabseil
@@ -104,61 +106,6 @@ outputs:
         - cmake --build .
         - ./flags_example    # [unix]
         - flags_example.exe  # [win]
-
-  {% else %}  # shared_libs == "OFF"
-
-  - name: libabseil-static
-    script: build-abseil.sh   # [unix]
-    script: build-abseil.bat  # [win]
-    build:
-      string: cxx{{ cxx_standard }}_h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}
-      # no run_export necessary for static lib
-
-    requirements:
-      build:
-        - {{ compiler('c') }}
-        - {{ compiler('cxx') }}
-        - cmake
-        - ninja
-      run_constrained:
-        - libabseil ={{ version }}=cxx{{ cxx_standard }}*
-        # make sure we don't co-install with old version of old package name
-        - abseil-cpp ={{ version }}
-    test:
-      requires:
-        - {{ compiler('cxx') }}
-        - cmake
-        - ninja
-        - pkg-config
-      files:
-        - cmake_test/
-      commands:
-        # absence of DLL on windows
-        - if exist %LIBRARY_BIN%\\abseil_dll.dll exit 1               # [win]
-        - if exist %LIBRARY_LIB%\\abseil_dll.lib exit 1               # [win]
-
-      {% for each_lib in absl_libs %}
-        # presence of static libs
-        - test -f $PREFIX/lib/libabsl_{{ each_lib }}.a                # [unix]
-        - if not exist %LIBRARY_LIB%\\absl_{{ each_lib }}.lib exit 1  # [win]
-        # absence of shared libs
-        - test ! -f $PREFIX/lib/libabsl_{{ each_lib }}${SHLIB_EXT}    # [unix]
-
-        # pkg-config
-        - pkg-config --print-errors --exact-version "{{ v_major }}" absl_{{ each_lib }}
-      {% endfor %}
-
-        # CMake integration
-        - cd cmake_test
-        - export CMAKE_ARGS="$CMAKE_ARGS -GNinja -DCMAKE_BUILD_TYPE=Release"  # [unix]
-        - set "CMAKE_ARGS=%CMAKE_ARGS% -GNinja -DCMAKE_BUILD_TYPE=Release"    # [win]
-        - cmake $CMAKE_ARGS  -DCMAKE_CXX_STANDARD={{ cxx_standard }} .        # [unix]
-        - cmake %CMAKE_ARGS% -DCMAKE_CXX_STANDARD={{ cxx_standard }} .        # [win]
-        - cmake --build .
-        - ./flags_example    # [unix]
-        - flags_example.exe  # [win]
-
-  {% endif %}  # shared_libs == "ON" / "OFF"
 
 about:
   home: https://github.com/abseil/abseil-cpp
