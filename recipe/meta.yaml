@@ -37,9 +37,10 @@ source:
     # Helps downstream packages import the dll without an extra define
     # https://github.com/conda-forge/abseil-cpp-feedstock/issues/43#issuecomment-1242969515
     - patches/0006-default-dll-import-for-windows.patch  # [win]
+    - patches/0007-Fix-ABSL_PROPAGATE_CXX_STD-cmake-option.patch
 
 build:
-  number: 0
+  number: 1
 
 outputs:
   # default behaviour is shared; however note that upstream does not support
