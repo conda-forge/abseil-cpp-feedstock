@@ -1,7 +1,7 @@
 From 54b57e1ccc6f2a9786f240a376d33eaf34daf3d2 Mon Sep 17 00:00:00 2001
 From: "H. Vetinari" <h.vetinari@gmx.com>
 Date: Tue, 7 Feb 2023 13:01:27 +1100
-Subject: [PATCH 5/6] fix some missing ABSL_INTERNAL_DLL_TARGETS for shared
+Subject: [PATCH 5/7] fix some missing ABSL_INTERNAL_DLL_TARGETS for shared
  builds
 
 ---
@@ -62,5 +62,5 @@ index c4a41e6d..eec6dd99 100644
    "scoped_mock_log"
  )
 -- 
-2.38.1.windows.1
+2.33.0.windows.2
 
