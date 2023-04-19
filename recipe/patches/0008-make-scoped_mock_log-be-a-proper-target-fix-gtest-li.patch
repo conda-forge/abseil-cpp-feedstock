@@ -1,0 +1,52 @@
+From 379cfe45cbff0967bdfecf15b9aa5aa63ed2066e Mon Sep 17 00:00:00 2001
+From: "H. Vetinari" <h.vetinari@gmx.com>
+Date: Sat, 22 Apr 2023 18:56:10 +1100
+Subject: [PATCH 8/8] make scoped_mock_log be a proper target & fix gtest
+ linkage
+
+---
+ CMake/AbseilDll.cmake   | 3 ++-
+ absl/log/CMakeLists.txt | 5 ++---
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/CMake/AbseilDll.cmake b/CMake/AbseilDll.cmake
+index 1aecd926..9353b334 100644
+--- a/CMake/AbseilDll.cmake
++++ b/CMake/AbseilDll.cmake
+@@ -578,6 +578,8 @@ set(ABSL_INTERNAL_DLL_TARGETS
+   "type_traits"
+   "utility"
+   "variant"
++  # originally a test-only dep, but needed for protobuf
++  "scoped_mock_log"
+ )
+ 
+ set(ABSL_INTERNAL_TEST_DLL_FILES
+@@ -599,7 +601,6 @@ set(ABSL_INTERNAL_TEST_DLL_TARGETS
+   "random_mocking_bit_gen"
+   "random_internal_distribution_test_util"
+   "random_internal_mock_overload_set"
+-  "scoped_mock_log"
+ )
+ 
+ function(_absl_target_compile_features_if_available TARGET TYPE FEATURE)
+diff --git a/absl/log/CMakeLists.txt b/absl/log/CMakeLists.txt
+index fb1b59f5..308333cf 100644
+--- a/absl/log/CMakeLists.txt
++++ b/absl/log/CMakeLists.txt
+@@ -634,10 +634,9 @@ absl_cc_library(
+     absl::log_sink_registry
+     absl::raw_logging_internal
+     absl::strings
+-    GTest::gmock
+-    GTest::gtest
++    gmock
++    gtest
+   PUBLIC
+-  TESTONLY
+ )
+ 
+ absl_cc_library(
+-- 
+2.38.1.windows.1
+

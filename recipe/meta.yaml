@@ -19,6 +19,8 @@
     "scoped_set_env", "spinlock_wait", "stacktrace", "status", "statusor", "strerror", "strings",
     "symbolize", "synchronization", "time", "time_zone"
 ] %}
+# test dependencies (but used e.g. by protobuf)
+{% set absl_libs = absl_libs + ["scoped_mock_log"] %}
 
 package:
   name: abseil-split
@@ -38,9 +40,10 @@ source:
     # https://github.com/conda-forge/abseil-cpp-feedstock/issues/43#issuecomment-1242969515
     - patches/0006-default-dll-import-for-windows.patch  # [win]
     - patches/0007-Fix-ABSL_PROPAGATE_CXX_STD-cmake-option.patch
+    - patches/0008-make-scoped_mock_log-be-a-proper-target.patch
 
 build:
-  number: 1
+  number: 2
 
 outputs:
   # default behaviour is shared; however note that upstream does not support
@@ -59,6 +62,10 @@ outputs:
         - {{ compiler('cxx') }}
         - cmake
         - ninja
+      host:
+        - gtest
+        # ... which also depends on
+        - gmock
       run_constrained:
         - libabseil-static ={{ version }}=cxx{{ cxx_standard }}*
         # make sure we don't co-install with old version of old package name

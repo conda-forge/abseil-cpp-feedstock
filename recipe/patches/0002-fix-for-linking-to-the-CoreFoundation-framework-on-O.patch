@@ -1,7 +1,7 @@
 From c8bd75a96ecb2bd528399829692307a03985da0b Mon Sep 17 00:00:00 2001
 From: Francesco Biscani <bluescarni@gmail.com>
 Date: Sat, 21 Sep 2019 21:39:26 +0200
-Subject: [PATCH 2/7] fix for linking to the CoreFoundation framework on OSX
+Subject: [PATCH 2/8] fix for linking to the CoreFoundation framework on OSX
 
 ---
  absl/time/CMakeLists.txt | 6 ++++--
@@ -27,5 +27,5 @@ index 7b720540..cfed46a4 100644
  absl_cc_library(
    NAME
 -- 
-2.33.0.windows.2
+2.38.1.windows.1
 

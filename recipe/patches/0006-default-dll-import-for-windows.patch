@@ -1,7 +1,7 @@
-From 08797647a52610ac2437c4d1b0c3af38d2704fd4 Mon Sep 17 00:00:00 2001
+From d062fa3db9557ec227a40af6c40727249499022f Mon Sep 17 00:00:00 2001
 From: Mark Harfouche <mark.harfouche@gmail.com>
 Date: Sun, 11 Sep 2022 10:32:19 -0400
-Subject: [PATCH 6/7] default dll import for windows
+Subject: [PATCH 6/8] default dll import for windows
 
 ---
  absl/base/config.h | 5 ++---
@@ -25,5 +25,5 @@ index e35d2e48..391da4de 100644
  #else
  #define ABSL_DLL
 -- 
-2.33.0.windows.2
+2.38.1.windows.1
 

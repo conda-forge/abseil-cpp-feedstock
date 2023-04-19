@@ -1,7 +1,7 @@
 From dfbac02988c119967037c53a0f78f03bdf01e1c8 Mon Sep 17 00:00:00 2001
 From: "Uwe L. Korn" <uwe.korn@quantco.com>
 Date: Thu, 30 Jul 2020 13:01:32 +0200
-Subject: [PATCH 3/7] remove "-ignore:4221" from ABSL_MSVC_LINKOPTS
+Subject: [PATCH 3/8] remove "-ignore:4221" from ABSL_MSVC_LINKOPTS
 
 see also https://github.com/microsoft/vcpkg/issues/13945
 ---
@@ -41,5 +41,5 @@ index e6e11949..09ac7618 100644
      # Standard). These flags are used for detecting whether or not the target
      # architecture has hardware support for AES instructions which can be used
 -- 
-2.33.0.windows.2
+2.38.1.windows.1
 
