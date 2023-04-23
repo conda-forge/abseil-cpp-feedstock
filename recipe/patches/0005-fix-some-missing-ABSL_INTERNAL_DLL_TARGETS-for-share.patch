@@ -1,0 +1,66 @@
+From 54b57e1ccc6f2a9786f240a376d33eaf34daf3d2 Mon Sep 17 00:00:00 2001
+From: "H. Vetinari" <h.vetinari@gmx.com>
+Date: Tue, 7 Feb 2023 13:01:27 +1100
+Subject: [PATCH 5/7] fix some missing ABSL_INTERNAL_DLL_TARGETS for shared
+ builds
+
+---
+ CMake/AbseilDll.cmake | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
+
+diff --git a/CMake/AbseilDll.cmake b/CMake/AbseilDll.cmake
+index c4a41e6d..eec6dd99 100644
+--- a/CMake/AbseilDll.cmake
++++ b/CMake/AbseilDll.cmake
+@@ -448,8 +448,14 @@ set(ABSL_INTERNAL_DLL_TARGETS
+   "container_common"
+   "container_memory"
+   "cord"
++  "cord_internal"
++  "cordz_functions"
++  "cordz_handle"
++  "cordz_info"
++  "cordz_sample_token"
+   "core_headers"
+   "counting_allocator"
++  "crc_cord_state"
+   "crc_cpu_detect"
+   "crc_internal"
+   "crc32c"
+@@ -498,12 +504,14 @@ set(ABSL_INTERNAL_DLL_TARGETS
+   "log_initialize"
+   "log"
+   "log_entry"
++  "log_flags"
+   "log_sink"
+   "log_sink_registry"
+   "log_streamer"
+   "log_internal_structured"
+   "log_severity"
+   "log_structured"
++  "low_level_hash"
+   "malloc_internal"
+   "memory"
+   "meta"
+@@ -555,8 +563,10 @@ set(ABSL_INTERNAL_DLL_TARGETS
+   "stack_consumption"
+   "stacktrace"
+   "status"
++  "statusor"
+   "str_format"
+   "str_format_internal"
++  "strerror"
+   "strings"
+   "strings_internal"
+   "symbolize"
+@@ -588,6 +598,7 @@ set(ABSL_INTERNAL_TEST_DLL_TARGETS
+   "cordz_test_helpers"
+   "hash_testing"
+   "random_mocking_bit_gen"
++  "random_internal_distribution_test_util"
+   "random_internal_mock_overload_set"
+   "scoped_mock_log"
+ )
+-- 
+2.33.0.windows.2
+

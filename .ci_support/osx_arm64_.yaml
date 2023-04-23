@@ -3,25 +3,19 @@ MACOSX_DEPLOYMENT_TARGET:
 c_compiler:
 - clang
 c_compiler_version:
-- '13'
+- '14'
 channel_sources:
 - conda-forge
 channel_targets:
-- conda-forge abseil_dev
+- conda-forge main
 cxx_compiler:
 - clangxx
 cxx_compiler_version:
-- '13'
-cxx_standard:
-- '17'
+- '14'
 macos_machine:
 - arm64-apple-darwin20.0.0
-shared_libs:
-- 'OFF'
 target_platform:
 - osx-arm64
 zip_keys:
 - - c_compiler_version
   - cxx_compiler_version
-- - cxx_standard
-  - shared_libs

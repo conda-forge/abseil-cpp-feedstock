@@ -8,52 +8,16 @@ jobs:
     vmImage: ubuntu-latest
   strategy:
     matrix:
-      linux_64_cxx_standard11shared_libsOFF:
-        CONFIG: linux_64_cxx_standard11shared_libsOFF
+      linux_64_:
+        CONFIG: linux_64_
         UPLOAD_PACKAGES: 'True'
         DOCKER_IMAGE: quay.io/condaforge/linux-anvil-cos7-x86_64
-      linux_64_cxx_standard14shared_libsOFF:
-        CONFIG: linux_64_cxx_standard14shared_libsOFF
+      linux_aarch64_:
+        CONFIG: linux_aarch64_
         UPLOAD_PACKAGES: 'True'
         DOCKER_IMAGE: quay.io/condaforge/linux-anvil-cos7-x86_64
-      linux_64_cxx_standard17shared_libsOFF:
-        CONFIG: linux_64_cxx_standard17shared_libsOFF
-        UPLOAD_PACKAGES: 'True'
-        DOCKER_IMAGE: quay.io/condaforge/linux-anvil-cos7-x86_64
-      linux_64_cxx_standard17shared_libsON:
-        CONFIG: linux_64_cxx_standard17shared_libsON
-        UPLOAD_PACKAGES: 'True'
-        DOCKER_IMAGE: quay.io/condaforge/linux-anvil-cos7-x86_64
-      linux_aarch64_cxx_standard11shared_libsOFF:
-        CONFIG: linux_aarch64_cxx_standard11shared_libsOFF
-        UPLOAD_PACKAGES: 'True'
-        DOCKER_IMAGE: quay.io/condaforge/linux-anvil-cos7-x86_64
-      linux_aarch64_cxx_standard14shared_libsOFF:
-        CONFIG: linux_aarch64_cxx_standard14shared_libsOFF
-        UPLOAD_PACKAGES: 'True'
-        DOCKER_IMAGE: quay.io/condaforge/linux-anvil-cos7-x86_64
-      linux_aarch64_cxx_standard17shared_libsOFF:
-        CONFIG: linux_aarch64_cxx_standard17shared_libsOFF
-        UPLOAD_PACKAGES: 'True'
-        DOCKER_IMAGE: quay.io/condaforge/linux-anvil-cos7-x86_64
-      linux_aarch64_cxx_standard17shared_libsON:
-        CONFIG: linux_aarch64_cxx_standard17shared_libsON
-        UPLOAD_PACKAGES: 'True'
-        DOCKER_IMAGE: quay.io/condaforge/linux-anvil-cos7-x86_64
-      linux_ppc64le_cxx_standard11shared_libsOFF:
-        CONFIG: linux_ppc64le_cxx_standard11shared_libsOFF
-        UPLOAD_PACKAGES: 'True'
-        DOCKER_IMAGE: quay.io/condaforge/linux-anvil-cos7-x86_64
-      linux_ppc64le_cxx_standard14shared_libsOFF:
-        CONFIG: linux_ppc64le_cxx_standard14shared_libsOFF
-        UPLOAD_PACKAGES: 'True'
-        DOCKER_IMAGE: quay.io/condaforge/linux-anvil-cos7-x86_64
-      linux_ppc64le_cxx_standard17shared_libsOFF:
-        CONFIG: linux_ppc64le_cxx_standard17shared_libsOFF
-        UPLOAD_PACKAGES: 'True'
-        DOCKER_IMAGE: quay.io/condaforge/linux-anvil-cos7-x86_64
-      linux_ppc64le_cxx_standard17shared_libsON:
-        CONFIG: linux_ppc64le_cxx_standard17shared_libsON
+      linux_ppc64le_:
+        CONFIG: linux_ppc64le_
         UPLOAD_PACKAGES: 'True'
         DOCKER_IMAGE: quay.io/condaforge/linux-anvil-cos7-x86_64
   timeoutInMinutes: 360
