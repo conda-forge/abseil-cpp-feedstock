@@ -38,6 +38,9 @@ source:
     # https://github.com/conda-forge/abseil-cpp-feedstock/issues/43#issuecomment-1242969515
     - patches/0006-default-dll-import-for-windows.patch  # [win]
     - patches/0007-Fix-ABSL_PROPAGATE_CXX_STD-cmake-option.patch
+    # backport https://github.com/abseil/abseil-cpp/commit/807763a7f57dcf0ba4af7c3b218013e8f525e811
+    # to be able to install TESTONLY libraries
+    - patches/0008-CMake-Install-TESTONLY-libraries-and-their-dependenc.patch
 
 build:
   number: 1
