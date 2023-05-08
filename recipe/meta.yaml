@@ -147,6 +147,9 @@ outputs:
       run:
         - gtest
         - {{ pin_subpackage("libabseil", exact=True) }}
+      run_constrained:
+        # only for libabseil-tests, see build-abseil.sh
+        - __osx >=10.13  # [osx and x86_64]
 
     test:
       requires:
