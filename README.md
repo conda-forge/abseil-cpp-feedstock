@@ -1,11 +1,11 @@
-About abseil-cpp
-================
+About abseil-cpp-feedstock
+==========================
+
+Feedstock license: [BSD-3-Clause](https://github.com/conda-forge/abseil-cpp-feedstock/blob/main/LICENSE.txt)
 
 Home: https://github.com/abseil/abseil-cpp
 
 Package license: Apache-2.0
-
-Feedstock license: [BSD-3-Clause](https://github.com/conda-forge/abseil-cpp-feedstock/blob/main/LICENSE.txt)
 
 Summary: Abseil Common Libraries (C++)
 
@@ -90,6 +90,7 @@ Current release info
 | Name | Downloads | Version | Platforms |
 | --- | --- | --- | --- |
 | [![Conda Recipe](https://img.shields.io/badge/recipe-libabseil-green.svg)](https://anaconda.org/conda-forge/libabseil) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/libabseil.svg)](https://anaconda.org/conda-forge/libabseil) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/libabseil.svg)](https://anaconda.org/conda-forge/libabseil) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/libabseil.svg)](https://anaconda.org/conda-forge/libabseil) |
+| [![Conda Recipe](https://img.shields.io/badge/recipe-libabseil--tests-green.svg)](https://anaconda.org/conda-forge/libabseil-tests) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/libabseil-tests.svg)](https://anaconda.org/conda-forge/libabseil-tests) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/libabseil-tests.svg)](https://anaconda.org/conda-forge/libabseil-tests) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/libabseil-tests.svg)](https://anaconda.org/conda-forge/libabseil-tests) |
 
 Installing abseil-cpp
 =====================
@@ -101,16 +102,16 @@ conda config --add channels conda-forge
 conda config --set channel_priority strict
 ```
 
-Once the `conda-forge` channel has been enabled, `libabseil` can be installed with `conda`:
+Once the `conda-forge` channel has been enabled, `libabseil, libabseil-tests` can be installed with `conda`:
 
 ```
-conda install libabseil
+conda install libabseil libabseil-tests
 ```
 
 or with `mamba`:
 
 ```
-mamba install libabseil
+mamba install libabseil libabseil-tests
 ```
 
 It is possible to list all of the versions of `libabseil` available on your platform with `conda`:
