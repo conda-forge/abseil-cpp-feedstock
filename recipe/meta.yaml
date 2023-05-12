@@ -1,4 +1,4 @@
-{% set version = "20230125.0" %}
+{% set version = "20230125.2" %}
 {% set v_major = version.split(".")[0] %}
 # needs to match across all dependent packages; using C++20
 # is potentially problematic in some cases, see #45
@@ -19,6 +19,8 @@
     "scoped_set_env", "spinlock_wait", "stacktrace", "status", "statusor", "strerror", "strings",
     "symbolize", "synchronization", "time", "time_zone"
 ] %}
+# test helper targets (but used e.g. by protobuf)
+{% set absl_test_libs = ["scoped_mock_log"] %}
 
 package:
   name: abseil-split
@@ -26,7 +28,7 @@ package:
 
 source:
   url: https://github.com/abseil/abseil-cpp/archive/refs/tags/{{ version }}.tar.gz
-  sha256: 3ea49a7d97421b88a8c48a0de16c16048e17725c7ec0f1d3ea2683a2a75adc21
+  sha256: 9a2b5752d7bfade0bdeee2701de17c9480620f8b237e1964c1b9967c75374906
   patches:
     - patches/0001-patch-out-the-build-issue-on-clang4-osx.patch
     - patches/0002-fix-for-linking-to-the-CoreFoundation-framework-on-O.patch
@@ -38,9 +40,16 @@ source:
     # https://github.com/conda-forge/abseil-cpp-feedstock/issues/43#issuecomment-1242969515
     - patches/0006-default-dll-import-for-windows.patch  # [win]
     - patches/0007-Fix-ABSL_PROPAGATE_CXX_STD-cmake-option.patch
+    # backport https://github.com/abseil/abseil-cpp/commit/807763a7f57dcf0ba4af7c3b218013e8f525e811
+    # to be able to install TESTONLY libraries
+    - patches/0008-CMake-Install-TESTONLY-libraries-and-their-dependenc.patch
+    # backport abseil/abseil-cpp#1445 for shared builds including test targets on win
+    - patches/0009-add-some-necessary-source-files-to-ABSL_INTERNAL_TES.patch
+    - patches/0010-update-ABSL_CC_TEST_LINKOPTS-when-using-shared-build.patch
+    - patches/0011-make-CordzHandle-and-relevant-internal-state-use-ABS.patch
 
 build:
-  number: 1
+  number: 0
 
 outputs:
   # default behaviour is shared; however note that upstream does not support
@@ -76,6 +85,9 @@ outputs:
         # windows-only (almost-)all-in-one DLL + import library
         - if not exist %LIBRARY_BIN%\\abseil_dll.dll exit 1           # [win]
         - if not exist %LIBRARY_LIB%\\abseil_dll.lib exit 1           # [win]
+        # absence of test targets in regular abseil output
+        - if exist %LIBRARY_BIN%\\abseil_test_dll.dll exit 1          # [win]
+        - if exist %LIBRARY_LIB%\\abseil_test_dll.lib exit 1          # [win]
 
         # absl_* libraries
       {% for each_lib in absl_libs %}
@@ -95,6 +107,14 @@ outputs:
         - pkg-config --print-errors --exact-version "{{ v_major }}" absl_{{ each_lib }}
       {% endfor %}
 
+        # absence of test targets in regular abseil output
+      {% for each_lib in absl_test_libs %}
+        # absence of all libs
+        - test ! -f $PREFIX/lib/libabsl_{{ each_lib }}${SHLIB_EXT}    # [unix]
+        - test ! -f $PREFIX/lib/libabsl_{{ each_lib }}.a              # [unix]
+        - if exist %LIBRARY_LIB%\\absl_{{ each_lib }}.lib exit 1      # [win]
+      {% endfor %}
+
         # pkg-config (abseil_dll)
         - pkg-config --print-errors --exact-version "{{ v_major }}" abseil_dll  # [win]
 
@@ -107,6 +127,51 @@ outputs:
         - cmake --build .
         - ./flags_example    # [unix]
         - flags_example.exe  # [win]
+
+  # tests & test-helpers
+  - name: libabseil-tests
+    script: build-abseil.sh   # [unix]
+    script: build-abseil.bat  # [win]
+    build:
+      string: cxx{{ cxx_standard }}_h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}
+
+    requirements:
+      build:
+        - {{ compiler('c') }}
+        - {{ compiler('cxx') }}
+        - cmake
+        - ninja
+      host:
+        - gtest
+        - {{ pin_subpackage("libabseil", exact=True) }}
+      run:
+        - gtest
+        - {{ pin_subpackage("libabseil", exact=True) }}
+      run_constrained:
+        # only for libabseil-tests, see build-abseil.sh
+        - __osx >=10.13  # [osx and x86_64]
+
+    test:
+      requires:
+        - pkg-config
+      commands:
+        # windows-only (almost-)all-in-one DLL + import library
+        - if not exist %LIBRARY_BIN%\\abseil_test_dll.dll exit 1      # [win]
+        - if not exist %LIBRARY_LIB%\\abseil_test_dll.lib exit 1      # [win]
+
+        # absl_* libraries
+      {% for each_lib in absl_test_libs %}
+        # presence of shared libs
+        - test -f $PREFIX/lib/libabsl_{{ each_lib }}${SHLIB_EXT}      # [unix]
+        # absence of static libs
+        - test ! -f $PREFIX/lib/libabsl_{{ each_lib }}.a              # [unix]
+
+        # pkg-config (should point to abseil_test_dll on shared windows builds)
+        - pkg-config --print-errors --exact-version "{{ v_major }}" absl_{{ each_lib }}
+      {% endfor %}
+
+        # pkg-config abseil_test_dll
+        - pkg-config --print-errors --exact-version "{{ v_major }}" abseil_test_dll  # [win]
 
 about:
   home: https://github.com/abseil/abseil-cpp

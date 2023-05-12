@@ -1,0 +1,51 @@
+From 783fdeef3098ba22153507abe0f706505c667897 Mon Sep 17 00:00:00 2001
+From: "H. Vetinari" <h.vetinari@gmx.com>
+Date: Mon, 8 May 2023 11:15:46 +1100
+Subject: [PATCH 11/11] make CordzHandle and relevant internal state use
+ ABSL_DLL
+
+---
+ absl/strings/internal/cord_internal.cc | 2 +-
+ absl/strings/internal/cord_internal.h  | 2 +-
+ absl/strings/internal/cordz_handle.h   | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/absl/strings/internal/cord_internal.cc b/absl/strings/internal/cord_internal.cc
+index b6b06cfa..f2842511 100644
+--- a/absl/strings/internal/cord_internal.cc
++++ b/absl/strings/internal/cord_internal.cc
+@@ -33,7 +33,7 @@ ABSL_CONST_INIT std::atomic<bool> cord_ring_buffer_enabled(
+     kCordEnableRingBufferDefault);
+ ABSL_CONST_INIT std::atomic<bool> shallow_subcords_enabled(
+     kCordShallowSubcordsDefault);
+-ABSL_CONST_INIT std::atomic<bool> cord_btree_exhaustive_validation(false);
++ABSL_CONST_INIT ABSL_DLL std::atomic<bool> cord_btree_exhaustive_validation(false);
+ 
+ void LogFatalNodeType(CordRep* rep) {
+   ABSL_INTERNAL_LOG(FATAL, absl::StrCat("Unexpected node type: ",
+diff --git a/absl/strings/internal/cord_internal.h b/absl/strings/internal/cord_internal.h
+index 63a81f4f..796d4de9 100644
+--- a/absl/strings/internal/cord_internal.h
++++ b/absl/strings/internal/cord_internal.h
+@@ -73,7 +73,7 @@ extern std::atomic<bool> shallow_subcords_enabled;
+ // in debug assertions, and code that calls `IsValid()` explicitly. By default,
+ // assertions should be relatively cheap and AssertValid() can easily lead to
+ // O(n^2) complexity as recursive / full tree validation is O(n).
+-extern std::atomic<bool> cord_btree_exhaustive_validation;
++ABSL_DLL extern std::atomic<bool> cord_btree_exhaustive_validation;
+ 
+ inline void enable_cord_ring_buffer(bool enable) {
+   cord_ring_buffer_enabled.store(enable, std::memory_order_relaxed);
+diff --git a/absl/strings/internal/cordz_handle.h b/absl/strings/internal/cordz_handle.h
+index 3c800b43..c4ac7cb8 100644
+--- a/absl/strings/internal/cordz_handle.h
++++ b/absl/strings/internal/cordz_handle.h
+@@ -34,7 +34,7 @@ namespace cord_internal {
+ // has gained visibility into a CordzInfo object, that CordzInfo object will not
+ // be deleted prematurely. This allows the profiler to inspect all CordzInfo
+ // objects that are alive without needing to hold a global lock.
+-class CordzHandle {
++class ABSL_DLL CordzHandle {
+  public:
+   CordzHandle() : CordzHandle(false) {}
+ 
