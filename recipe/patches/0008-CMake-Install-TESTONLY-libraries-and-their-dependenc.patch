@@ -1,8 +1,8 @@
-From 4ed51580e60f87f0cdd2024b407aa6688f65c5ef Mon Sep 17 00:00:00 2001
+From 48c9ff9c870b45bfc770d2765b0ea50cc0aef082 Mon Sep 17 00:00:00 2001
 From: Derek Mauro <dmauro@google.com>
 Date: Thu, 2 Mar 2023 17:32:02 -0800
-Subject: [PATCH 08/11] CMake: Install TESTONLY libraries and their
- dependencies when they are built
+Subject: [PATCH 8/9] CMake: Install TESTONLY libraries and their dependencies
+ when they are built
 
 https://github.com/abseil/abseil-cpp/issues/1407
 

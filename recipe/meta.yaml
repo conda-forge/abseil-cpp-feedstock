@@ -43,13 +43,12 @@ source:
     # backport https://github.com/abseil/abseil-cpp/commit/807763a7f57dcf0ba4af7c3b218013e8f525e811
     # to be able to install TESTONLY libraries
     - patches/0008-CMake-Install-TESTONLY-libraries-and-their-dependenc.patch
-    # backport abseil/abseil-cpp#1445 for shared builds including test targets on win
-    - patches/0009-add-some-necessary-source-files-to-ABSL_INTERNAL_TES.patch
-    - patches/0010-update-ABSL_CC_TEST_LINKOPTS-when-using-shared-build.patch
-    - patches/0011-make-CordzHandle-and-relevant-internal-state-use-ABS.patch
+    # backport https://github.com/abseil/abseil-cpp/commit/3aa3377ef66e6388ed19fd7c862bf0dc3a3630e0
+    # for being able to do shared builds on windows that include test targets
+    - patches/0009-Fixed-Windows-DLL-builds-of-test-targets.patch
 
 build:
-  number: 0
+  number: 1
 
 outputs:
   # default behaviour is shared; however note that upstream does not support

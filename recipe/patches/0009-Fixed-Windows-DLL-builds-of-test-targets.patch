@@ -1,0 +1,399 @@
+From db8c97c0975a685c7bf6445a48001c3fb7ac15bb Mon Sep 17 00:00:00 2001
+From: Derek Mauro <dmauro@google.com>
+Date: Fri, 12 May 2023 08:45:48 -0700
+Subject: [PATCH 9/9] Fixed Windows DLL builds of test targets
+
+This is a heavily modified version of
+https://github.com/abseil/abseil-cpp/pull/1445,
+which adds some missing test libraries to the test DLL.
+
+Unlike #1445, this change moves several global variables out of
+headers that did not need to be in headers.
+
+For instance, cord_btree_exhaustive_validation was a global
+defined/declared in cord_internal, but only used in cord_rep_btree
+and its test.
+
+cordz_handle defined a queue in its header even though it wasn't needed,
+which also led to ODR problems.
+
+The Spinlock used in CordzHandle is replaced with a Mutex. This was
+originally a Mutex, but Chromium asked us to change it to a Spinlock
+to avoid a static initializer. After this change, the static
+initializer is no longer an issue.
+
+#1407
+
+PiperOrigin-RevId: 531516991
+Change-Id: I0e431a193698b20ba03fac6e414c26f153f330a7
+---
+ CMake/AbseilDll.cmake                        |  4 ++
+ CMake/AbseilHelpers.cmake                    |  4 ++
+ absl/strings/internal/cord_internal.cc       |  1 -
+ absl/strings/internal/cord_internal.h        |  6 --
+ absl/strings/internal/cord_rep_btree.cc      | 17 +++--
+ absl/strings/internal/cord_rep_btree.h       |  8 +++
+ absl/strings/internal/cord_rep_btree_test.cc |  8 +--
+ absl/strings/internal/cordz_handle.cc        | 66 ++++++++++++++------
+ absl/strings/internal/cordz_handle.h         | 33 ----------
+ 9 files changed, 79 insertions(+), 68 deletions(-)
+
+diff --git a/CMake/AbseilDll.cmake b/CMake/AbseilDll.cmake
+index 1aecd926..26078596 100644
+--- a/CMake/AbseilDll.cmake
++++ b/CMake/AbseilDll.cmake
+@@ -584,6 +584,10 @@ set(ABSL_INTERNAL_TEST_DLL_FILES
+   "hash/hash_testing.h"
+   "log/scoped_mock_log.cc"
+   "log/scoped_mock_log.h"
++  "random/internal/chi_square.cc"
++  "random/internal/chi_square.h"
++  "random/internal/distribution_test_util.cc"
++  "random/internal/distribution_test_util.h"
+   "random/internal/mock_helpers.h"
+   "random/internal/mock_overload_set.h"
+   "random/mocking_bit_gen.h"
+diff --git a/CMake/AbseilHelpers.cmake b/CMake/AbseilHelpers.cmake
+index f452a676..89f6ba9a 100644
+--- a/CMake/AbseilHelpers.cmake
++++ b/CMake/AbseilHelpers.cmake
+@@ -427,6 +427,10 @@ function(absl_cc_test)
+       DEPS ${ABSL_CC_TEST_DEPS}
+       OUTPUT ABSL_CC_TEST_DEPS
+     )
++    absl_internal_dll_targets(
++      DEPS ${ABSL_CC_TEST_LINKOPTS}
++      OUTPUT ABSL_CC_TEST_LINKOPTS
++    )
+   else()
+     target_compile_definitions(${_NAME}
+       PUBLIC
+diff --git a/absl/strings/internal/cord_internal.cc b/absl/strings/internal/cord_internal.cc
+index b6b06cfa..b7874385 100644
+--- a/absl/strings/internal/cord_internal.cc
++++ b/absl/strings/internal/cord_internal.cc
+@@ -33,7 +33,6 @@ ABSL_CONST_INIT std::atomic<bool> cord_ring_buffer_enabled(
+     kCordEnableRingBufferDefault);
+ ABSL_CONST_INIT std::atomic<bool> shallow_subcords_enabled(
+     kCordShallowSubcordsDefault);
+-ABSL_CONST_INIT std::atomic<bool> cord_btree_exhaustive_validation(false);
+ 
+ void LogFatalNodeType(CordRep* rep) {
+   ABSL_INTERNAL_LOG(FATAL, absl::StrCat("Unexpected node type: ",
+diff --git a/absl/strings/internal/cord_internal.h b/absl/strings/internal/cord_internal.h
+index e6f0d544..8d9836ba 100644
+--- a/absl/strings/internal/cord_internal.h
++++ b/absl/strings/internal/cord_internal.h
+@@ -69,12 +69,6 @@ enum CordFeatureDefaults {
+ extern std::atomic<bool> cord_ring_buffer_enabled;
+ extern std::atomic<bool> shallow_subcords_enabled;
+ 
+-// `cord_btree_exhaustive_validation` can be set to force exhaustive validation
+-// in debug assertions, and code that calls `IsValid()` explicitly. By default,
+-// assertions should be relatively cheap and AssertValid() can easily lead to
+-// O(n^2) complexity as recursive / full tree validation is O(n).
+-extern std::atomic<bool> cord_btree_exhaustive_validation;
+-
+ inline void enable_cord_ring_buffer(bool enable) {
+   cord_ring_buffer_enabled.store(enable, std::memory_order_relaxed);
+ }
+diff --git a/absl/strings/internal/cord_rep_btree.cc b/absl/strings/internal/cord_rep_btree.cc
+index a86fdc0b..05bd0e20 100644
+--- a/absl/strings/internal/cord_rep_btree.cc
++++ b/absl/strings/internal/cord_rep_btree.cc
+@@ -14,6 +14,7 @@
+ 
+ #include "absl/strings/internal/cord_rep_btree.h"
+ 
++#include <atomic>
+ #include <cassert>
+ #include <cstdint>
+ #include <iostream>
+@@ -49,9 +50,7 @@ using CopyResult = CordRepBtree::CopyResult;
+ constexpr auto kFront = CordRepBtree::kFront;
+ constexpr auto kBack = CordRepBtree::kBack;
+ 
+-inline bool exhaustive_validation() {
+-  return cord_btree_exhaustive_validation.load(std::memory_order_relaxed);
+-}
++ABSL_CONST_INIT std::atomic<bool> cord_btree_exhaustive_validation(false);
+ 
+ // Implementation of the various 'Dump' functions.
+ // Prints the entire tree structure or 'rep'. External callers should
+@@ -362,6 +361,15 @@ struct StackOperations {
+ 
+ }  // namespace
+ 
++void SetCordBtreeExhaustiveValidation(bool do_exaustive_validation) {
++  cord_btree_exhaustive_validation.store(do_exaustive_validation,
++                                         std::memory_order_relaxed);
++}
++
++bool IsCordBtreeExhaustiveValidationEnabled() {
++  return cord_btree_exhaustive_validation.load(std::memory_order_relaxed);
++}
++
+ void CordRepBtree::Dump(const CordRep* rep, absl::string_view label,
+                         bool include_contents, std::ostream& stream) {
+   stream << "===================================\n";
+@@ -450,7 +458,8 @@ bool CordRepBtree::IsValid(const CordRepBtree* tree, bool shallow) {
+     child_length += edge->length;
+   }
+   NODE_CHECK_EQ(child_length, tree->length);
+-  if ((!shallow || exhaustive_validation()) && tree->height() > 0) {
++  if ((!shallow || IsCordBtreeExhaustiveValidationEnabled()) &&
++      tree->height() > 0) {
+     for (CordRep* edge : tree->Edges()) {
+       if (!IsValid(edge->btree(), shallow)) return false;
+     }
+diff --git a/absl/strings/internal/cord_rep_btree.h b/absl/strings/internal/cord_rep_btree.h
+index 4209e512..be94b62e 100644
+--- a/absl/strings/internal/cord_rep_btree.h
++++ b/absl/strings/internal/cord_rep_btree.h
+@@ -32,6 +32,14 @@ namespace absl {
+ ABSL_NAMESPACE_BEGIN
+ namespace cord_internal {
+ 
++// `SetCordBtreeExhaustiveValidation()` can be set to force exhaustive
++// validation in debug assertions, and code that calls `IsValid()`
++// explicitly. By default, assertions should be relatively cheap and
++// AssertValid() can easily lead to O(n^2) complexity as recursive / full tree
++// validation is O(n).
++void SetCordBtreeExhaustiveValidation(bool do_exaustive_validation);
++bool IsCordBtreeExhaustiveValidationEnabled();
++
+ class CordRepBtreeNavigator;
+ 
+ // CordRepBtree is as the name implies a btree implementation of a Cordrep tree.
+diff --git a/absl/strings/internal/cord_rep_btree_test.cc b/absl/strings/internal/cord_rep_btree_test.cc
+index 9d6ce484..586cc5ff 100644
+--- a/absl/strings/internal/cord_rep_btree_test.cc
++++ b/absl/strings/internal/cord_rep_btree_test.cc
+@@ -1355,9 +1355,9 @@ TEST(CordRepBtreeTest, AssertValid) {
+ 
+ TEST(CordRepBtreeTest, CheckAssertValidShallowVsDeep) {
+   // Restore exhaustive validation on any exit.
+-  const bool exhaustive_validation = cord_btree_exhaustive_validation.load();
++  const bool exhaustive_validation = IsCordBtreeExhaustiveValidationEnabled();
+   auto cleanup = absl::MakeCleanup([exhaustive_validation] {
+-    cord_btree_exhaustive_validation.store(exhaustive_validation);
++    SetCordBtreeExhaustiveValidation(exhaustive_validation);
+   });
+ 
+   // Create a tree of at least 2 levels, and mess with the original flat, which
+@@ -1372,7 +1372,7 @@ TEST(CordRepBtreeTest, CheckAssertValidShallowVsDeep) {
+   }
+   flat->length = 100;
+ 
+-  cord_btree_exhaustive_validation.store(false);
++  SetCordBtreeExhaustiveValidation(false);
+   EXPECT_FALSE(CordRepBtree::IsValid(tree));
+   EXPECT_TRUE(CordRepBtree::IsValid(tree, true));
+   EXPECT_FALSE(CordRepBtree::IsValid(tree, false));
+@@ -1382,7 +1382,7 @@ TEST(CordRepBtreeTest, CheckAssertValidShallowVsDeep) {
+   EXPECT_DEBUG_DEATH(CordRepBtree::AssertValid(tree, false), ".*");
+ #endif
+ 
+-  cord_btree_exhaustive_validation.store(true);
++  SetCordBtreeExhaustiveValidation(true);
+   EXPECT_FALSE(CordRepBtree::IsValid(tree));
+   EXPECT_FALSE(CordRepBtree::IsValid(tree, true));
+   EXPECT_FALSE(CordRepBtree::IsValid(tree, false));
+diff --git a/absl/strings/internal/cordz_handle.cc b/absl/strings/internal/cordz_handle.cc
+index a73fefed..a7061dbe 100644
+--- a/absl/strings/internal/cordz_handle.cc
++++ b/absl/strings/internal/cordz_handle.cc
+@@ -16,34 +16,60 @@
+ #include <atomic>
+ 
+ #include "absl/base/internal/raw_logging.h"  // For ABSL_RAW_CHECK
+-#include "absl/base/internal/spinlock.h"
++#include "absl/synchronization/mutex.h"
+ 
+ namespace absl {
+ ABSL_NAMESPACE_BEGIN
+ namespace cord_internal {
+ 
+-using ::absl::base_internal::SpinLockHolder;
++namespace {
+ 
+-ABSL_CONST_INIT CordzHandle::Queue CordzHandle::global_queue_(absl::kConstInit);
++struct Queue {
++  Queue() = default;
++
++  absl::Mutex mutex;
++  std::atomic<CordzHandle*> dq_tail ABSL_GUARDED_BY(mutex){nullptr};
++
++  // Returns true if this delete queue is empty. This method does not acquire
++  // the lock, but does a 'load acquire' observation on the delete queue tail.
++  // It is used inside Delete() to check for the presence of a delete queue
++  // without holding the lock. The assumption is that the caller is in the
++  // state of 'being deleted', and can not be newly discovered by a concurrent
++  // 'being constructed' snapshot instance. Practically, this means that any
++  // such discovery (`find`, 'first' or 'next', etc) must have proper 'happens
++  // before / after' semantics and atomic fences.
++  bool IsEmpty() const ABSL_NO_THREAD_SAFETY_ANALYSIS {
++    return dq_tail.load(std::memory_order_acquire) == nullptr;
++  }
++};
++
++static Queue* GlobalQueue() {
++  static Queue* global_queue = new Queue;
++  return global_queue;
++}
++
++}  // namespace
+ 
+ CordzHandle::CordzHandle(bool is_snapshot) : is_snapshot_(is_snapshot) {
++  Queue* global_queue = GlobalQueue();
+   if (is_snapshot) {
+-    SpinLockHolder lock(&queue_->mutex);
+-    CordzHandle* dq_tail = queue_->dq_tail.load(std::memory_order_acquire);
++    MutexLock lock(&global_queue->mutex);
++    CordzHandle* dq_tail =
++        global_queue->dq_tail.load(std::memory_order_acquire);
+     if (dq_tail != nullptr) {
+       dq_prev_ = dq_tail;
+       dq_tail->dq_next_ = this;
+     }
+-    queue_->dq_tail.store(this, std::memory_order_release);
++    global_queue->dq_tail.store(this, std::memory_order_release);
+   }
+ }
+ 
+ CordzHandle::~CordzHandle() {
+-  ODRCheck();
++  Queue* global_queue = GlobalQueue();
+   if (is_snapshot_) {
+     std::vector<CordzHandle*> to_delete;
+     {
+-      SpinLockHolder lock(&queue_->mutex);
++      MutexLock lock(&global_queue->mutex);
+       CordzHandle* next = dq_next_;
+       if (dq_prev_ == nullptr) {
+         // We were head of the queue, delete every CordzHandle until we reach
+@@ -59,7 +85,7 @@ CordzHandle::~CordzHandle() {
+       if (next) {
+         next->dq_prev_ = dq_prev_;
+       } else {
+-        queue_->dq_tail.store(dq_prev_, std::memory_order_release);
++        global_queue->dq_tail.store(dq_prev_, std::memory_order_release);
+       }
+     }
+     for (CordzHandle* handle : to_delete) {
+@@ -69,16 +95,15 @@ CordzHandle::~CordzHandle() {
+ }
+ 
+ bool CordzHandle::SafeToDelete() const {
+-  return is_snapshot_ || queue_->IsEmpty();
++  return is_snapshot_ || GlobalQueue()->IsEmpty();
+ }
+ 
+ void CordzHandle::Delete(CordzHandle* handle) {
+   assert(handle);
+   if (handle) {
+-    handle->ODRCheck();
+-    Queue* const queue = handle->queue_;
++    Queue* const queue = GlobalQueue();
+     if (!handle->SafeToDelete()) {
+-      SpinLockHolder lock(&queue->mutex);
++      MutexLock lock(&queue->mutex);
+       CordzHandle* dq_tail = queue->dq_tail.load(std::memory_order_acquire);
+       if (dq_tail != nullptr) {
+         handle->dq_prev_ = dq_tail;
+@@ -93,8 +118,9 @@ void CordzHandle::Delete(CordzHandle* handle) {
+ 
+ std::vector<const CordzHandle*> CordzHandle::DiagnosticsGetDeleteQueue() {
+   std::vector<const CordzHandle*> handles;
+-  SpinLockHolder lock(&global_queue_.mutex);
+-  CordzHandle* dq_tail = global_queue_.dq_tail.load(std::memory_order_acquire);
++  Queue* global_queue = GlobalQueue();
++  MutexLock lock(&global_queue->mutex);
++  CordzHandle* dq_tail = global_queue->dq_tail.load(std::memory_order_acquire);
+   for (const CordzHandle* p = dq_tail; p; p = p->dq_prev_) {
+     handles.push_back(p);
+   }
+@@ -103,13 +129,13 @@ std::vector<const CordzHandle*> CordzHandle::DiagnosticsGetDeleteQueue() {
+ 
+ bool CordzHandle::DiagnosticsHandleIsSafeToInspect(
+     const CordzHandle* handle) const {
+-  ODRCheck();
+   if (!is_snapshot_) return false;
+   if (handle == nullptr) return true;
+   if (handle->is_snapshot_) return false;
+   bool snapshot_found = false;
+-  SpinLockHolder lock(&queue_->mutex);
+-  for (const CordzHandle* p = queue_->dq_tail; p; p = p->dq_prev_) {
++  Queue* global_queue = GlobalQueue();
++  MutexLock lock(&global_queue->mutex);
++  for (const CordzHandle* p = global_queue->dq_tail; p; p = p->dq_prev_) {
+     if (p == handle) return !snapshot_found;
+     if (p == this) snapshot_found = true;
+   }
+@@ -119,13 +145,13 @@ bool CordzHandle::DiagnosticsHandleIsSafeToInspect(
+ 
+ std::vector<const CordzHandle*>
+ CordzHandle::DiagnosticsGetSafeToInspectDeletedHandles() {
+-  ODRCheck();
+   std::vector<const CordzHandle*> handles;
+   if (!is_snapshot()) {
+     return handles;
+   }
+ 
+-  SpinLockHolder lock(&queue_->mutex);
++  Queue* global_queue = GlobalQueue();
++  MutexLock lock(&global_queue->mutex);
+   for (const CordzHandle* p = dq_next_; p != nullptr; p = p->dq_next_) {
+     if (!p->is_snapshot()) {
+       handles.push_back(p);
+diff --git a/absl/strings/internal/cordz_handle.h b/absl/strings/internal/cordz_handle.h
+index 3c800b43..9afe9a21 100644
+--- a/absl/strings/internal/cordz_handle.h
++++ b/absl/strings/internal/cordz_handle.h
+@@ -20,8 +20,6 @@
+ 
+ #include "absl/base/config.h"
+ #include "absl/base/internal/raw_logging.h"
+-#include "absl/base/internal/spinlock.h"
+-#include "absl/synchronization/mutex.h"
+ 
+ namespace absl {
+ ABSL_NAMESPACE_BEGIN
+@@ -79,37 +77,6 @@ class CordzHandle {
+   virtual ~CordzHandle();
+ 
+  private:
+-  // Global queue data. CordzHandle stores a pointer to the global queue
+-  // instance to harden against ODR violations.
+-  struct Queue {
+-    constexpr explicit Queue(absl::ConstInitType)
+-        : mutex(absl::kConstInit,
+-                absl::base_internal::SCHEDULE_COOPERATIVE_AND_KERNEL) {}
+-
+-    absl::base_internal::SpinLock mutex;
+-    std::atomic<CordzHandle*> dq_tail ABSL_GUARDED_BY(mutex){nullptr};
+-
+-    // Returns true if this delete queue is empty. This method does not acquire
+-    // the lock, but does a 'load acquire' observation on the delete queue tail.
+-    // It is used inside Delete() to check for the presence of a delete queue
+-    // without holding the lock. The assumption is that the caller is in the
+-    // state of 'being deleted', and can not be newly discovered by a concurrent
+-    // 'being constructed' snapshot instance. Practically, this means that any
+-    // such discovery (`find`, 'first' or 'next', etc) must have proper 'happens
+-    // before / after' semantics and atomic fences.
+-    bool IsEmpty() const ABSL_NO_THREAD_SAFETY_ANALYSIS {
+-      return dq_tail.load(std::memory_order_acquire) == nullptr;
+-    }
+-  };
+-
+-  void ODRCheck() const {
+-#ifndef NDEBUG
+-    ABSL_RAW_CHECK(queue_ == &global_queue_, "ODR violation in Cord");
+-#endif
+-  }
+-
+-  ABSL_CONST_INIT static Queue global_queue_;
+-  Queue* const queue_ = &global_queue_;
+   const bool is_snapshot_;
+ 
+   // dq_prev_ and dq_next_ require the global queue mutex to be held.

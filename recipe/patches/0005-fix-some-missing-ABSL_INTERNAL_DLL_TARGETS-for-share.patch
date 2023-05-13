@@ -1,7 +1,7 @@
-From d6480ef5044ab0cb548dcae070327481a9da46c9 Mon Sep 17 00:00:00 2001
+From 12ce83f3071ac21d2544b492bedac015dd2a8840 Mon Sep 17 00:00:00 2001
 From: "H. Vetinari" <h.vetinari@gmx.com>
 Date: Tue, 7 Feb 2023 13:01:27 +1100
-Subject: [PATCH 05/11] fix some missing ABSL_INTERNAL_DLL_TARGETS for shared
+Subject: [PATCH 5/9] fix some missing ABSL_INTERNAL_DLL_TARGETS for shared
  builds
 
 ---
