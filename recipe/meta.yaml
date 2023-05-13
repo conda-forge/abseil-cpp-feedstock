@@ -48,7 +48,7 @@ source:
     - patches/0009-Fixed-Windows-DLL-builds-of-test-targets.patch
 
 build:
-  number: 0
+  number: 1
 
 outputs:
   # default behaviour is shared; however note that upstream does not support
