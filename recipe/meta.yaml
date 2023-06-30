@@ -1,4 +1,4 @@
-{% set version = "20230125.2" %}
+{% set version = "20230125.3" %}
 {% set v_major = version.split(".")[0] %}
 # needs to match across all dependent packages; using C++20
 # is potentially problematic in some cases, see #45
@@ -28,7 +28,7 @@ package:
 
 source:
   url: https://github.com/abseil/abseil-cpp/archive/refs/tags/{{ version }}.tar.gz
-  sha256: 9a2b5752d7bfade0bdeee2701de17c9480620f8b237e1964c1b9967c75374906
+  sha256: 5366d7e7fa7ba0d915014d387b66d0d002c03236448e1ba9ef98122c13b35c36
   patches:
     - patches/0001-patch-out-the-build-issue-on-clang4-osx.patch
     - patches/0002-fix-for-linking-to-the-CoreFoundation-framework-on-O.patch
@@ -49,7 +49,7 @@ source:
     - patches/0011-make-CordzHandle-and-relevant-internal-state-use-ABS.patch
 
 build:
-  number: 2
+  number: 0
 
 outputs:
   # default behaviour is shared; however note that upstream does not support
