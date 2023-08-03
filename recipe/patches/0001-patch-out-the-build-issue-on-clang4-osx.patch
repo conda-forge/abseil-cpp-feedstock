@@ -1,7 +1,7 @@
-From 505d4c7a08130bfc869b42d130c5333526ab1f2c Mon Sep 17 00:00:00 2001
+From 957710d9a3694a4d128fb5b29cbbc606409d9919 Mon Sep 17 00:00:00 2001
 From: Francesco Biscani <bluescarni@gmail.com>
 Date: Sat, 21 Sep 2019 15:05:46 +0200
-Subject: [PATCH 01/10] patch out the build issue on clang4 osx
+Subject: [PATCH 1/4] patch out the build issue on clang4 osx
 
 ---
  absl/time/internal/cctz/include/cctz/civil_time_detail.h | 4 ++++
