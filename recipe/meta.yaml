@@ -1,4 +1,4 @@
-{% set version = "20230125.3" %}
+{% set version = "20230802.0" %}
 {% set v_major = version.split(".")[0] %}
 # needs to match across all dependent packages; using C++20
 # is potentially problematic in some cases, see #45
@@ -28,22 +28,14 @@ package:
 
 source:
   url: https://github.com/abseil/abseil-cpp/archive/refs/tags/{{ version }}.tar.gz
-  sha256: 5366d7e7fa7ba0d915014d387b66d0d002c03236448e1ba9ef98122c13b35c36
+  sha256: 59d2976af9d6ecf001a81a35749a6e551a335b949d34918cfade07737b9d93c5
   patches:
     - patches/0001-patch-out-the-build-issue-on-clang4-osx.patch
-    - patches/0002-fix-for-linking-to-the-CoreFoundation-framework-on-O.patch
-    - patches/0003-remove-ignore-4221-from-ABSL_MSVC_LINKOPTS.patch
-    - patches/0004-add-missing-osx-workaround.patch
-    # backport of https://github.com/abseil/abseil-cpp/pull/1115
-    - patches/0005-fix-some-missing-ABSL_INTERNAL_DLL_TARGETS-for-share.patch
+    - patches/0002-remove-ignore-4221-from-ABSL_MSVC_LINKOPTS.patch
+    - patches/0003-add-missing-osx-workaround.patch
     # Helps downstream packages import the dll without an extra define
     # https://github.com/conda-forge/abseil-cpp-feedstock/issues/43#issuecomment-1242969515
-    - patches/0006-default-dll-import-for-windows.patch  # [win]
-    - patches/0007-Fix-ABSL_PROPAGATE_CXX_STD-cmake-option.patch
-    # backport abseil/abseil-cpp#1445 for shared builds including test targets on win
-    - patches/0008-add-some-necessary-source-files-to-ABSL_INTERNAL_TES.patch
-    - patches/0009-update-ABSL_CC_TEST_LINKOPTS-when-using-shared-build.patch
-    - patches/0010-make-CordzHandle-and-relevant-internal-state-use-ABS.patch
+    - patches/0004-default-dll-import-for-windows.patch
 
 build:
   number: 0
@@ -52,7 +44,7 @@ outputs:
   # default behaviour is shared; however note that upstream does not support
   # fully shared builds on windows, and some static libs will remain, see above
   - name: libabseil
-    script: build-abseil.sh   # [unix]
+    script: build-abseil.sh  # [unix]
     script: build-abseil.bat  # [win]
     build:
       string: cxx{{ cxx_standard }}_h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}
@@ -129,7 +121,7 @@ outputs:
 
   # tests & test-helpers
   - name: libabseil-tests
-    script: build-abseil.sh   # [unix]
+    script: build-abseil.sh  # [unix]
     script: build-abseil.bat  # [win]
     build:
       string: cxx{{ cxx_standard }}_h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}
