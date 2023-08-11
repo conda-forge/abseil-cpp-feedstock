@@ -13,12 +13,6 @@ fi
 if [[ "$PKG_NAME" == "libabseil-tests" ]]; then
     CMAKE_ARGS="${CMAKE_ARGS} -DBUILD_TESTING=ON -DABSL_BUILD_TESTING=ON"
     CMAKE_ARGS="${CMAKE_ARGS} -DABSL_USE_EXTERNAL_GOOGLETEST=ON -DABSL_FIND_GOOGLETEST=ON"
-    if [[ "${target_platform}" == osx-* ]]; then
-        # test targets require C11's aligned_alloc, which doesn't compile even
-        # with a newer MACOSX_SDK_VERSION; need to bump target version too
-        CMAKE_ARGS="$(echo $CMAKE_ARGS | sed 's/-DCMAKE_OSX_DEPLOYMENT_TARGET=10.9 //g')"
-        CMAKE_ARGS="${CMAKE_ARGS} -DCMAKE_OSX_DEPLOYMENT_TARGET=10.13"
-    fi
 fi
 
 cmake -G Ninja \
