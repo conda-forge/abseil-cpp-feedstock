@@ -38,7 +38,7 @@ source:
     - patches/0004-default-dll-import-for-windows.patch
 
 build:
-  number: 0
+  number: 1
 
 outputs:
   # default behaviour is shared; however note that upstream does not support
@@ -63,6 +63,7 @@ outputs:
         - libabseil-static ={{ version }}=cxx{{ cxx_standard }}*
         # make sure we don't co-install with old version of old package name
         - abseil-cpp ={{ version }}
+        - __osx >={{ MACOSX_DEPLOYMENT_TARGET }}  # [osx and x86_64]
 
     test:
       requires:
@@ -143,8 +144,7 @@ outputs:
         - gtest
         - {{ pin_subpackage("libabseil", exact=True) }}
       run_constrained:
-        # only for libabseil-tests, see build-abseil.sh
-        - __osx >=10.13  # [osx and x86_64]
+        - __osx >={{ MACOSX_DEPLOYMENT_TARGET }}  # [osx and x86_64]
 
     test:
       requires:
