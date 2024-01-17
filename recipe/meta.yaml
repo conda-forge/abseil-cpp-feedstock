@@ -1,4 +1,4 @@
-{% set version = "20230802.1" %}
+{% set version = "20240116.rc1" %}
 {% set v_major = version.split(".")[0] %}
 # needs to match across all dependent packages; using C++20
 # is potentially problematic in some cases, see #45
@@ -28,7 +28,7 @@ package:
 
 source:
   url: https://github.com/abseil/abseil-cpp/archive/refs/tags/{{ version }}.tar.gz
-  sha256: 987ce98f02eefbaf930d6e38ab16aa05737234d7afbab2d5c4ea7adbe50c28ed
+  sha256: f8903111260a18d2cc4618cd5bf35a22bcc28f372ebe4f04024b49e88a2e16c1
   patches:
     - patches/0001-patch-out-the-build-issue-on-clang4-osx.patch
     - patches/0002-remove-ignore-4221-from-ABSL_MSVC_LINKOPTS.patch
