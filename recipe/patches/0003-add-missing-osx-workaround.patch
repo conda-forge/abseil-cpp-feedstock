@@ -1,7 +1,7 @@
 From f3ebba74fda755fa7002f8c6ec64b77cb3e7e38e Mon Sep 17 00:00:00 2001
 From: "H. Vetinari" <h.vetinari@gmx.com>
 Date: Fri, 1 Jul 2022 13:37:17 +0200
-Subject: [PATCH 3/5] add missing osx workaround
+Subject: [PATCH 3/6] add missing osx workaround
 
 ---
  absl/debugging/internal/examine_stack.cc | 4 ++++

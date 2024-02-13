@@ -1,7 +1,7 @@
 From a023e403af16c99eb25ba5c476bb19edc0df6d6f Mon Sep 17 00:00:00 2001
 From: Mark Harfouche <mark.harfouche@gmail.com>
 Date: Sun, 11 Sep 2022 10:32:19 -0400
-Subject: [PATCH 4/5] default dll import for windows
+Subject: [PATCH 4/6] default dll import for windows
 
 ---
  absl/base/config.h | 5 ++---
