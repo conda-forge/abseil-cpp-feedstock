@@ -1,17 +1,10 @@
-cxx_standard:
-  - 11
-  - 14
-  - 17
-  - 17  # [unix]
-shared_libs:
-  - OFF
-  - OFF
-  - OFF
-  - ON  # [unix]
-zip_keys:
-  -
-    - cxx_standard
-    - shared_libs
+# abseil now only support MacOS >=10.13, see
+# https://github.com/abseil/abseil-cpp#support and
+# https://github.com/abseil/abseil-cpp/issues/1513
+MACOSX_SDK_VERSION:        # [osx and x86_64]
+  - "10.13"                # [osx and x86_64]
+MACOSX_DEPLOYMENT_TARGET:  # [osx and x86_64]
+  - "10.13"                # [osx and x86_64]
 
 channel_targets:
   - conda-forge abseil_dev
