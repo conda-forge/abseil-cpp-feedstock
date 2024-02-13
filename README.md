@@ -95,14 +95,14 @@ Current release info
 Installing abseil-cpp
 =====================
 
-Installing `abseil-cpp` from the `conda-forge` channel can be achieved by adding `conda-forge` to your channels with:
+Installing `abseil-cpp` from the `conda-forge/label/abseil_dev` channel can be achieved by adding `conda-forge/label/abseil_dev` to your channels with:
 
 ```
-conda config --add channels conda-forge
+conda config --add channels conda-forge/label/abseil_dev
 conda config --set channel_priority strict
 ```
 
-Once the `conda-forge` channel has been enabled, `libabseil, libabseil-tests` can be installed with `conda`:
+Once the `conda-forge/label/abseil_dev` channel has been enabled, `libabseil, libabseil-tests` can be installed with `conda`:
 
 ```
 conda install libabseil libabseil-tests
@@ -117,26 +117,26 @@ mamba install libabseil libabseil-tests
 It is possible to list all of the versions of `libabseil` available on your platform with `conda`:
 
 ```
-conda search libabseil --channel conda-forge
+conda search libabseil --channel conda-forge/label/abseil_dev
 ```
 
 or with `mamba`:
 
 ```
-mamba search libabseil --channel conda-forge
+mamba search libabseil --channel conda-forge/label/abseil_dev
 ```
 
 Alternatively, `mamba repoquery` may provide more information:
 
 ```
 # Search all versions available on your platform:
-mamba repoquery search libabseil --channel conda-forge
+mamba repoquery search libabseil --channel conda-forge/label/abseil_dev
 
 # List packages depending on `libabseil`:
-mamba repoquery whoneeds libabseil --channel conda-forge
+mamba repoquery whoneeds libabseil --channel conda-forge/label/abseil_dev
 
 # List dependencies of `libabseil`:
-mamba repoquery depends libabseil --channel conda-forge
+mamba repoquery depends libabseil --channel conda-forge/label/abseil_dev
 ```
 
 
