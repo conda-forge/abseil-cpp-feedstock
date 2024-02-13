@@ -1,7 +1,7 @@
 From b3cb423fa77bf132eff2f3ca2a2c471c2d606219 Mon Sep 17 00:00:00 2001
 From: "Uwe L. Korn" <uwe.korn@quantco.com>
 Date: Thu, 30 Jul 2020 13:01:32 +0200
-Subject: [PATCH 2/5] remove "-ignore:4221" from ABSL_MSVC_LINKOPTS
+Subject: [PATCH 2/6] remove "-ignore:4221" from ABSL_MSVC_LINKOPTS
 
 see also https://github.com/microsoft/vcpkg/issues/13945
 ---

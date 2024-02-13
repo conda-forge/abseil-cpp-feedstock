@@ -1,7 +1,7 @@
 From c27c0ea092f6a67160f5398a1a85e95969ed153f Mon Sep 17 00:00:00 2001
 From: "H. Vetinari" <h.vetinari@gmx.com>
 Date: Wed, 7 Feb 2024 17:07:42 +0100
-Subject: [PATCH 5/5] don't use C++20 stdlib-features which change ABI compared
+Subject: [PATCH 5/6] don't use C++20 stdlib-features which change ABI compared
  to C++17 baseline
 
 ---
