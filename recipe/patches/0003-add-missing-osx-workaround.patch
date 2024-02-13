@@ -1,0 +1,24 @@
+From f3ebba74fda755fa7002f8c6ec64b77cb3e7e38e Mon Sep 17 00:00:00 2001
+From: "H. Vetinari" <h.vetinari@gmx.com>
+Date: Fri, 1 Jul 2022 13:37:17 +0200
+Subject: [PATCH 3/6] add missing osx workaround
+
+---
+ absl/debugging/internal/examine_stack.cc | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/absl/debugging/internal/examine_stack.cc b/absl/debugging/internal/examine_stack.cc
+index 3dd6ba1a..1d911c4f 100644
+--- a/absl/debugging/internal/examine_stack.cc
++++ b/absl/debugging/internal/examine_stack.cc
+@@ -29,6 +29,10 @@
+ #endif
+ #endif
+ 
++#if defined(MAP_ANON) && !defined(MAP_ANONYMOUS)
++#define MAP_ANONYMOUS MAP_ANON
++#endif
++
+ #if defined(__linux__) || defined(__APPLE__)
+ #include <sys/ucontext.h>
+ #endif
