@@ -1,7 +1,7 @@
-From 647571e5e81f28e39fec55bf41ace4114a96d76b Mon Sep 17 00:00:00 2001
+From f86ffcfba84ec681a70249a61be3b7d2c7f32fa4 Mon Sep 17 00:00:00 2001
 From: "H. Vetinari" <h.vetinari@gmx.com>
 Date: Tue, 13 Feb 2024 08:43:06 +0100
-Subject: [PATCH 3/3] unconditionally export Mutex Destructor
+Subject: [PATCH 3/4] unconditionally export Mutex Destructor
 
 ---
  absl/synchronization/mutex.cc | 2 --
