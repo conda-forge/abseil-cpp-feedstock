@@ -37,8 +37,6 @@ source:
     - patches/0002-don-t-use-C-20-stdlib-features-which-change-ABI-comp.patch
     # workaround for https://github.com/abseil/abseil-cpp/issues/1624
     - patches/0003-unconditionally-export-Mutex-Destructor.patch
-    # backport https://github.com/abseil/abseil-cpp/commit/cfde5f74e276049727f9556f13473a59fe77d9eb
-    - patches/0004-Workaround-for-NVIDIA-C-compiler-being-unable-to-par.patch
 
 build:
   number: 0
