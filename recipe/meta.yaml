@@ -1,4 +1,4 @@
-{% set version = "20240116.1" %}
+{% set version = "20240116.2" %}
 {% set v_major = version.split(".")[0] %}
 # needs to match across all dependent packages; using C++20
 # is potentially problematic in some cases, see #45
@@ -28,7 +28,7 @@ package:
 
 source:
   url: https://github.com/abseil/abseil-cpp/archive/refs/tags/{{ version }}.tar.gz
-  sha256: 3c743204df78366ad2eaf236d6631d83f6bc928d1705dd0000b872e53b73dc6a
+  sha256: 733726b8c3a6d39a4120d7e45ea8b41a434cdacde401cba500f14236c49b39dc
   patches:
     # Helps downstream packages import the dll without an extra define
     # https://github.com/conda-forge/abseil-cpp-feedstock/issues/43#issuecomment-1242969515
@@ -41,7 +41,7 @@ source:
     - patches/0004-Workaround-for-NVIDIA-C-compiler-being-unable-to-par.patch
 
 build:
-  number: 2
+  number: 0
 
 outputs:
   # default behaviour is shared; however note that upstream does not support
