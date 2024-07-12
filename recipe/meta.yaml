@@ -37,6 +37,8 @@ source:
     - patches/0002-don-t-use-C-20-stdlib-features-which-change-ABI-comp.patch
     # workaround for https://github.com/abseil/abseil-cpp/issues/1624
     - patches/0003-unconditionally-export-Mutex-Destructor.patch
+    # backport https://github.com/abseil/abseil-cpp/commit/779a3565ac6c5b69dd1ab9183e500a27633117d5
+    - patches/0004-Avoid-export-of-testonly-target-absl-test_allocator-.patch
 
 build:
   number: 0
