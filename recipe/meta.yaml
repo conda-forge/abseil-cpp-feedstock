@@ -41,7 +41,7 @@ source:
     - patches/0004-Avoid-export-of-testonly-target-absl-test_allocator-.patch
 
 build:
-  number: 0
+  number: 1
 
 outputs:
   # default behaviour is shared; however note that upstream does not support
