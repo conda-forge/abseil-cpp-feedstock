@@ -37,9 +37,11 @@ source:
     - patches/0002-don-t-use-C-20-stdlib-features-which-change-ABI-comp.patch
     # workaround for https://github.com/abseil/abseil-cpp/issues/1624
     - patches/0003-unconditionally-export-Mutex-Destructor.patch
+    # backport https://github.com/abseil/abseil-cpp/commit/779a3565ac6c5b69dd1ab9183e500a27633117d5
+    - patches/0004-Avoid-export-of-testonly-target-absl-test_allocator-.patch
 
 build:
-  number: 0
+  number: 1
 
 outputs:
   # default behaviour is shared; however note that upstream does not support
@@ -53,26 +55,23 @@ outputs:
         - {{ pin_subpackage("libabseil", max_pin="x") }}
         # also pin on ABI variant
         - libabseil =*=cxx{{ cxx_standard }}*
-        # abseil needs the 10.13 headers even just to be `# include`d;
-        # ensure that all dependent packages reflect that to
-        # avoid the solver getting stuck in no-man's-land.
-        - __osx >={{ MACOSX_DEPLOYMENT_TARGET }}  # [osx and x86_64]
 
     requirements:
       build:
         - {{ compiler('c') }}
         - {{ compiler('cxx') }}
+        - {{ stdlib('c') }}
         - cmake
         - ninja
       run_constrained:
         - libabseil-static ={{ version }}=cxx{{ cxx_standard }}*
         # make sure we don't co-install with old version of old package name
         - abseil-cpp ={{ version }}
-        - __osx >={{ MACOSX_DEPLOYMENT_TARGET }}  # [osx and x86_64]
 
     test:
       requires:
         - {{ compiler('cxx') }}
+        - {{ stdlib('c') }}
         - cmake
         - ninja
         - pkg-config
@@ -140,6 +139,7 @@ outputs:
       build:
         - {{ compiler('c') }}
         - {{ compiler('cxx') }}
+        - {{ stdlib('c') }}
         - cmake
         - ninja
       host:
