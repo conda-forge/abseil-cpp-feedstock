@@ -35,9 +35,12 @@ source:
     - patches/0001-default-dll-import-for-windows.patch
     # avoid that compilation in C++20 mode changes the ABI vs. C++17
     - patches/0002-don-t-use-C-20-stdlib-features-which-change-ABI-comp.patch
+    # Avoid SHELL:-Xarch… flags leaking into pkg-config files
+    # These flagse are not used anyways in our setup
+    - patches/0001-Don-t-try-to-compile-to-multiple-OSX-arches.patch
 
 build:
-  number: 0
+  number: 1
 
 outputs:
   # default behaviour is shared; however note that upstream does not support
@@ -119,6 +122,8 @@ outputs:
         - cmake --build .
         - ./flags_example    # [unix]
         - flags_example.exe  # [win]
+        # Check for absence of disturbing SHELL:-Xarch... content in pkg-config files
+        - grep -q SHELL $PREFIX/lib/pkgconfig/absl_random_internal_randen_hwaes.pc && exit 1 || exit 0  # [unix]
 
   # tests & test-helpers
   - name: libabseil-tests
