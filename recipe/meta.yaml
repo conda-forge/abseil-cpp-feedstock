@@ -40,7 +40,7 @@ source:
     - patches/0001-Don-t-try-to-compile-to-multiple-OSX-arches.patch
 
 build:
-  number: 1
+  number: 2
 
 outputs:
   # default behaviour is shared; however note that upstream does not support
@@ -53,7 +53,7 @@ outputs:
       run_exports:
         - {{ pin_subpackage("libabseil", max_pin="x") }}
         # also pin on ABI variant
-        - libabseil =*=cxx{{ cxx_standard }}*
+        - libabseil * cxx{{ cxx_standard }}*
 
     requirements:
       build:
@@ -63,9 +63,9 @@ outputs:
         - cmake
         - ninja
       run_constrained:
-        - libabseil-static ={{ version }}=cxx{{ cxx_standard }}*
+        - libabseil-static {{ version }} cxx{{ cxx_standard }}*
         # make sure we don't co-install with old version of old package name
-        - abseil-cpp ={{ version }}
+        - abseil-cpp {{ version }}
 
     test:
       requires:
