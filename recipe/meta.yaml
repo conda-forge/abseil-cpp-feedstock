@@ -40,7 +40,7 @@ source:
     - patches/0001-Don-t-try-to-compile-to-multiple-OSX-arches.patch
 
 build:
-  number: 1
+  number: 2
 
 outputs:
   # default behaviour is shared; however note that upstream does not support
