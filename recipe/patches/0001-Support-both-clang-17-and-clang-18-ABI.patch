@@ -1,0 +1,81 @@
+From 3fb1af546ca2e74ea6dfe5478e78c4981481740a Mon Sep 17 00:00:00 2001
+From: Isuru Fernando <isuruf@gmail.com>
+Date: Fri, 3 Jan 2025 22:06:55 +0530
+Subject: [PATCH] Support both clang-17 and clang-18 ABI
+
+---
+ CMake/AbseilDll.cmake             |  1 +
+ absl/log/CMakeLists.txt           |  3 +++
+ absl/log/internal/log_message2.cc | 27 +++++++++++++++++++++++++++
+ 3 files changed, 31 insertions(+)
+ create mode 100644 absl/log/internal/log_message2.cc
+
+diff --git a/CMake/AbseilDll.cmake b/CMake/AbseilDll.cmake
+index a3fb15a1..bbc41128 100644
+--- a/CMake/AbseilDll.cmake
++++ b/CMake/AbseilDll.cmake
+@@ -183,6 +183,7 @@ set(ABSL_INTERNAL_DLL_FILES
+   "log/internal/log_format.h"
+   "log/internal/log_impl.h"
+   "log/internal/log_message.cc"
++  "log/internal/log_message2.cc"
+   "log/internal/log_message.h"
+   "log/internal/log_sink_set.cc"
+   "log/internal/log_sink_set.h"
+diff --git a/absl/log/CMakeLists.txt b/absl/log/CMakeLists.txt
+index 5b9a5f9d..f23d9105 100644
+--- a/absl/log/CMakeLists.txt
++++ b/absl/log/CMakeLists.txt
+@@ -187,6 +187,7 @@ absl_cc_library(
+     log_internal_message
+   SRCS
+     "internal/log_message.cc"
++    "internal/log_message2.cc"
+   HDRS
+     "internal/log_message.h"
+   COPTS
+@@ -220,6 +221,8 @@ absl_cc_library(
+     absl::time
+ )
+ 
++set_source_files_properties(internal/log_message2.cc PROPERTIES COMPILE_FLAGS -fclang-abi-compat=17)
++
+ absl_cc_library(
+   NAME
+     log_internal_log_sink_set
+diff --git a/absl/log/internal/log_message2.cc b/absl/log/internal/log_message2.cc
+new file mode 100644
+index 00000000..7f12a3af
+--- /dev/null
++++ b/absl/log/internal/log_message2.cc
+@@ -0,0 +1,27 @@
++#include "absl/log/internal/log_message.h"
++
++namespace absl {
++ABSL_NAMESPACE_BEGIN
++namespace log_internal {
++
++template LogMessage& LogMessage::operator<<(const char& v);
++template LogMessage& LogMessage::operator<<(const signed char& v);
++template LogMessage& LogMessage::operator<<(const unsigned char& v);
++template LogMessage& LogMessage::operator<<(const short& v);           // NOLINT
++template LogMessage& LogMessage::operator<<(const unsigned short& v);  // NOLINT
++template LogMessage& LogMessage::operator<<(const int& v);
++template LogMessage& LogMessage::operator<<(const unsigned int& v);
++template LogMessage& LogMessage::operator<<(const long& v);           // NOLINT
++template LogMessage& LogMessage::operator<<(const unsigned long& v);  // NOLINT
++template LogMessage& LogMessage::operator<<(const long long& v);      // NOLINT
++template LogMessage& LogMessage::operator<<(
++    const unsigned long long& v);  // NOLINT
++template LogMessage& LogMessage::operator<<(void* const& v);
++template LogMessage& LogMessage::operator<<(const void* const& v);
++template LogMessage& LogMessage::operator<<(const float& v);
++template LogMessage& LogMessage::operator<<(const double& v);
++template LogMessage& LogMessage::operator<<(const bool& v);
++}  // namespace log_internal
++
++ABSL_NAMESPACE_END
++}  // namespace absl
+-- 
+2.44.0
+

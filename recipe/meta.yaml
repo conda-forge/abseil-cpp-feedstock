@@ -38,9 +38,10 @@ source:
     # Avoid SHELL:-Xarch… flags leaking into pkg-config files
     # These flagse are not used anyways in our setup
     - patches/0001-Don-t-try-to-compile-to-multiple-OSX-arches.patch
+    - patches/0001-Support-both-clang-17-and-clang-18-ABI.patch  # [cxx_compiler == "clangxx"]
 
 build:
-  number: 2
+  number: 3
 
 outputs:
   # default behaviour is shared; however note that upstream does not support
