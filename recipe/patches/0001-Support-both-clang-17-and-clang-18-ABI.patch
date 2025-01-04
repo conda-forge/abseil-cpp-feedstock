@@ -1,17 +1,20 @@
-From 3fb1af546ca2e74ea6dfe5478e78c4981481740a Mon Sep 17 00:00:00 2001
+From 3623f1ccabef593342c0e40306c37f20eaa0847b Mon Sep 17 00:00:00 2001
 From: Isuru Fernando <isuruf@gmail.com>
 Date: Fri, 3 Jan 2025 22:06:55 +0530
 Subject: [PATCH] Support both clang-17 and clang-18 ABI
 
 ---
- CMake/AbseilDll.cmake             |  1 +
- absl/log/CMakeLists.txt           |  3 +++
- absl/log/internal/log_message2.cc | 27 +++++++++++++++++++++++++++
- 3 files changed, 31 insertions(+)
+ CMake/AbseilDll.cmake             |   2 +
+ absl/log/CMakeLists.txt           |   3 +
+ absl/log/internal/log_message2.cc |  27 ++++++++
+ absl/strings/CMakeLists.txt       |   3 +
+ absl/strings/cord2.cc             | 110 ++++++++++++++++++++++++++++++
+ 5 files changed, 145 insertions(+)
  create mode 100644 absl/log/internal/log_message2.cc
+ create mode 100644 absl/strings/cord2.cc
 
 diff --git a/CMake/AbseilDll.cmake b/CMake/AbseilDll.cmake
-index a3fb15a1..bbc41128 100644
+index a3fb15a1..b3325de1 100644
 --- a/CMake/AbseilDll.cmake
 +++ b/CMake/AbseilDll.cmake
 @@ -183,6 +183,7 @@ set(ABSL_INTERNAL_DLL_FILES
@@ -22,6 +25,14 @@ index a3fb15a1..bbc41128 100644
    "log/internal/log_message.h"
    "log/internal/log_sink_set.cc"
    "log/internal/log_sink_set.h"
+@@ -281,6 +282,7 @@ set(ABSL_INTERNAL_DLL_FILES
+   "strings/charconv.h"
+   "strings/charset.h"
+   "strings/cord.cc"
++  "strings/cord2.cc"
+   "strings/cord.h"
+   "strings/cord_analysis.cc"
+   "strings/cord_analysis.h"
 diff --git a/absl/log/CMakeLists.txt b/absl/log/CMakeLists.txt
 index 5b9a5f9d..f23d9105 100644
 --- a/absl/log/CMakeLists.txt
@@ -76,6 +87,143 @@ index 00000000..7f12a3af
 +
 +ABSL_NAMESPACE_END
 +}  // namespace absl
+diff --git a/absl/strings/CMakeLists.txt b/absl/strings/CMakeLists.txt
+index 993d7517..a009edc1 100644
+--- a/absl/strings/CMakeLists.txt
++++ b/absl/strings/CMakeLists.txt
+@@ -974,6 +974,7 @@ absl_cc_library(
+     "cord_buffer.h"
+   SRCS
+     "cord.cc"
++    "cord2.cc"
+     "cord_analysis.cc"
+     "cord_analysis.h"
+     "cord_buffer.cc"
+@@ -1002,6 +1003,8 @@ absl_cc_library(
+   PUBLIC
+ )
+ 
++set_source_files_properties(cord2.cc PROPERTIES COMPILE_FLAGS -fclang-abi-compat=17)
++
+ # Internal-only target, do not depend on directly.
+ absl_cc_library(
+   NAME
+diff --git a/absl/strings/cord2.cc b/absl/strings/cord2.cc
+new file mode 100644
+index 00000000..288aafd1
+--- /dev/null
++++ b/absl/strings/cord2.cc
+@@ -0,0 +1,110 @@
++#include "absl/strings/cord.h"
++
++namespace absl {
++ABSL_NAMESPACE_BEGIN
++
++using ::absl::cord_internal::CordRep;
++using ::absl::cord_internal::CordRepBtree;
++using ::absl::cord_internal::CordRepFlat;
++using ::absl::cord_internal::kMaxBytesToCopy;
++using ::absl::cord_internal::kMaxFlatLength;
++
++static absl::Nonnull<CordRepFlat*> CreateFlat(absl::Nonnull<const char*> data,
++                                              size_t length,
++                                              size_t alloc_hint) {
++  CordRepFlat* flat = CordRepFlat::New(length + alloc_hint);
++  flat->length = length;
++  memcpy(flat->Data(), data, length);
++  return flat;
++}
++
++// Creates a new flat or Btree out of the specified array.
++// The returned node has a refcount of 1.
++static absl::Nonnull<CordRep*> NewBtree(absl::Nonnull<const char*> data,
++                                        size_t length, size_t alloc_hint) {
++  if (length <= kMaxFlatLength) {
++    return CreateFlat(data, length, alloc_hint);
++  }
++  CordRepFlat* flat = CreateFlat(data, kMaxFlatLength, 0);
++  data += kMaxFlatLength;
++  length -= kMaxFlatLength;
++  auto* root = CordRepBtree::Create(flat);
++  return CordRepBtree::Append(root, {data, length}, alloc_hint);
++}
++
++// Create a new tree out of the specified array.
++// The returned node has a refcount of 1.
++static absl::Nullable<CordRep*> NewTree(absl::Nullable<const char*> data,
++                                        size_t length, size_t alloc_hint) {
++  if (length == 0) return nullptr;
++  return NewBtree(data, length, alloc_hint);
++}
++
++// Creates a CordRep from the provided string. If the string is large enough,
++// and not wasteful, we move the string into an external cord rep, preserving
++// the already allocated string contents.
++// Requires the provided string length to be larger than `kMaxInline`.
++static absl::Nonnull<CordRep*> CordRepFromString(std::string&& src) {
++  assert(src.length() > cord_internal::kMaxInline);
++  if (
++      // String is short: copy data to avoid external block overhead.
++      src.size() <= kMaxBytesToCopy ||
++      // String is wasteful: copy data to avoid pinning too much unused memory.
++      src.size() < src.capacity() / 2
++  ) {
++    return NewTree(src.data(), src.size(), 0);
++  }
++
++  struct StringReleaser {
++    void operator()(absl::string_view /* data */) {}
++    std::string data;
++  };
++  const absl::string_view original_data = src;
++  auto* rep =
++      static_cast<::absl::cord_internal::CordRepExternalImpl<StringReleaser>*>(
++          absl::cord_internal::NewExternalRep(original_data,
++                                              StringReleaser{std::move(src)}));
++  // Moving src may have invalidated its data pointer, so adjust it.
++  rep->base = rep->template get<0>().data.data();
++  return rep;
++}
++
++template <typename T, Cord::EnableIfString<T>>
++Cord::Cord(T&& src) : contents_(InlineData::kDefaultInit) {
++  if (src.size() <= InlineRep::kMaxInline) {
++    contents_.set_data(src.data(), src.size());
++  } else {
++    CordRep* rep = CordRepFromString(std::forward<T>(src));
++    contents_.EmplaceTree(rep, CordzUpdateTracker::kConstructorString);
++  }
++}
++
++template Cord::Cord(std::string&& src);
++
++template <typename T, Cord::EnableIfString<T>>
++void Cord::Append(T&& src) {
++  if (src.size() <= kMaxBytesToCopy) {
++    Append(absl::string_view(src));
++  } else {
++    CordRep* rep = CordRepFromString(std::forward<T>(src));
++    contents_.AppendTree(rep, CordzUpdateTracker::kAppendString);
++  }
++}
++
++template void Cord::Append(std::string&& src);
++
++template <typename T, Cord::EnableIfString<T>>
++inline void Cord::Prepend(T&& src) {
++  if (src.size() <= kMaxBytesToCopy) {
++    Prepend(absl::string_view(src));
++  } else {
++    CordRep* rep = CordRepFromString(std::forward<T>(src));
++    contents_.PrependTree(rep, CordzUpdateTracker::kPrependString);
++  }
++}
++
++template void Cord::Prepend(std::string&& src);
++
++ABSL_NAMESPACE_END
++}  // namespace absl
++
 -- 
 2.44.0
 
