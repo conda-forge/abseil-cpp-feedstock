@@ -41,7 +41,7 @@ source:
     - patches/0001-Support-both-clang-17-and-clang-18-ABI.patch  # [cxx_compiler == "clangxx"]
 
 build:
-  number: 3
+  number: 4
 
 outputs:
   # default behaviour is shared; however note that upstream does not support
