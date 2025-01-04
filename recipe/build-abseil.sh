@@ -27,3 +27,7 @@ cmake -G Ninja \
 
 cmake --build .
 cmake --install .
+
+if [[ "${target_platform}" == osx-* ]]; then
+  nm -g $PREFIX/lib/libabsl_log_internal_message.*.dylib | grep LogMessagels
+fi
