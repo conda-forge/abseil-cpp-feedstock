@@ -1,4 +1,4 @@
-From 3623f1ccabef593342c0e40306c37f20eaa0847b Mon Sep 17 00:00:00 2001
+From 8fbc9bacb6ea79a795995623426ae5025ef5fca3 Mon Sep 17 00:00:00 2001
 From: Isuru Fernando <isuruf@gmail.com>
 Date: Fri, 3 Jan 2025 22:06:55 +0530
 Subject: [PATCH] Support both clang-17 and clang-18 ABI
@@ -6,10 +6,10 @@ Subject: [PATCH] Support both clang-17 and clang-18 ABI
 ---
  CMake/AbseilDll.cmake             |   2 +
  absl/log/CMakeLists.txt           |   3 +
- absl/log/internal/log_message2.cc |  27 ++++++++
+ absl/log/internal/log_message2.cc |  27 +++++++
  absl/strings/CMakeLists.txt       |   3 +
- absl/strings/cord2.cc             | 110 ++++++++++++++++++++++++++++++
- 5 files changed, 145 insertions(+)
+ absl/strings/cord2.cc             | 116 ++++++++++++++++++++++++++++++
+ 5 files changed, 151 insertions(+)
  create mode 100644 absl/log/internal/log_message2.cc
  create mode 100644 absl/strings/cord2.cc
 
@@ -110,10 +110,10 @@ index 993d7517..a009edc1 100644
    NAME
 diff --git a/absl/strings/cord2.cc b/absl/strings/cord2.cc
 new file mode 100644
-index 00000000..288aafd1
+index 00000000..00b57605
 --- /dev/null
 +++ b/absl/strings/cord2.cc
-@@ -0,0 +1,110 @@
+@@ -0,0 +1,116 @@
 +#include "absl/strings/cord.h"
 +
 +namespace absl {
@@ -124,6 +124,12 @@ index 00000000..288aafd1
 +using ::absl::cord_internal::CordRepFlat;
 +using ::absl::cord_internal::kMaxBytesToCopy;
 +using ::absl::cord_internal::kMaxFlatLength;
++
++inline void Cord::InlineRep::set_data(absl::Nonnull<const char*> data,
++                                      size_t n) {
++  static_assert(kMaxInline == 15, "set_data is hard-coded for a length of 15");
++  data_.set_inline_data(data, n);
++}
 +
 +static absl::Nonnull<CordRepFlat*> CreateFlat(absl::Nonnull<const char*> data,
 +                                              size_t length,
