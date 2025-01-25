@@ -1,4 +1,4 @@
-{% set version = "20240722.0" %}
+{% set version = "20240722.1" %}
 {% set v_major = version.split(".")[0] %}
 # needs to match across all dependent packages; using C++20
 # is potentially problematic in some cases, see #45
@@ -28,7 +28,7 @@ package:
 
 source:
   url: https://github.com/abseil/abseil-cpp/archive/refs/tags/{{ version }}.tar.gz
-  sha256: f50e5ac311a81382da7fa75b97310e4b9006474f9560ac46f54a9967f07d4ae3
+  sha256: 40cee67604060a7c8794d931538cb55f4d444073e556980c88b6c49bb9b19bb7
   patches:
     # Helps downstream packages import the dll without an extra define
     # https://github.com/conda-forge/abseil-cpp-feedstock/issues/43#issuecomment-1242969515
@@ -41,7 +41,7 @@ source:
     - patches/0001-Support-both-clang-17-and-clang-18-ABI.patch  # [cxx_compiler == "clangxx"]
 
 build:
-  number: 4
+  number: 0
 
 outputs:
   # default behaviour is shared; however note that upstream does not support
