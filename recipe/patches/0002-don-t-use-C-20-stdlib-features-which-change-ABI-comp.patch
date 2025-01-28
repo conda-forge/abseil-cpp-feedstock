@@ -1,7 +1,7 @@
-From 1140318d3504be7e4b8c1dbc03eeb7d19da988d5 Mon Sep 17 00:00:00 2001
+From 939694b60cbdfa765f5c3183ac1f05a925c251dc Mon Sep 17 00:00:00 2001
 From: "H. Vetinari" <h.vetinari@gmx.com>
 Date: Wed, 7 Feb 2024 17:07:42 +0100
-Subject: [PATCH 2/2] don't use C++20 stdlib-features which change ABI compared
+Subject: [PATCH 2/4] don't use C++20 stdlib-features which change ABI compared
  to C++17 baseline
 
 ---
@@ -9,10 +9,10 @@ Subject: [PATCH 2/2] don't use C++20 stdlib-features which change ABI compared
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/CMakeLists.txt b/CMakeLists.txt
-index 7c82b3a7..1d4f421f 100644
+index 5b21ee76..bc1fc379 100644
 --- a/CMakeLists.txt
 +++ b/CMakeLists.txt
-@@ -221,7 +221,7 @@ if(ABSL_ENABLE_INSTALL)
+@@ -220,7 +220,7 @@ if(ABSL_ENABLE_INSTALL)
      foreach(FEATURE "ORDERING")
        string(REPLACE
        "#define ABSL_OPTION_USE_STD_${FEATURE} 2"
