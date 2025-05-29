@@ -1,4 +1,4 @@
-{% set version = "20250127.1" %}
+{% set version = "20250512.0" %}
 {% set v_major = version.split(".")[0] %}
 # needs to match across all dependent packages; using C++20
 # is potentially problematic in some cases, see #45
@@ -28,7 +28,7 @@ package:
 
 source:
   url: https://github.com/abseil/abseil-cpp/archive/refs/tags/{{ version }}.tar.gz
-  sha256: b396401fd29e2e679cace77867481d388c807671dc2acc602a0259eeb79b7811
+  sha256: 7262daa7c1711406248c10f41026d685e88223bc92817d16fb93c19adb57f669
   patches:
     # Helps downstream packages import the dll without an extra define
     # https://github.com/conda-forge/abseil-cpp-feedstock/issues/43#issuecomment-1242969515

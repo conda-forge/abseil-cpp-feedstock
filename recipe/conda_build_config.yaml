@@ -1,0 +1,6 @@
+# google has moved the lower bound for MSVC to v2022 already in April 2024, see
+# https://github.com/google/oss-policies-info/blob/main/foundational-cxx-support-matrix.md
+c_compiler:     # [win]
+  - vs2022      # [win]
+cxx_compiler:   # [win]
+  - vs2022      # [win]
