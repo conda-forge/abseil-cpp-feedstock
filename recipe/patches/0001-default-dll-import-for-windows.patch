@@ -1,17 +1,17 @@
-From e8044cc76e21b88ef92d36c62e56b8015b75f588 Mon Sep 17 00:00:00 2001
+From 27f96d26d74908c3a838bd9359175a6c3ff176ce Mon Sep 17 00:00:00 2001
 From: Mark Harfouche <mark.harfouche@gmail.com>
 Date: Sun, 11 Sep 2022 10:32:19 -0400
-Subject: [PATCH 1/2] default dll import for windows
+Subject: [PATCH 1/3] default dll import for windows
 
 ---
  absl/base/config.h | 5 ++---
  1 file changed, 2 insertions(+), 3 deletions(-)
 
 diff --git a/absl/base/config.h b/absl/base/config.h
-index 0b22167e..56acb3ba 100644
+index a31b9a5d..b2cf7a78 100644
 --- a/absl/base/config.h
 +++ b/absl/base/config.h
-@@ -705,10 +705,9 @@ static_assert(ABSL_INTERNAL_INLINE_NAMESPACE_STR[0] != 'h' ||
+@@ -619,10 +619,9 @@ static_assert(ABSL_INTERNAL_INLINE_NAMESPACE_STR[0] != 'h' ||
  #if defined(_MSC_VER)
  #if defined(ABSL_BUILD_DLL)
  #define ABSL_DLL __declspec(dllexport)

@@ -37,8 +37,7 @@ source:
     - patches/0002-don-t-use-C-20-stdlib-features-which-change-ABI-comp.patch
     # Avoid SHELL:-Xarch… flags leaking into pkg-config files
     # These flagse are not used anyways in our setup
-    - patches/0001-Don-t-try-to-compile-to-multiple-OSX-arches.patch
-    - patches/0001-Support-both-clang-17-and-clang-18-ABI.patch  # [cxx_compiler == "clangxx"]
+    - patches/0003-Don-t-try-to-compile-to-multiple-OSX-arches.patch
 
 build:
   number: 0
