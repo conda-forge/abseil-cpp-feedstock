@@ -14,7 +14,7 @@
 {% set absl_libs = absl_libs_always_static_on_win + [
     "base", "civil_time", "cord", "cordz_functions", "cordz_handle", "cordz_info",
     "cordz_sample_token", "examine_stack", "exponential_biased", "failure_signal_handler",
-    "hash", "hashtablez_sampler", "int128", "log_severity", "low_level_hash", "periodic_sampler",
+    "hash", "hashtablez_sampler", "int128", "log_severity", "periodic_sampler",
     "random_distributions", "random_seed_gen_exception", "random_seed_sequences", "raw_hash_set",
     "scoped_set_env", "spinlock_wait", "stacktrace", "status", "statusor", "strerror", "strings",
     "symbolize", "synchronization", "time", "time_zone"
