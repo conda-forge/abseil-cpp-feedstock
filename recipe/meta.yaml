@@ -7,17 +7,18 @@
 # shared builds for flags_* libraries are not supported on windows, see
 # https://github.com/abseil/abseil-cpp/pull/1115
 {% set absl_libs_always_static_on_win = [
-    "log_flags", "flags_commandlineflag", "flags_config", "flags_marshalling", "flags_parse",
-    "flags_private_handle_accessor", "flags_program_name", "flags_reflection", "flags_usage"
+    "decode_rust_punycode", "demangle_rust", "flags_commandlineflag", "flags_config", "flags_marshalling",
+    "flags_parse", "flags_private_handle_accessor", "flags_program_name", "flags_reflection", "flags_usage",
+    "hashtable_profiler", "log_flags", "poison", "profile_builder"
 ] %}
 
 {% set absl_libs = absl_libs_always_static_on_win + [
-    "base", "civil_time", "cord", "cordz_functions", "cordz_handle", "cordz_info",
-    "cordz_sample_token", "examine_stack", "exponential_biased", "failure_signal_handler",
-    "hash", "hashtablez_sampler", "int128", "log_severity", "periodic_sampler",
+    "base", "civil_time", "crc_cord_state", "crc_cpu_detect", "crc32c", "cord", "cordz_functions",
+    "cordz_handle", "cordz_info", "cordz_sample_token", "die_if_null", "examine_stack", "exponential_biased",
+    "failure_signal_handler", "hash", "hashtablez_sampler", "int128", "log_severity", "periodic_sampler",
     "random_distributions", "random_seed_gen_exception", "random_seed_sequences", "raw_hash_set",
     "scoped_set_env", "spinlock_wait", "stacktrace", "status", "statusor", "strerror", "strings",
-    "symbolize", "synchronization", "time", "time_zone"
+    "symbolize", "synchronization", "throw_delegate", "time", "time_zone"
 ] %}
 # test helper targets (but used e.g. by protobuf)
 {% set absl_test_libs = ["scoped_mock_log"] %}
