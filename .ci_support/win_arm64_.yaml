@@ -9,6 +9,6 @@ channel_targets:
 cxx_compiler:
 - vs2022
 libabseil:
-- '20250127'
+- '20250512'
 target_platform:
 - win-arm64
