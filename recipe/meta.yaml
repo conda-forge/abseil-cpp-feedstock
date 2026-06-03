@@ -41,7 +41,7 @@ source:
     - patches/0003-Don-t-try-to-compile-to-multiple-OSX-arches.patch
 
 build:
-  number: 0
+  number: 1
 
 outputs:
   # default behaviour is shared; however note that upstream does not support
