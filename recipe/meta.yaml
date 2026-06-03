@@ -25,7 +25,7 @@
 
 package:
   name: abseil-split
-  version: {{ version }}
+  version: "{{ version }}"
 
 source:
   url: https://github.com/abseil/abseil-cpp/archive/refs/tags/{{ version }}.tar.gz
