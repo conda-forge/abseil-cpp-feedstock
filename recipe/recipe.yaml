@@ -102,26 +102,26 @@ outputs:
                 - absl_time
                 - absl_time_zone
             - if: win
-              then:
-                - abseil_dll
-                - absl_decode_rust_punycode
-                - absl_demangle_rust
-                - absl_flags_commandlineflag
-                - absl_flags_config
-                - absl_flags_marshalling
-                - absl_flags_parse
-                - absl_flags_private_handle_accessor
-                - absl_flags_program_name
-                - absl_flags_reflection
-                - absl_flags_usage
-                - absl_hashtable_profiler
-                - absl_log_flags
-                - absl_poison
-                - absl_profile_builder
+              then: abseil_dll
           files:
             exists:
               - if: win
-                then: Library/bin/abseil_dll.dll
+                then:
+                  - Library/bin/abseil_dll.dll
+                  - Library/lib/absl_decode_rust_punycode.lib
+                  - Library/lib/absl_demangle_rust.lib
+                  - Library/lib/absl_flags_commandlineflag.lib
+                  - Library/lib/absl_flags_config.lib
+                  - Library/lib/absl_flags_marshalling.lib
+                  - Library/lib/absl_flags_parse.lib
+                  - Library/lib/absl_flags_private_handle_accessor.lib
+                  - Library/lib/absl_flags_program_name.lib
+                  - Library/lib/absl_flags_reflection.lib
+                  - Library/lib/absl_flags_usage.lib
+                  - Library/lib/absl_hashtable_profiler.lib
+                  - Library/lib/absl_log_flags.lib
+                  - Library/lib/absl_poison.lib
+                  - Library/lib/absl_profile_builder.lib
             not_exists:
               - if: unix
                 then:
