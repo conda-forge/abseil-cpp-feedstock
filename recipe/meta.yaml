@@ -1,4 +1,4 @@
-{% set version = "20260526.0" %}
+{% set version = "20260817.0" %}
 {% set v_major = version.split(".")[0] %}
 # needs to match across all dependent packages; using C++20
 # is potentially problematic in some cases, see #45
@@ -29,7 +29,7 @@ package:
 
 source:
   url: https://github.com/abseil/abseil-cpp/archive/refs/tags/{{ version }}.tar.gz
-  sha256: 6e1aee535473414164bf83e4ebc40240dec71a4701f8a642d906e95bea1aea0c
+  sha256: f7e05179df39c45434cad433f5783840bb3788ef322976f9138bc6b72b3a107d
   patches:
     # Helps downstream packages import the dll without an extra define
     # https://github.com/conda-forge/abseil-cpp-feedstock/issues/43#issuecomment-1242969515
@@ -41,7 +41,7 @@ source:
     - patches/0003-Don-t-try-to-compile-to-multiple-OSX-arches.patch
 
 build:
-  number: 1
+  number: 0
 
 outputs:
   # default behaviour is shared; however note that upstream does not support
