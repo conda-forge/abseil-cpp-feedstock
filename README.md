@@ -13,9 +13,8 @@ Development: https://github.com/abseil/abseil-cpp
 
 Documentation: https://github.com/abseil/abseil-cpp
 
-Abseil is an open-source collection of C++ code (compliant to C++11)
-designed to augment the C++ standard library.
-
+Abseil is an open-source collection of C++ code designed to augment the C++
+standard library.
 
 Current build status
 ====================
@@ -55,6 +54,13 @@ Current build status
                   <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/abseil-cpp-feedstock?branchName=main&jobName=osx&configuration=osx%20osx_arm64_" alt="variant">
                 </a>
               </td>
+            </tr><tr>
+              <td>win_64</td>
+              <td>
+                <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=7433&branchName=main">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/abseil-cpp-feedstock?branchName=main&jobName=win&configuration=win%20win_64_" alt="variant">
+                </a>
+              </td>
             </tr>
           </tbody>
         </table>
@@ -81,73 +87,31 @@ conda config --add channels conda-forge
 conda config --set channel_priority strict
 ```
 
-How to use
-----------
-
-<details>
-<summary>With conda</summary>
+Once the `conda-forge` channel has been enabled, `libabseil, libabseil-tests` can be installed with `conda`:
 
 ```
 conda install libabseil libabseil-tests
 ```
 
-</details>
-
-<details>
-<summary>With mamba</summary>
+or with `mamba`:
 
 ```
 mamba install libabseil libabseil-tests
 ```
 
-</details>
-
-<details>
-<summary>With pixi</summary>
-
-```
-# for adding to your local project
-pixi add libabseil libabseil-tests
-# for installing globally
-pixi global install libabseil libabseil-tests
-```
-
-</details>
-
-Search package versions
------------------------
-
-It is possible to list all of the versions of `libabseil` available on your platform:
-
-<details>
-<summary>With conda</summary>
+It is possible to list all of the versions of `libabseil` available on your platform with `conda`:
 
 ```
 conda search libabseil --channel conda-forge
 ```
 
-</details>
-
-<details>
-<summary>With mamba</summary>
+or with `mamba`:
 
 ```
 mamba search libabseil --channel conda-forge
 ```
 
-</details>
-
-<details>
-<summary>With pixi</summary>
-
-```
-pixi search libabseil --channel conda-forge
-```
-
-</details>
-
-<details>
-<summary>With mamba repoquery, which may provide more information</summary>
+Alternatively, `mamba repoquery` may provide more information:
 
 ```
 # Search all versions available on your platform:
@@ -159,8 +123,6 @@ mamba repoquery whoneeds libabseil --channel conda-forge
 # List dependencies of `libabseil`:
 mamba repoquery depends libabseil --channel conda-forge
 ```
-
-</details>
 
 
 About conda-forge

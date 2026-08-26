@@ -1,0 +1,297 @@
+schema_version: 1
+
+context:
+  version: "20260526.0"
+  version_major: "20260526"
+  cxx_standard: 17
+  build_number: 2
+
+recipe:
+  name: abseil-split
+  version: ${{ version }}
+
+source:
+  url: https://github.com/abseil/abseil-cpp/archive/refs/tags/${{ version }}.tar.gz
+  sha256: 6e1aee535473414164bf83e4ebc40240dec71a4701f8a642d906e95bea1aea0c
+  patches:
+    # Helps downstream packages import the DLL without an extra define.
+    # https://github.com/conda-forge/abseil-cpp/issues/43
+    - patches/0001-default-dll-import-for-windows.patch
+    # Avoid C++20 mode changing the ABI relative to C++17.
+    - patches/0002-don-t-use-C-20-stdlib-features-which-change-ABI-comp.patch
+    # Avoid SHELL:-Xarch flags leaking into pkg-config files.
+    - patches/0003-Don-t-try-to-compile-to-multiple-OSX-arches.patch
+
+build:
+  number: ${{ build_number }}
+
+outputs:
+  # Shared by default. Upstream does not support fully shared Windows builds,
+  # so a small set of static libraries remains there.
+  - package:
+      name: libabseil
+    build:
+      script: build-abseil
+      string: cxx${{ cxx_standard }}_h${{ hash }}_${{ build_number }}
+    requirements:
+      build:
+        - ${{ compiler('c') }}
+        - ${{ compiler('cxx') }}
+        - ${{ stdlib('c') }}
+        - cmake
+        - ninja
+      run_exports:
+        - ${{ pin_subpackage('libabseil', upper_bound='x') }}
+        - libabseil * cxx${{ cxx_standard }}*
+      run_constraints:
+        - libabseil-static ==${{ version }} cxx${{ cxx_standard }}*
+        # Do not co-install with the old package name.
+        - abseil-cpp ==${{ version }}
+    tests:
+      - package_contents:
+          lib:
+            - if: unix
+              then:
+                - absl_decode_rust_punycode
+                - absl_demangle_rust
+                - absl_flags_commandlineflag
+                - absl_flags_config
+                - absl_flags_marshalling
+                - absl_flags_parse
+                - absl_flags_private_handle_accessor
+                - absl_flags_program_name
+                - absl_flags_reflection
+                - absl_flags_usage
+                - absl_hashtable_profiler
+                - absl_log_flags
+                - absl_poison
+                - absl_profile_builder
+                - absl_base
+                - absl_civil_time
+                - absl_cord
+                - absl_cordz_functions
+                - absl_cordz_handle
+                - absl_cordz_info
+                - absl_cordz_sample_token
+                - absl_crc32c
+                - absl_crc_cord_state
+                - absl_crc_cpu_detect
+                - absl_die_if_null
+                - absl_examine_stack
+                - absl_exponential_biased
+                - absl_failure_signal_handler
+                - absl_hash
+                - absl_hashtablez_sampler
+                - absl_int128
+                - absl_log_severity
+                - absl_periodic_sampler
+                - absl_random_distributions
+                - absl_random_seed_gen_exception
+                - absl_random_seed_sequences
+                - absl_raw_hash_set
+                - absl_scoped_set_env
+                - absl_spinlock_wait
+                - absl_stacktrace
+                - absl_status
+                - absl_statusor
+                - absl_strerror
+                - absl_strings
+                - absl_symbolize
+                - absl_synchronization
+                - absl_throw_delegate
+                - absl_time
+                - absl_time_zone
+            - if: win
+              then: abseil_dll
+          files:
+            exists:
+              - if: win
+                then:
+                  - Library/bin/abseil_dll.dll
+                  - Library/lib/absl_decode_rust_punycode.lib
+                  - Library/lib/absl_demangle_rust.lib
+                  - Library/lib/absl_flags_commandlineflag.lib
+                  - Library/lib/absl_flags_config.lib
+                  - Library/lib/absl_flags_marshalling.lib
+                  - Library/lib/absl_flags_parse.lib
+                  - Library/lib/absl_flags_private_handle_accessor.lib
+                  - Library/lib/absl_flags_program_name.lib
+                  - Library/lib/absl_flags_reflection.lib
+                  - Library/lib/absl_flags_usage.lib
+                  - Library/lib/absl_hashtable_profiler.lib
+                  - Library/lib/absl_log_flags.lib
+                  - Library/lib/absl_poison.lib
+                  - Library/lib/absl_profile_builder.lib
+            not_exists:
+              - if: unix
+                then:
+                  - lib/libabsl_*.a
+                  - lib/libabsl_scoped_mock_log*
+              - if: win
+                then:
+                  - Library/bin/abseil_test_dll.dll
+                  - Library/lib/abseil_test_dll.lib
+                  - Library/lib/absl_base.lib
+                  - Library/lib/absl_civil_time.lib
+                  - Library/lib/absl_cord.lib
+                  - Library/lib/absl_cordz_functions.lib
+                  - Library/lib/absl_cordz_handle.lib
+                  - Library/lib/absl_cordz_info.lib
+                  - Library/lib/absl_cordz_sample_token.lib
+                  - Library/lib/absl_crc32c.lib
+                  - Library/lib/absl_crc_cord_state.lib
+                  - Library/lib/absl_crc_cpu_detect.lib
+                  - Library/lib/absl_die_if_null.lib
+                  - Library/lib/absl_examine_stack.lib
+                  - Library/lib/absl_exponential_biased.lib
+                  - Library/lib/absl_failure_signal_handler.lib
+                  - Library/lib/absl_hash.lib
+                  - Library/lib/absl_hashtablez_sampler.lib
+                  - Library/lib/absl_int128.lib
+                  - Library/lib/absl_log_severity.lib
+                  - Library/lib/absl_periodic_sampler.lib
+                  - Library/lib/absl_random_distributions.lib
+                  - Library/lib/absl_random_seed_gen_exception.lib
+                  - Library/lib/absl_random_seed_sequences.lib
+                  - Library/lib/absl_raw_hash_set.lib
+                  - Library/lib/absl_scoped_set_env.lib
+                  - Library/lib/absl_spinlock_wait.lib
+                  - Library/lib/absl_stacktrace.lib
+                  - Library/lib/absl_status.lib
+                  - Library/lib/absl_statusor.lib
+                  - Library/lib/absl_strerror.lib
+                  - Library/lib/absl_strings.lib
+                  - Library/lib/absl_symbolize.lib
+                  - Library/lib/absl_synchronization.lib
+                  - Library/lib/absl_throw_delegate.lib
+                  - Library/lib/absl_time.lib
+                  - Library/lib/absl_time_zone.lib
+                  - Library/lib/absl_scoped_mock_log.lib
+      - files:
+          recipe:
+            - cmake_test
+        requirements:
+          build:
+            - ${{ compiler('cxx') }}
+            - ${{ stdlib('c') }}
+            - cmake
+            - ninja
+            - pkg-config
+        script:
+          - if: unix
+            then: for lib in decode_rust_punycode demangle_rust flags_commandlineflag flags_config flags_marshalling flags_parse flags_private_handle_accessor flags_program_name flags_reflection flags_usage hashtable_profiler log_flags poison profile_builder base civil_time crc_cord_state crc_cpu_detect crc32c cord cordz_functions cordz_handle cordz_info cordz_sample_token die_if_null examine_stack exponential_biased failure_signal_handler hash hashtablez_sampler int128 log_severity periodic_sampler random_distributions random_seed_gen_exception random_seed_sequences raw_hash_set scoped_set_env spinlock_wait stacktrace status statusor strerror strings symbolize synchronization throw_delegate time time_zone; do pkg-config --print-errors --exact-version "${{ version_major }}" absl_${lib}; done
+          - if: win
+            then: for %%L in (decode_rust_punycode demangle_rust flags_commandlineflag flags_config flags_marshalling flags_parse flags_private_handle_accessor flags_program_name flags_reflection flags_usage hashtable_profiler log_flags poison profile_builder base civil_time crc_cord_state crc_cpu_detect crc32c cord cordz_functions cordz_handle cordz_info cordz_sample_token die_if_null examine_stack exponential_biased failure_signal_handler hash hashtablez_sampler int128 log_severity periodic_sampler random_distributions random_seed_gen_exception random_seed_sequences raw_hash_set scoped_set_env spinlock_wait stacktrace status statusor strerror strings symbolize synchronization throw_delegate time time_zone) do @pkg-config --print-errors --exact-version "${{ version_major }}" absl_%%L || exit /b 1
+          - if: win
+            then: pkg-config --print-errors --exact-version "${{ version_major }}" abseil_dll
+          - if: unix
+            then: cd cmake_test
+          - if: win
+            then: cd cmake_test
+          - if: unix
+            then: export CMAKE_ARGS="$CMAKE_ARGS -GNinja -DCMAKE_BUILD_TYPE=Release"
+          - if: win
+            then: set "CMAKE_ARGS=%CMAKE_ARGS% -GNinja -DCMAKE_BUILD_TYPE=Release"
+          - if: unix
+            then: cmake $CMAKE_ARGS -DCMAKE_CXX_STANDARD=${{ cxx_standard }} .
+          - if: win
+            then: cmake %CMAKE_ARGS% -DCMAKE_CXX_STANDARD=${{ cxx_standard }} .
+          - cmake --build .
+          - if: unix
+            then: ./flags_example
+          - if: win
+            then: flags_example.exe
+          # Check for disturbing SHELL:-Xarch content in pkg-config files.
+          - if: unix
+            then: grep -q SHELL $PREFIX/lib/pkgconfig/absl_random_internal_randen_hwaes.pc && exit 1 || exit 0
+
+  # Test and test-helper targets used by downstream packages such as protobuf.
+  - package:
+      name: libabseil-tests
+    build:
+      script: build-abseil
+      string: cxx${{ cxx_standard }}_h${{ hash }}_${{ build_number }}
+      always_include_files:
+        - if: unix
+          then: lib/cmake/absl
+        - if: win
+          then: Library/lib/cmake/absl
+    requirements:
+      build:
+        - ${{ compiler('c') }}
+        - ${{ compiler('cxx') }}
+        - ${{ stdlib('c') }}
+        - cmake
+        - ninja
+      host:
+        - gtest
+        - ${{ pin_subpackage('libabseil', exact=True) }}
+      run:
+        - gtest
+        - ${{ pin_subpackage('libabseil', exact=True) }}
+    tests:
+      - package_contents:
+          lib:
+            - if: unix
+              then: absl_scoped_mock_log
+            - if: win
+              then: abseil_test_dll
+          files:
+            exists:
+              - if: win
+                then: Library/bin/abseil_test_dll.dll
+            not_exists:
+              - if: unix
+                then: lib/libabsl_scoped_mock_log.a
+      - files:
+          recipe:
+            - cmake_test
+        requirements:
+          build:
+            - ${{ compiler('cxx') }}
+            - ${{ stdlib('c') }}
+            - cmake
+            - ninja
+            - pkg-config
+        script:
+          - if: unix
+            then: pkg-config --print-errors --exact-version "${{ version_major }}" absl_scoped_mock_log
+          - if: win
+            then: pkg-config --print-errors --exact-version "${{ version_major }}" abseil_test_dll
+          - cd cmake_test
+          - if: unix
+            then: export CMAKE_ARGS="$CMAKE_ARGS -GNinja -DCMAKE_BUILD_TYPE=Release"
+          - if: win
+            then: set "CMAKE_ARGS=%CMAKE_ARGS% -GNinja -DCMAKE_BUILD_TYPE=Release"
+          - if: unix
+            then: cmake $CMAKE_ARGS -DCMAKE_CXX_STANDARD=${{ cxx_standard }} .
+          - if: win
+            then: cmake %CMAKE_ARGS% -DCMAKE_CXX_STANDARD=${{ cxx_standard }} .
+          - if: unix
+            then: export TRY_TEST_TARGET=1
+          - if: win
+            then: set TRY_TEST_TARGET=1
+          - cmake --build .
+          - if: unix
+            then: ./flags_example
+          - if: win
+            then: flags_example.exe
+
+about:
+  homepage: https://github.com/abseil/abseil-cpp
+  license: Apache-2.0
+  license_file: LICENSE
+  summary: Abseil Common Libraries (C++)
+  description: |
+    Abseil is an open-source collection of C++ code designed to augment the C++
+    standard library.
+  documentation: https://github.com/abseil/abseil-cpp
+  repository: https://github.com/abseil/abseil-cpp
+
+extra:
+  recipe-maintainers:
+    - njzjz
+    - bluescarni
+    - xhochy
+    - h-vetinari
+  feedstock-name: abseil-cpp
