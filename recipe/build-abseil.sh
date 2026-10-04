@@ -15,13 +15,18 @@ if [[ "$PKG_NAME" == "libabseil-tests" ]]; then
     CMAKE_ARGS="${CMAKE_ARGS} -DABSL_USE_EXTERNAL_GOOGLETEST=ON -DABSL_FIND_GOOGLETEST=ON"
 fi
 
+BUILD_SHARED_LIBS=ON
+if [[ "$PKG_NAME" == "libabseil-static" ]]; then
+    BUILD_SHARED_LIBS=OFF
+fi
+
 cmake -G Ninja \
     ${CMAKE_ARGS} \
     -DCMAKE_BUILD_TYPE=Release \
     -DCMAKE_CXX_STANDARD=17 \
     -DCMAKE_INSTALL_LIBDIR=lib \
     -DCMAKE_PREFIX_PATH=${PREFIX} \
-    -DBUILD_SHARED_LIBS=ON \
+    -DBUILD_SHARED_LIBS=${BUILD_SHARED_LIBS} \
     -DABSL_PROPAGATE_CXX_STD=ON \
     ..
 
