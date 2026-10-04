@@ -44,6 +44,7 @@ source:
     # derived class's injected-class-name; onnxruntime patches its vendored
     # abseil the same way:
     # https://github.com/microsoft/onnxruntime/blob/v1.30.0/cmake/vcpkg-ports/abseil/absl_cuda_warnings.patch
+    # added there by https://github.com/microsoft/onnxruntime/pull/28736
     - patches/0004-Name-HashStateBase-explicitly-in-friend-declarations.patch
 
 build:
