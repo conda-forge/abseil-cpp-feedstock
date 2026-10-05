@@ -40,9 +40,15 @@ source:
     # Avoid SHELL:-Xarch… flags leaking into pkg-config files
     # These flagse are not used anyways in our setup
     - patches/0003-Don-t-try-to-compile-to-multiple-OSX-arches.patch
+    # nvcc 13.4 + MSVC cannot resolve a base class befriended through the
+    # derived class's injected-class-name; onnxruntime patches its vendored
+    # abseil the same way:
+    # https://github.com/microsoft/onnxruntime/blob/v1.30.0/cmake/vcpkg-ports/abseil/absl_cuda_warnings.patch
+    # added there by https://github.com/microsoft/onnxruntime/pull/28736
+    - patches/0004-Name-HashStateBase-explicitly-in-friend-declarations.patch
 
 build:
-  number: 0
+  number: 1
 
 outputs:
   # default behaviour is shared; however note that upstream does not support
