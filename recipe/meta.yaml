@@ -133,6 +133,32 @@ outputs:
         # Check for absence of disturbing SHELL:-Xarch... content in pkg-config files
         - grep -q SHELL $PREFIX/lib/pkgconfig/absl_random_internal_randen_hwaes.pc && exit 1 || exit 0  # [unix]
 
+  - name: libabseil-static
+    script: build-abseil.sh  # [unix]
+    script: build-abseil.bat  # [win]
+    build:
+      string: cxx{{ cxx_standard }}_h{{ PKG_HASH }}_{{ PKG_BUILDNUM }}
+    requirements:
+      build:
+        - {{ compiler('c') }}
+        - {{ compiler('cxx') }}
+        - {{ stdlib('c') }}
+        - cmake
+        - ninja
+      host:
+        - {{ pin_subpackage("libabseil", exact=True) }}
+      run:
+        - {{ pin_subpackage("libabseil", exact=True) }}
+    files:
+      - lib/*.a  # [unix]
+      - Library/lib/*.lib  # [win]
+    test:
+      commands:
+        - test -f $PREFIX/lib/libabsl_base.a  # [unix]
+        - test -f $PREFIX/lib/libabsl_strings.a  # [unix]
+        - if not exist %LIBRARY_LIB%\\absl_base.lib exit 1  # [win]
+        - if not exist %LIBRARY_LIB%\\absl_strings.lib exit 1  # [win]
+
   # tests & test-helpers
   - name: libabseil-tests
     script: build-abseil.sh  # [unix]
