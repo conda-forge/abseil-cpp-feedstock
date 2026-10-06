@@ -46,9 +46,13 @@ source:
     # https://github.com/microsoft/onnxruntime/blob/v1.30.0/cmake/vcpkg-ports/abseil/absl_cuda_warnings.patch
     # added there by https://github.com/microsoft/onnxruntime/pull/28736
     - patches/0004-Name-HashStateBase-explicitly-in-friend-declarations.patch
+    # 0004 alone is not enough: nvcc 13.4 + MSVC then fails with C2248 on the
+    # `using Base = typename flat_hash_map::raw_hash_map;` aliases, see
+    # https://github.com/conda-forge/onnxruntime-feedstock/actions/runs/37306309009/job/111750712123
+    - patches/0005-Name-the-raw_hash-base-classes-explicitly.patch
 
 build:
-  number: 1
+  number: 2
 
 outputs:
   # default behaviour is shared; however note that upstream does not support
