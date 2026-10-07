@@ -25,13 +25,16 @@ applied to the headers:
 https://github.com/conda-forge/onnxruntime-feedstock/actions/runs/37306309009/job/111750712123
 
 Spell the base type out instead.  That requires renaming the class
-template's Hash/Eq parameters: raw_hash_map and raw_hash_set declare
-private typedefs of those names, which hide the template parameters
-inside the derived class body, so the spelled-out base would otherwise
-pick up the private typedefs and fail with the same C2248.  The
-parameters are not referenced anywhere else inside these class bodies,
-and template parameter names are not part of any mangled name, so this
-changes no behaviour and no ABI.
+template's Hash/Eq parameters, and node_hash_map/node_hash_set's Alloc
+parameter: raw_hash_map and raw_hash_set declare private typedefs named
+Hash, Eq and Alloc.  MSVC looks unqualified names up in dependent base
+classes, so inside the derived class body those private typedefs hide
+template parameters of the same name, and the spelled-out base would
+pick them up and fail with the same C2248.  (flat_hash_map and
+flat_hash_set call their third parameter Allocator, which does not
+collide.)  The parameters are not referenced anywhere else inside these
+class bodies, and template parameter names are not part of any mangled
+name, so this changes no behaviour and no ABI.
 
 Unlike 0004, onnxruntime does not carry this change for the abseil it
 vendors, and there is no upstream abseil report for it yet.
@@ -92,7 +95,7 @@ index bd24dde..81a1ffc 100644
   public:
    // Constructors and Assignment Operators
 diff --git a/absl/container/node_hash_map.h b/absl/container/node_hash_map.h
-index d58feed..8e5d6b5 100644
+index d58feed..a879a63 100644
 --- a/absl/container/node_hash_map.h
 +++ b/absl/container/node_hash_map.h
 @@ -124,17 +124,19 @@ class NodeHashMapPolicy;
@@ -105,7 +108,8 @@ index d58feed..8e5d6b5 100644
 -    class Eq =
 +    class AbslEqT =
          typename container_internal::NodeHashMapPolicy<Key, Value>::DefaultEq,
-     class Alloc = typename container_internal::NodeHashMapPolicy<
+-    class Alloc = typename container_internal::NodeHashMapPolicy<
++    class AbslAllocT = typename container_internal::NodeHashMapPolicy<
          Key, Value>::DefaultAlloc>
  class ABSL_ATTRIBUTE_OWNER node_hash_map
      : public absl::container_internal::InstantiateRawHashMap<
@@ -113,15 +117,15 @@ index d58feed..8e5d6b5 100644
 -          Alloc>::type {
 -  using Base = typename node_hash_map::raw_hash_map;
 +          absl::container_internal::NodeHashMapPolicy<Key, Value>, AbslHashT,
-+          AbslEqT, Alloc>::type {
++          AbslEqT, AbslAllocT>::type {
 +  using Base = typename absl::container_internal::InstantiateRawHashMap<
 +      absl::container_internal::NodeHashMapPolicy<Key, Value>, AbslHashT,
-+      AbslEqT, Alloc>::type;
++      AbslEqT, AbslAllocT>::type;
  
   public:
    // Constructors and Assignment Operators
 diff --git a/absl/container/node_hash_set.h b/absl/container/node_hash_set.h
-index 55568b7..330127b 100644
+index 55568b7..0f69d17 100644
 --- a/absl/container/node_hash_set.h
 +++ b/absl/container/node_hash_set.h
 @@ -120,15 +120,18 @@ struct NodeHashSetPolicy;
@@ -130,20 +134,22 @@ index 55568b7..330127b 100644
      class T,
 -    class Hash = typename container_internal::NodeHashSetPolicy<T>::DefaultHash,
 -    class Eq = typename container_internal::NodeHashSetPolicy<T>::DefaultEq,
+-    class Alloc =
 +    class AbslHashT =
 +        typename container_internal::NodeHashSetPolicy<T>::DefaultHash,
 +    class AbslEqT = typename container_internal::NodeHashSetPolicy<T>::DefaultEq,
-     class Alloc =
++    class AbslAllocT =
          typename container_internal::NodeHashSetPolicy<T>::DefaultAlloc>
  class ABSL_ATTRIBUTE_OWNER node_hash_set
      : public absl::container_internal::InstantiateRawHashSet<
 -          absl::container_internal::NodeHashSetPolicy<T>, Hash, Eq,
-+          absl::container_internal::NodeHashSetPolicy<T>, AbslHashT, AbslEqT,
-           Alloc>::type {
+-          Alloc>::type {
 -  using Base = typename node_hash_set::raw_hash_set;
++          absl::container_internal::NodeHashSetPolicy<T>, AbslHashT, AbslEqT,
++          AbslAllocT>::type {
 +  using Base = typename absl::container_internal::InstantiateRawHashSet<
 +      absl::container_internal::NodeHashSetPolicy<T>, AbslHashT, AbslEqT,
-+      Alloc>::type;
++      AbslAllocT>::type;
  
   public:
    // Constructors and Assignment Operators
