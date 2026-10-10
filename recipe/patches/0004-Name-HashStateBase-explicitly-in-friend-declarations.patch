@@ -1,0 +1,32 @@
+From: Mark Harfouche <mark.harfouche@gmail.com>
+Subject: [PATCH] Name HashStateBase explicitly in friend declarations
+
+nvcc 13.4 with MSVC rejects `friend class HashState::HashStateBase;`
+with error C3856.
+---
+diff --git a/absl/hash/hash.h b/absl/hash/hash.h
+index e2bde0c..04f4b82 100644
+--- a/absl/hash/hash.h
++++ b/absl/hash/hash.h
+@@ -368,7 +368,7 @@ class HashState : public hash_internal::HashStateBase<HashState> {
+  private:
+   HashState() = default;
+ 
+-  friend class HashState::HashStateBase;
++  friend class hash_internal::HashStateBase<HashState>;
+   friend struct hash_internal::CombineRaw;
+ 
+   template <typename T>
+diff --git a/absl/hash/internal/hash.h b/absl/hash/internal/hash.h
+index 8837679..6c7eaa6 100644
+--- a/absl/hash/internal/hash.h
++++ b/absl/hash/internal/hash.h
+@@ -1425,7 +1425,7 @@ class ABSL_DLL MixingHashState : public HashStateBase<MixingHashState> {
+   }
+ 
+  private:
+-  friend class MixingHashState::HashStateBase;
++  friend class HashStateBase<MixingHashState>;
+   template <typename H>
+   friend H absl::hash_internal::hash_weakly_mixed_integer(H,
+                                                           WeaklyMixedInteger);
