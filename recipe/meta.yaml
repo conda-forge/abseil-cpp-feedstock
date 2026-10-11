@@ -39,9 +39,11 @@ source:
     # Avoid SHELL:-Xarch… flags leaking into pkg-config files
     # These flagse are not used anyways in our setup
     - patches/0003-Don-t-try-to-compile-to-multiple-OSX-arches.patch
+    - patches/0004-Name-HashStateBase-explicitly-in-friend-declarations.patch
+    - patches/0005-Name-the-raw_hash-base-classes-explicitly.patch
 
 build:
-  number: 2
+  number: 3
 
 outputs:
   # default behaviour is shared; however note that upstream does not support
